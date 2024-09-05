@@ -131,7 +131,18 @@ public sealed class RoutineHandler
     /// <returns>An enumerator that repeats execution of the given action specified number of times.</returns>
     public IEnumerator RepeatExecuteRoutine(int times, Action action)
     {
-        for (int i = 0; i < times; i++) { yield return host.StartCoroutine(ExecuteRoutine(action)); }
+        for (int i = 0; i < times; i++)
+        {
+            yield return host.StartCoroutine(ExecuteRoutine(action));
+        }
+    }
+
+    public IEnumerator RepeatExecuteRoutine(int times, float delay, Action action)
+    {
+        for (int i = 0; i < times; i++)
+        {
+            yield return host.StartCoroutine(WaitThenExecuteRoutine(delay, action));
+        }
     }
 }
 }

@@ -30,5 +30,7 @@ public interface ISequence
     ISequence OnFail(Action<Exception> action);
 
     ISequence RepeatExecute(int times, Action action);
+    
+    ISequence RepeatExecute(int times, float interval, Action action);
 }
 }

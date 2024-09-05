@@ -14,33 +14,31 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   sceneDatasByGuid:
     keys:
+    - 
     - 99c9720ab356a0642a771bea13969a05
     values:
     - goDatasByGlobalId:
+        keys: []
+        values: []
+      goDatasByInstanceId:
+        keys: 
+        values: []
+    - goDatasByGlobalId:
         keys:
-        - GlobalObjectId_V1-2-99c9720ab356a0642a771bea13969a05-6680087432799634209-1392127057200015359
+        - GlobalObjectId_V1-2-99c9720ab356a0642a771bea13969a05-979912903-0
+        - GlobalObjectId_V1-2-99c9720ab356a0642a771bea13969a05-262597486-0
+        - GlobalObjectId_V1-2-99c9720ab356a0642a771bea13969a05-1712571640-0
         - GlobalObjectId_V1-2-99c9720ab356a0642a771bea13969a05-1669737010-0
         - GlobalObjectId_V1-2-99c9720ab356a0642a771bea13969a05-1957967889-0
-        - GlobalObjectId_V1-2-99c9720ab356a0642a771bea13969a05-979912903-0
-        - GlobalObjectId_V1-2-99c9720ab356a0642a771bea13969a05-2067874972-0
-        - GlobalObjectId_V1-2-99c9720ab356a0642a771bea13969a05-1712571640-0
-        - GlobalObjectId_V1-2-99c9720ab356a0642a771bea13969a05-308459164-0
         - GlobalObjectId_V1-2-99c9720ab356a0642a771bea13969a05-1751904151-0
-        - GlobalObjectId_V1-2-99c9720ab356a0642a771bea13969a05-330585543-0
-        - GlobalObjectId_V1-2-99c9720ab356a0642a771bea13969a05-795018230-0
+        - GlobalObjectId_V1-2-99c9720ab356a0642a771bea13969a05-308459164-0
         - GlobalObjectId_V1-2-99c9720ab356a0642a771bea13969a05-1193072119-0
-        - GlobalObjectId_V1-2-99c9720ab356a0642a771bea13969a05-1708025321-0
-        - GlobalObjectId_V1-2-99c9720ab356a0642a771bea13969a05-223222971-0
-        - GlobalObjectId_V1-2-99c9720ab356a0642a771bea13969a05-262597486-0
-        - GlobalObjectId_V1-2-99c9720ab356a0642a771bea13969a05-528287053-0
-        - GlobalObjectId_V1-2-99c9720ab356a0642a771bea13969a05-1091990732-0
-        - GlobalObjectId_V1-2-99c9720ab356a0642a771bea13969a05-987036862-0
-        - GlobalObjectId_V1-2-99c9720ab356a0642a771bea13969a05-1111156669-0
         - GlobalObjectId_V1-2-99c9720ab356a0642a771bea13969a05-1822789227-0
+        - GlobalObjectId_V1-2-99c9720ab356a0642a771bea13969a05-522304668-0
+        - GlobalObjectId_V1-2-99c9720ab356a0642a771bea13969a05-2067874972-0
+        - GlobalObjectId_V1-2-99c9720ab356a0642a771bea13969a05-310991796-0
         values:
         - iColor: 0
-          icon: AvatarMask On Icon
-        - iColor: 0
           icon: d_eyeDropper.sml
         - iColor: 0
           icon: d_eyeDropper.sml
@@ -56,64 +54,46 @@ MonoBehaviour:
           icon: d_eyeDropper.sml
         - iColor: 0
           icon: Camera Icon
-        - iColor: 0
-          icon: PreMatCube
-        - iColor: 0
-          icon: Camera Icon
-        - iColor: 0
-          icon: 
-        - iColor: 0
-          icon: d_eyeDropper.sml
-        - iColor: 0
-          icon: d_eyeDropper.sml
-        - iColor: 0
-          icon: d_eyeDropper.sml
-        - iColor: 0
-          icon: d_eyeDropper.sml
-        - iColor: 0
-          icon: d_eyeDropper.sml
-        - iColor: 0
-          icon: d_eyeDropper.sml
         - iColor: 0
           icon: Canvas Icon
+        - iColor: 0
+          icon: EventSystem Icon
+        - iColor: 0
+          icon: d_eyeDropper.sml
+        - iColor: 0
+          icon: Camera Icon
       goDatasByInstanceId:
-        keys: b66e0000806e0000aa6e0000606e0000ae6e00008c6e0000066e0000906e00000a6e0000446e0000646e0000846e00008eb8ffff842fffffb02fffff9a2fffffb42dffff1a1effff946e0000
+        keys: 08d000006ecf000060d0000052d000007ed0000064d0000074cf0000d270feff28d0000078cf000068d00000b4cf000082d00000505ffefffc32f9ff449cf4ff
         values:
+        - iColor: 0
+          icon: d_eyeDropper.sml
+        - iColor: 0
+          icon: d_eyeDropper.sml
+        - iColor: 0
+          icon: d_eyeDropper.sml
+        - iColor: 0
+          icon: d_eyeDropper.sml
+        - iColor: 0
+          icon: d_eyeDropper.sml
+        - iColor: 0
+          icon: d_eyeDropper.sml
+        - iColor: 0
+          icon: d_eyeDropper.sml
         - iColor: 0
           icon: AvatarMask On Icon
         - iColor: 0
-          icon: d_eyeDropper.sml
-        - iColor: 0
-          icon: d_eyeDropper.sml
-        - iColor: 0
-          icon: d_eyeDropper.sml
-        - iColor: 0
-          icon: d_eyeDropper.sml
-        - iColor: 0
-          icon: d_eyeDropper.sml
-        - iColor: 0
-          icon: d_eyeDropper.sml
-        - iColor: 0
-          icon: d_eyeDropper.sml
+          icon: Camera Icon
         - iColor: 0
           icon: Camera Icon
         - iColor: 0
-          icon: PreMatCube
+          icon: Canvas Icon
         - iColor: 0
-          icon: Camera Icon
+          icon: EventSystem Icon
+        - iColor: 0
+          icon: d_eyeDropper.sml
         - iColor: 0
           icon: 
         - iColor: 0
-          icon: d_eyeDropper.sml
-        - iColor: 0
-          icon: d_eyeDropper.sml
-        - iColor: 0
-          icon: d_eyeDropper.sml
-        - iColor: 0
-          icon: d_eyeDropper.sml
-        - iColor: 0
-          icon: d_eyeDropper.sml
-        - iColor: 0
-          icon: d_eyeDropper.sml
-        - iColor: 0
           icon: Canvas Icon
+        - iColor: 0
+          icon: Camera Icon

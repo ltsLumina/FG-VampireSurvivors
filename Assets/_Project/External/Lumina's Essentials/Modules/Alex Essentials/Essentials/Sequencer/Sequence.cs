@@ -164,5 +164,18 @@ public sealed class Sequence : ISequence
         actions.Enqueue(routineHandler.RepeatExecuteRoutine(times, action));
         return this;
     }
+    
+    /// <summary>
+    ///    Repeats specified action specified number of times with a delay between each repetition.
+    /// </summary>
+    /// <param name="times"></param>
+    /// <param name="delay"></param>
+    /// <param name="action"></param>
+    /// <returns></returns>
+    public ISequence RepeatExecute(int times, float delay, Action action)
+    {
+        actions.Enqueue(routineHandler.RepeatExecuteRoutine(times, delay, action));
+        return this;
+    }
 }
 }
