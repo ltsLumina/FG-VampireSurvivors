@@ -1,9 +1,16 @@
+using UnityEditor;
 using UnityEngine;
 
 public sealed class Player : MonoBehaviour, IDamageable
 {
+    [Header("Stats")]
     [SerializeField] int health = 100;
     [SerializeField] int speed = 5;
+
+    [Space(20)]
+    
+    [Header("Effects")]
+    [SerializeField] ParticleSystem levelUpAura;
     
     InputManager inputManager;
     CausesOfDeath.Cause causeOfDeath;
@@ -31,8 +38,16 @@ public sealed class Player : MonoBehaviour, IDamageable
     public delegate void PlayerDeath(CausesOfDeath.Cause cause);
     public static event PlayerDeath OnPlayerDeath;
 
-    // void OnEnable() => OnPlayerHit += 
-    // void OnDisable() => OnPlayerHit -= 
+    void OnEnable()
+    {
+        //OnPlayerHit += ;
+        Experience.OnLevelUp += () => EffectPlayer.PlayEffect(levelUpAura);
+    }
+
+    void OnDisable()
+    {
+        //OnPlayerHit -= ;
+    }
 
     void Awake()
     {
@@ -74,4 +89,27 @@ public sealed class Player : MonoBehaviour, IDamageable
         OnPlayerDeath?.Invoke(cause);
     }
     #endregion
+}
+
+[CustomEditor(typeof(Player))]
+public class PlayerEditor : Editor
+{
+    Editor experienceBarEditor;
+    
+    public override void OnInspectorGUI()
+    {
+        DrawDefaultInspector();
+        
+        ExperienceBar experienceBar = FindObjectOfType<ExperienceBar>();
+
+        if (experienceBar)
+        {
+            if (!experienceBarEditor) experienceBarEditor = CreateEditor(experienceBar);
+
+            EditorGUILayout.Space();
+            EditorGUILayout.LabelField("Experience Bar", EditorStyles.boldLabel);
+            experienceBarEditor.OnInspectorGUI();
+        }
+        else { EditorGUILayout.HelpBox("ExperienceBar component not found on Player.", MessageType.Warning); }
+    }
 }

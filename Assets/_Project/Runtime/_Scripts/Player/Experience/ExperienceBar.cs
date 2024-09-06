@@ -1,3 +1,4 @@
+using System;
 using Lumina.Essentials.Attributes;
 using UnityEditor;
 using UnityEngine;
@@ -46,7 +47,7 @@ public class ExperienceBar : MonoBehaviour
 
     void Reset()
     {
-        slider = GetComponent<Slider>();
+        slider = GetComponentInChildren<Slider>();
         
         slider.value    = 0;
         slider.maxValue = xpToLevelUp;
@@ -55,13 +56,20 @@ public class ExperienceBar : MonoBehaviour
         xp = Experience.XP;
     }
 
-    void OnValidate()
-    {
-        xp     = Experience.XP;
-        slider = GetComponent<Slider>();
-    }
+    void OnValidate() => xp = Experience.XP;
 
-    void Awake() => slider = GetComponent<Slider>();
+    #region Level-up Event
+    void OnEnable() => Experience.OnLevelUp += ShowLevelUpMenu;
+    void OnDisable() => Experience.OnLevelUp -= ShowLevelUpMenu;
+
+    static void ShowLevelUpMenu()
+    {
+        var levelUpManager = FindObjectOfType<LevelUpManager>();
+        levelUpManager.ShowLevelUpMenu();
+    }
+    #endregion
+
+    void Awake() => slider = GetComponentInChildren<Slider>();
     void Start() => slider.maxValue = xpToLevelUp;
 }
 
@@ -76,17 +84,7 @@ public class ExperienceBarEditor : Editor
 
         if (GUILayout.Button("Add XP"))
         {
-            // Check if the player has enough XP to level up
-            if (Experience.XP + 10 >= experienceBar.XPToLevelUp)
-            {
-                Experience.GainExp(10);
-                Experience.LevelUp();
-            }
-            else
-            {
-                Experience.GainExp(10);
-            }
-
+            Experience.GainExp(10);
             UpdateValues();
         }
 
@@ -98,7 +96,13 @@ public class ExperienceBarEditor : Editor
 
         if (GUILayout.Button("Level Up"))
         {
-            Experience.LevelUp();
+            Experience.GainLevel();
+            UpdateValues();
+        }
+
+        if (GUILayout.Button("Reset"))
+        {
+            Experience.ResetAll();
             UpdateValues();
         }
     }
@@ -113,7 +117,7 @@ public class ExperienceBarEditor : Editor
         experienceBar.Level       = Experience.Level;
         experienceBar.TotalXP     = Experience.TotalExp;
 
-        slider.value = Experience.XP;
+        //slider.value = Experience.XP;
         slider.maxValue = Experience.XPToLevelUp;
     }
 }

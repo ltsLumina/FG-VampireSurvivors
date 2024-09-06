@@ -109,10 +109,14 @@ public abstract class Enemy : MonoBehaviour, IDamageable
 
     public virtual void Death()
     {
-        Experience.GainExp(50); // 50 is debug value
         Destroy(gameObject);
         Debug.Log("Enemy has died of " + causeOfDeath);
         
         OnEnemyDeath?.Invoke(causeOfDeath);
+
+        var randomOffset = UnityEngine.Random.insideUnitSphere * 3;
+        var randomRotation = UnityEngine.Random.rotation;
+        Instantiate(Resources.Load<ExperiencePickup>("XP"), transform.position + new Vector3(randomOffset.x, 0, randomOffset.z), randomRotation);
+        
     }
 }

@@ -6,13 +6,6 @@ using UnityEngine;
 
 public class RoundTimer : MonoBehaviour
 {
-    enum TimerFormat
-    {
-        Whole,
-        TenthDecimal,
-        HundredthsDecimal,
-    }
-
     [Header("Reference"), Space(10), ReadOnly]
     [SerializeField] TextMeshProUGUI timerText;
 
@@ -56,9 +49,15 @@ public class RoundTimer : MonoBehaviour
 
     void Start() => Finished = false;
 
-    void OnEnable() => OnTimerEnded += TimerFinishedEvent;
+    void OnEnable()
+    {
+        OnTimerEnded         += TimerFinishedEvent;
+    }
 
-    void OnDisable() => OnTimerEnded -= TimerFinishedEvent;
+    void OnDisable()
+    {
+        OnTimerEnded -= TimerFinishedEvent;
+    }
 
     void TimerFinishedEvent()
     {
