@@ -11,7 +11,6 @@ public abstract class Enemy : MonoBehaviour, IDamageable
     [SerializeField] int recoilDamage = 15;
     [SerializeField] float recoilInterval;
 
-    Player player;
     CausesOfDeath.Cause causeOfDeath;
 
     public delegate void EnemyHit(int damage);
@@ -42,17 +41,11 @@ public abstract class Enemy : MonoBehaviour, IDamageable
 
     void Start()
     {
-        player = GameObject.FindWithTag("Player").GetComponent<Player>();
-
         Init();
 
         return;
 
-        void Init()
-        {
-            // face the player on start
-            transform.LookAt(player.transform);
-        }
+        void Init() => transform.LookAt(Player.Instance.transform);
     }
 
     void OnTriggerStay(Collider other)
@@ -61,7 +54,7 @@ public abstract class Enemy : MonoBehaviour, IDamageable
         const string dealDamage       = nameof(DealDamage);
         const string takeRecoilDamage = nameof(TakeRecoilDamage);
 
-        if (other.gameObject.CompareTag("Player") && player)
+        if (other.gameObject.CompareTag("Player") && Player.Instance)
         {
             if (!IsInvoking(dealDamage))
             {
@@ -83,7 +76,7 @@ public abstract class Enemy : MonoBehaviour, IDamageable
 
     void DealDamage()
     {
-        player.TryGetComponent(out IDamageable damageable);
+        Player.Instance.TryGetComponent(out IDamageable damageable);
         damageable?.TakeDamage(damage, CausesOfDeath.Cause.Enemy);
     }
 
@@ -99,7 +92,7 @@ public abstract class Enemy : MonoBehaviour, IDamageable
 
     void TakeRecoilDamage()
     {
-        if (player.Health <= 0) return;
+        if (Player.Instance.Health <= 0) return;
 
         Health       -= recoilDamage;
         causeOfDeath =  CausesOfDeath.Cause.Player;

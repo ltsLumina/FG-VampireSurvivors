@@ -1,4 +1,6 @@
+#define DISABLED // this line was added by VUtils.ToggleDefineDisabledInScript
 #if UNITY_EDITOR
+#region
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -10,6 +12,7 @@ using UnityEngine;
 using static VInspector.Libs.VUtils;
 using static VInspector.Libs.VGUI;
 using Object = UnityEngine.Object;
+#endregion
 
 namespace VInspector
 {

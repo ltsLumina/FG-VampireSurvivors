@@ -1,19 +1,13 @@
+#region
 using UnityEngine;
 using UnityEngine.AI;
+#endregion
 
 public class EnemyNavMeshManager : MonoBehaviour
 {
-    Player player;
     NavMeshAgent agent;
 
-    void Start()
-    {
-        player = GameObject.FindWithTag("Player").GetComponent<Player>();
-        agent  = GetComponent<NavMeshAgent>();
-    }
+    void Start() => agent = GetComponent<NavMeshAgent>();
 
-    void Update()
-    {
-        agent.destination = player.transform.position;
-    }
+    void Update() => agent.destination = Player.Instance.transform.position;
 }

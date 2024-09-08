@@ -16,7 +16,7 @@ public class SelectItemButton : Button
     void SelectItem()
     {
         interactable = false;
-        Inventory.Instance.AddItem(Item.Create());
+        InventoryManager.Instance.AddItem(Item.Create());
         StartCoroutine(Wait());
     }
 

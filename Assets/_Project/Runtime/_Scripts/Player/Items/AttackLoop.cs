@@ -4,32 +4,65 @@ using System.Collections.Generic;
 using UnityEngine;
 #endregion
 
-public class AttackLoop : MonoBehaviour
+// - Partial class to Player.cs
+// - Contains the logic for the player's attack loop
+public partial class Player
 {
     Coroutine lightningRingCoroutine;
-
-    void Awake() => lightningRingCoroutine = null;
+    Coroutine garlicCoroutine;
 
     void Update()
     {
-        List<Inventory.Items> items = Inventory.Instance.ItemsInInventory;
+        List<InventoryManager.Items> inventory = InventoryManager.Instance.Inventory;
 
-        foreach (Inventory.Items inventory in items) { inventory.item.Use(); }
+        foreach (InventoryManager.Items inventoryItem in inventory) { inventoryItem.Item.Use(); }
     }
 
-    public void Attack<T>(Item item)
+    public void Attack<T>()
         where T : Item
     {
-        if (typeof(T) == typeof(LightningRing))
+        switch (typeof(T))
         {
-            var player = FindObjectOfType<Player>();
+            case not null when typeof(T) == typeof(LightningRing):
+                lightningRingCoroutine ??= StartCoroutine(LightningRingCooldown(InventoryManager.Instance.GetItem<LightningRing>()));
+                break;
 
-            if (lightningRingCoroutine == null) { lightningRingCoroutine = StartCoroutine(Cooldown(item as LightningRing)); }
-            else
+            case not null when typeof(T) == typeof(Garlic):
+                garlicCoroutine ??= StartCoroutine(GarlicCooldown(InventoryManager.Instance.GetItem<Garlic>()));
+                break;
+        }
+    }
+
+    void DamageZone()
+    {
+        var   garlic = InventoryManager.Instance.GetItem<Garlic>();
+        float area   = garlic.GetStat(Item.Levels.StatTypes.Area);
+
+        var        damageZoneObjects = new List<Collider>(5);
+        Collider[] garlicColliders   = Physics.OverlapSphere(Instance.transform.position, area, LayerMask.GetMask("Enemy"));
+        Debug.Log("Total colliders: " + garlicColliders.Length);
+
+        damageZoneObjects.AddRange(garlicColliders);
+
+        foreach (Collider obj in damageZoneObjects)
+        {
+            if (obj.TryGetComponent(out IDamageable damageable))
             {
-                StopCoroutine(lightningRingCoroutine);
-                lightningRingCoroutine = StartCoroutine(Cooldown(item as LightningRing));
+                if (damageable is Player) continue;
+                damageable.TakeDamage(garlic.GetStatInt(Item.Levels.StatTypes.Damage), CausesOfDeath.Cause.Garlic);
             }
+        }
+    }
+
+    IEnumerator GarlicCooldown(Garlic garlic)
+    {
+        float cooldown = garlic.GetStat(Item.Levels.StatTypes.Speed);
+        Debug.Log("Garlic Cooldown: " + cooldown);
+
+        while (true)
+        {
+            DamageZone();
+            yield return new WaitForSeconds(cooldown);
         }
     }
 
@@ -37,26 +70,30 @@ public class AttackLoop : MonoBehaviour
     {
         Debug.Log("Lightning Ring used." + "\nDealt " + item.GetStatInt(Item.Levels.StatTypes.Damage) + " damage.");
 
-        var   player  = FindObjectOfType<Player>();
         int   damage  = item.GetStatInt(Item.Levels.StatTypes.Damage);
         float area    = item.GetStat(Item.Levels.StatTypes.Area);
         var   enemies = new List<Enemy>();
 
-        Collider[] colliders = Physics.OverlapSphere(player.transform.position, area, LayerMask.GetMask("Enemy"));
+        Collider[] colliders = Physics.OverlapSphere(Instance.transform.position, area, LayerMask.GetMask("Enemy"));
 
         foreach (Collider collider in colliders)
         {
             if (collider.TryGetComponent(out Enemy enemy)) enemies.Add(enemy);
         }
 
-        foreach (Enemy enemy in enemies)
+        // strike amountOfStrikes times
+        for (int i = 0; i < item.NumberOfStrikes; i++)
         {
-            Instantiate(lightningEffect, enemy.transform.position, Quaternion.identity);
-            enemy.TakeDamage(damage, CausesOfDeath.Cause.LightningRing);
+            if (enemies.Count == 0) break;
+
+            int randomIndex = Random.Range(0, enemies.Count);
+            Instantiate(lightningEffect, enemies[randomIndex].transform.position, Quaternion.identity);
+            enemies[randomIndex].TakeDamage(damage, CausesOfDeath.Cause.LightningRing);
+            enemies.RemoveAt(randomIndex);
         }
     }
 
-    static IEnumerator Cooldown(LightningRing item)
+    static IEnumerator LightningRingCooldown(LightningRing item)
     {
         float cooldown = item.GetStat(Item.Levels.StatTypes.Speed);
         Debug.Log("Cooldown: " + cooldown);

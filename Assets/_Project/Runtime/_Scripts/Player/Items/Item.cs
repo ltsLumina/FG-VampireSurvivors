@@ -1,6 +1,10 @@
 ﻿#region
 using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using JetBrains.Annotations;
+using UnityEditor;
 using UnityEngine;
 using Random = UnityEngine.Random;
 #endregion
@@ -35,11 +39,12 @@ public abstract class Item : ScriptableObject
 
         [Header("Item Stats")]
         public int level;
+        public BaseStats baseStats;
 
-        public int damage;
-        public float speed;    // reload speed
-        public float duration; // how long lingering effects last
-        public float area;     // area of effect
+        public int Damage => baseStats.Damage;
+        public float Speed => baseStats.Speed;
+        public float Duration => baseStats.Duration;
+        public float Area => baseStats.Area;
     }
 
     [Header("Item Details")]
@@ -47,15 +52,15 @@ public abstract class Item : ScriptableObject
     [SerializeField] List<Levels> levelsList;
     Levels levels;
 
-    // The item type is determined by the name of the class
     public ItemTypes ItemType => (ItemTypes) Enum.Parse(typeof(ItemTypes), GetType().Name);
 
-    public string Name => details.name;
-    public string Description => details.description;
+    [UsedImplicitly] public string Name => details.name;
+    [UsedImplicitly] public string Description => details.description;
 
+    #region Utility | OnValidate
     void OnValidate()
     {
-        details.name = GetType().Name;
+        details.name = string.Concat(GetType().Name.Select(x => char.IsUpper(x) ? " " + x : x.ToString())).TrimStart(' ');
 
         // ensure the list of levels is always 8
         EnforcedLevelAmount();
@@ -106,6 +111,24 @@ public abstract class Item : ScriptableObject
             }
         }
     }
+    #endregion
+
+    #region Utility | GetStat methods
+    #region Old GetStat
+    // object GetStat(int level, Levels.StatTypes stat)
+    // {
+    //     // if the level is out of bounds, return a string
+    //     if (level < 1 || level > levelsList.Count)
+    //     {
+    //         Debug.LogError("Level out of bounds. Please enter a valid level." + "\nLevel entered: " + level);
+    //         return -1;
+    //     }
+    //
+    //     // return the value of the stat at the given level
+    //     //TODO: GetType() and GetField() are slow, consider caching the results (slow due to reflection)
+    //     return levelsList[level - 1].GetType().GetField(stat.ToString().ToLower()).GetValue(levelsList[level - 1]);
+    // }
+    #endregion
 
     object GetStat(int level, Levels.StatTypes stat)
     {
@@ -116,18 +139,68 @@ public abstract class Item : ScriptableObject
             return -1;
         }
 
-        // return the value of the stat at the given level
-        return levelsList[level - 1].GetType().GetField(stat.ToString().ToLower()).GetValue(levelsList[level - 1]);
+        Levels    levelData = levelsList[level - 1];
+        BaseStats baseStats = levelData.baseStats;
+
+        // Check if the stat is part of BaseStats
+        switch (stat)
+        {
+            case Levels.StatTypes.Damage:
+                return baseStats.Damage;
+
+            case Levels.StatTypes.Speed:
+                return baseStats.Speed;
+
+            case Levels.StatTypes.Duration:
+                return baseStats.Duration;
+
+            case Levels.StatTypes.Area:
+                return baseStats.Area;
+
+            default:
+                Debug.LogError("Stat type not found.");
+                return -1;
+        }
     }
 
-    public float GetStat(Levels.StatTypes stat) => (float) GetStat(Inventory.Instance.GetItemLevel(GetType()), stat);
+    public float GetStat(Levels.StatTypes stat) =>
 
-    public float GetStat(Type item, Levels.StatTypes stat) => (float) GetStat(Inventory.Instance.GetItemLevel(item), stat);
+        // if the level is out of bounds or the stat doesn't exist, debug log and return a string
+        // if (levels.level < 1 || levels.level > levelsList.Count)
+        // {
+        //     string error = "Level out of bounds or the provided stat is invalid. Returning -1. \n" +
+        //                    "<color=red>[NOTICE]</color> Make sure the Base Stats Scriptable Object is assigned to each level." +
+        //                    $"\nLevel entered: {levels.level}" + 
+        //                    $"\nStat entered: {stat}";
+        //     
+        //     Logger.LogError(error);
+        //     Debug.Break();
+        //     return -1;
+        // }
+        (float) GetStat(InventoryManager.Instance.GetItemLevel(GetType()), stat);
 
-    public int GetStatInt(Levels.StatTypes stat) => (int) GetStat(Inventory.Instance.GetItemLevel(GetType()), stat);
+    public float GetStat(Type item, Levels.StatTypes stat) => (float) GetStat(InventoryManager.Instance.GetItemLevel(item), stat);
 
-    public int GetStatInt(Type item, Levels.StatTypes stat) => (int) GetStat(Inventory.Instance.GetItemLevel(item), stat);
+    public int GetStatInt(Levels.StatTypes stat) =>
 
+        // if the level is out of bounds or the stat doesnt exist, debug log and return a string
+        // if (levels.level < 1 || levels.level > levelsList.Count)
+        // {
+        //     string error = "Level out of bounds or the provided stat is invalid. Returning -1. \n" + 
+        //                    "<color=red>[NOTICE]</color> Make sure the Base Stats Scriptable Object is assigned to each level." +
+        //                    $"\nLevel entered: {levels.level}" + 
+        //                    $"\nStat entered: {stat}";
+        //
+        //     Logger.LogError(error);
+        //     Debug.Break();
+        //     return -1;
+        // }
+        (int) GetStat(InventoryManager.Instance.GetItemLevel(GetType()), stat);
+
+    public int GetStatInt(Type item, Levels.StatTypes stat) => (int) GetStat(InventoryManager.Instance.GetItemLevel(item), stat);
+    #endregion
+
+    #region Utility | Create method
     public static Item Create()
     {
         var potentialItems = new List<Item>(Resources.LoadAll<Item>("Items"));
@@ -137,6 +210,28 @@ public abstract class Item : ScriptableObject
 
         return item;
     }
+    #endregion
+
+    #region Utility | LoadFromFile method
+    public static Item LoadFromFile(string path, Item item)
+    {
+        if (!File.Exists(path))
+        {
+            Debug.LogError("File not found: " + path);
+            return null;
+        }
+
+        if (EditorUtility.DisplayDialog("Load Item Stats", "Are you sure you want to load the item stats from the file? \nThis will overwrite the current values.", "Yes", "No"))
+        {
+            string json = File.ReadAllText(path);
+            JsonUtility.FromJsonOverwrite(json, item);
+            return item;
+        }
+
+        Debug.LogWarning("Load cancelled.");
+        return null;
+    }
+    #endregion
 
     public abstract void Use();
 

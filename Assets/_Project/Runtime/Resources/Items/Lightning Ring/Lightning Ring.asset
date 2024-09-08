@@ -1,0 +1,37 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 83f1cfb21b993d5419bec5d03d1edc00, type: 3}
+  m_Name: Lightning Ring
+  m_EditorClassIdentifier: 
+  details:
+    name: Lightning Ring
+    description: 
+  levelsList:
+  - level: 1
+    baseStats: {fileID: 11400000, guid: c160a13acd7ba6540b084c6e0c490d96, type: 2}
+  - level: 2
+    baseStats: {fileID: 11400000, guid: c9626eed522bf2e4aa5ddcebd8d418c5, type: 2}
+  - level: 3
+    baseStats: {fileID: 11400000, guid: 0acc0e90ed2dadf4e8e3e72c66d58730, type: 2}
+  - level: 4
+    baseStats: {fileID: 11400000, guid: bf626b33515ad0f4d87c2de1ae3d9613, type: 2}
+  - level: 5
+    baseStats: {fileID: 11400000, guid: 2d9b1c9c8e2051146aa91988cda0e6b6, type: 2}
+  - level: 6
+    baseStats: {fileID: 11400000, guid: 7eb6efeaa4d475e49b8848ee29cb55b1, type: 2}
+  - level: 7
+    baseStats: {fileID: 11400000, guid: 75990f6af3acde847a476996ade85ca9, type: 2}
+  - level: 8
+    baseStats: {fileID: 11400000, guid: ccb4bd19ed141654889f0bc9f851dd0d, type: 2}
+  numberOfStrikes: 3
+  lightningEffect: {fileID: 1617602193996184, guid: 37cc546003ea4944ca2f036db80baeab,
+    type: 3}

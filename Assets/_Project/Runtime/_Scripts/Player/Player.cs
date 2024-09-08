@@ -2,7 +2,7 @@
 using UnityEngine;
 #endregion
 
-public sealed class Player : MonoBehaviour, IDamageable
+public sealed partial class Player : MonoBehaviour, IDamageable
 {
     [Header("Levels")]
     [SerializeField] int health = 100;
@@ -64,6 +64,9 @@ public sealed class Player : MonoBehaviour, IDamageable
             inputManager = GetComponentInChildren<InputManager>();
             if (!inputManager) Logger.LogError("InputManager component not found on Player!");
 
+            lightningRingCoroutine = null;
+            garlicCoroutine        = null;
+
             if (Instance == null) Instance = this;
             else Destroy(gameObject);
         }
@@ -100,10 +103,10 @@ public sealed class Player : MonoBehaviour, IDamageable
 
     void OnDrawGizmos()
     {
-        if (!Inventory.Instance) return;
+        if (!InventoryManager.Instance) return;
 
         // Garlic
-        Item garlic = Inventory.Instance.GetItem(typeof(Garlic));
+        Item garlic = InventoryManager.Instance.GetItem<Garlic>();
 
         if (garlic != null)
         {
@@ -112,7 +115,7 @@ public sealed class Player : MonoBehaviour, IDamageable
         }
 
         // Lightning Ring
-        Item lightningRing = Inventory.Instance.GetItem(typeof(LightningRing));
+        Item lightningRing = InventoryManager.Instance.GetItem<LightningRing>();
 
         if (lightningRing != null)
         {
