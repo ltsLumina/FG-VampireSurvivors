@@ -1,0 +1,60 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 83f1cfb21b993d5419bec5d03d1edc00, type: 3}
+  m_Name: Lightning Ring
+  m_EditorClassIdentifier: 
+  details:
+    name: LightningRing
+    description: 
+  levels:
+  - level: 1
+    damage: 25
+    speed: 1
+    duration: 0
+    area: 5
+  - level: 2
+    damage: 99
+    speed: 1
+    duration: 0
+    area: 5
+  - level: 2
+    damage: 99
+    speed: 1
+    duration: 0
+    area: 5
+  - level: 2
+    damage: 99
+    speed: 1
+    duration: 0
+    area: 5
+  - level: 2
+    damage: 99
+    speed: 1
+    duration: 0
+    area: 5
+  - level: 2
+    damage: 99
+    speed: 1
+    duration: 0
+    area: 5
+  - level: 2
+    damage: 99
+    speed: 1
+    duration: 0
+    area: 5
+  - level: 2
+    damage: 99
+    speed: 1
+    duration: 0
+    area: 5
+  lightningEffect: {fileID: 1617602193996184, guid: 37cc546003ea4944ca2f036db80baeab,
+    type: 3}

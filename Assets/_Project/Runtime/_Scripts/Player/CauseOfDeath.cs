@@ -6,5 +6,10 @@
         Enemy,
         Environment,
         Unknown,
+
+        // Weapon types
+        Garlic,
+        LightningRing,
+        Whip,
     }
 }

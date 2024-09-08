@@ -45,6 +45,11 @@ MonoBehaviour:
         - GlobalObjectId_V1-2-99c9720ab356a0642a771bea13969a05-528287053-0
         - GlobalObjectId_V1-2-99c9720ab356a0642a771bea13969a05-1177387075-0
         - GlobalObjectId_V1-2-99c9720ab356a0642a771bea13969a05-105871617-0
+        - GlobalObjectId_V1-2-99c9720ab356a0642a771bea13969a05-377775628-0
+        - GlobalObjectId_V1-2-99c9720ab356a0642a771bea13969a05-1091990732-0
+        - GlobalObjectId_V1-2-99c9720ab356a0642a771bea13969a05-2086564205-0
+        - GlobalObjectId_V1-2-99c9720ab356a0642a771bea13969a05-2061933226-0
+        - GlobalObjectId_V1-2-99c9720ab356a0642a771bea13969a05-6680087432799634209-1392127057200015359
         values:
         - iColor: 0
           icon: d_eyeDropper.sml
@@ -86,8 +91,18 @@ MonoBehaviour:
           icon: d_eyeDropper.sml
         - iColor: 0
           icon: Settings Icon
+        - iColor: 0
+          icon: d_eyeDropper.sml
+        - iColor: 0
+          icon: d_eyeDropper.sml
+        - iColor: 0
+          icon: PreMatCube
+        - iColor: 0
+          icon: PreMatQuad
+        - iColor: 0
+          icon: AvatarMask On Icon
       goDatasByInstanceId:
-        keys: ea700000507000006c7100005e7100008671000076710000567000000c7100007a710000907000008a7100005a70000044710000eef6ffffee7000003c700000627100000071000098700000504ffeff9a50feff
+        keys: 2a7100009a700000cc710000be710000ea710000d6710000a070000054710000de710000d2700000f471000094710000b07100003271000086700000c271000044710000da7000005071000072700000a670000040710000f8710000ee71000066faffff
         values:
         - iColor: 0
           icon: d_eyeDropper.sml
@@ -112,8 +127,6 @@ MonoBehaviour:
         - iColor: 0
           icon: d_eyeDropper.sml
         - iColor: 0
-          icon: Camera Icon
-        - iColor: 0
           icon: Canvas Icon
         - iColor: 0
           icon: Camera Icon
@@ -131,3 +144,13 @@ MonoBehaviour:
           icon: d_eyeDropper.sml
         - iColor: 0
           icon: Settings Icon
+        - iColor: 0
+          icon: d_eyeDropper.sml
+        - iColor: 0
+          icon: d_eyeDropper.sml
+        - iColor: 0
+          icon: PreMatCube
+        - iColor: 0
+          icon: PreMatQuad
+        - iColor: 0
+          icon: AvatarMask On Icon

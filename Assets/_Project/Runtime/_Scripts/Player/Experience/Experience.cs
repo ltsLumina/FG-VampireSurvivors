@@ -1,9 +1,17 @@
-using System.Collections;
+#region
+using System.Collections.Generic;
 using UnityEngine;
+#endregion
 
 public static class Experience
 {
     static int xp;
+
+    /// <summary>
+    ///     Queue to store the levels that the player has gained in the event that the player gains multiple levels at once.
+    /// </summary>
+    public readonly static Queue<int> levelsQueued = new ();
+
     public static int XP
     {
         get => xp;
@@ -11,78 +19,75 @@ public static class Experience
         {
             xp = value;
             if (xp >= XPToLevelUp) GainLevel();
+
+            OnGainedXP?.Invoke(value);
         }
     }
-    
+
     public static int Level { get; private set; } = 1;
-    public static int TotalExp { get; private set; }
+    public static int TotalXP { get; private set; }
     public static int XPToLevelUp { get; private set; } = 100;
+
+    public delegate void GainedXP(int amount);
+    public static event GainedXP OnGainedXP;
 
     public delegate void LevelUp();
     public static event LevelUp OnLevelUp;
-    
+
     public static void GainExp(int amount)
     {
         XP      += amount;
-        TotalExp += amount;
+        TotalXP += amount;
 
-        Object.FindObjectOfType<ExperienceBar>().Slider.value = XP;
+        OnGainedXP?.Invoke(amount);
     }
-    
+
     public static void LoseExp(int amount)
     {
         if (XP - amount < 0)
         {
-            ResetExp();
+            ResetXP();
             return;
         }
 
         XP      -= amount;
-        TotalExp -= amount;
+        TotalXP -= amount;
     }
-    
+
     public static void GainLevel()
     {
-        ResetExp();
-        
         Level++;
-        XPToLevelUp *= 2;
-        
+        levelsQueued.Enqueue(Level);
+        Debug.Log("Levels queued: " + levelsQueued.Count);
+
+        // -- Sets the XP required to level up to the next level
+        // SO stands for Scriptable Object
+        var breakpointsSO = Resources.Load<XPBreakpoints>("Scriptable Objects/XP Breakpoints");
+
+        breakpointsSO.Breakpoints.ForEach
+        (bp =>
+        {
+            if (bp.level == Level) XPToLevelUp = bp.xp;
+        });
+
         OnLevelUp?.Invoke();
     }
 
-    public static void ResetExp() => XP = 0;
+    public static void ResetXP() => XP = 0;
+
     public static void ResetLevel() => Level = 1;
-    public static void ResetTotalExp() => TotalExp = 0;
+
+    public static void ResetTotalExp() => TotalXP = 0;
+
     public static void ResetXPToLevelUp() => XPToLevelUp = 100;
+
     public static void ResetAll()
     {
-        ResetExp();
+        levelsQueued.Clear();
+
+        ResetXP();
         ResetLevel();
         ResetTotalExp();
         ResetXPToLevelUp();
-    }
-    
-    /// <summary>
-    /// Fills the experience bar to the next level to temporarily show off that the player has leveled up.  
-    /// </summary>
-    public static void CosmeticExperienceBar(bool enabled)
-    {
-        // set the XP bar to the maximum value to temporarily show off that the player has leveled up.
-        var experienceBar = Object.FindObjectOfType<ExperienceBar>();
-        var slider        = experienceBar.Slider;
-
-        if (enabled)
-        {
-            slider.maxValue = 9999999;
-            slider.value    = 9999999;
-        }
-        else
-        {
-            slider.maxValue = XPToLevelUp;
-            slider.value    = XP;
-        }
-
-        Debug.Log("Hit");
     }
 }

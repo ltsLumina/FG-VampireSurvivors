@@ -1,6 +1,6 @@
-﻿using System;
+﻿#region
 using UnityEngine;
-using UnityEngine.AI;
+#endregion
 
 public abstract class Enemy : MonoBehaviour, IDamageable
 {
@@ -10,24 +10,23 @@ public abstract class Enemy : MonoBehaviour, IDamageable
     [SerializeField] float damageInterval;
     [SerializeField] int recoilDamage = 15;
     [SerializeField] float recoilInterval;
-    
-    
+
     Player player;
     CausesOfDeath.Cause causeOfDeath;
 
     public delegate void EnemyHit(int damage);
     public static event EnemyHit OnEnemyHit;
-    
+
     public delegate void EnemyDeath(CausesOfDeath.Cause cause);
     public static event EnemyDeath OnEnemyDeath;
-    
+
     public int Health
     {
         get => health;
         set
         {
             health = value;
-            
+
             if (health <= 0) Death();
         }
     }
@@ -39,15 +38,17 @@ public abstract class Enemy : MonoBehaviour, IDamageable
     }
 
     void OnEnable() { }
+
     void OnDisable() { }
 
     void Start()
     {
         player = GameObject.FindWithTag("Player").GetComponent<Player>();
-        
+
         Init();
-        
+
         return;
+
         void Init()
         {
             // face the player on start
@@ -58,14 +59,14 @@ public abstract class Enemy : MonoBehaviour, IDamageable
     void OnTriggerStay(Collider other)
     {
         #region Player Collision
-        const string dealDamage = nameof(DealDamage);
+        const string dealDamage       = nameof(DealDamage);
         const string takeRecoilDamage = nameof(TakeRecoilDamage);
 
         if (other.gameObject.CompareTag("Player") && player)
         {
             if (!IsInvoking(dealDamage))
             {
-                InvokeRepeating(dealDamage, 0f, damageInterval); // hurt the player
+                InvokeRepeating(dealDamage, 0f, damageInterval);       // hurt the player
                 InvokeRepeating(takeRecoilDamage, 0f, recoilInterval); // enemy takes recoil damage from colliding with player
             }
         }
@@ -93,7 +94,7 @@ public abstract class Enemy : MonoBehaviour, IDamageable
 
         Health       -= damage;
         causeOfDeath =  CausesOfDeath.Cause.Player;
-        
+
         OnEnemyHit?.Invoke(damage);
     }
 
@@ -103,20 +104,21 @@ public abstract class Enemy : MonoBehaviour, IDamageable
 
         Health       -= recoilDamage;
         causeOfDeath =  CausesOfDeath.Cause.Player;
-        
+
         OnEnemyHit?.Invoke(recoilDamage);
     }
 
-    public virtual void Death()
+    void Death()
     {
-        Destroy(gameObject);
-        Debug.Log("Enemy has died of " + causeOfDeath);
-        
         OnEnemyDeath?.Invoke(causeOfDeath);
 
-        var randomOffset = UnityEngine.Random.insideUnitSphere * 3;
-        var randomRotation = UnityEngine.Random.rotation;
-        Instantiate(Resources.Load<ExperiencePickup>("XP"), transform.position + new Vector3(randomOffset.x, 0, randomOffset.z), randomRotation);
-        
+        Vector3    randomOffset   = Random.insideUnitSphere * 3;
+        Quaternion randomRotation = Random.rotation;
+
+        var xp = Resources.Load<ExperiencePickup>("XP");
+        Instantiate(xp, transform.position + new Vector3(randomOffset.x, 1, randomOffset.z), randomRotation);
+
+        Logger.Log("Enemy has died of " + causeOfDeath);
+        Destroy(gameObject);
     }
 }

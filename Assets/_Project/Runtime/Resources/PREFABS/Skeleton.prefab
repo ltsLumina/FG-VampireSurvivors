@@ -69,7 +69,7 @@ GameObject:
   - component: {fileID: 340622724880626008}
   - component: {fileID: 2665047878688603726}
   - component: {fileID: 2373308814059859806}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Skeleton
   m_TagString: Enemy
   m_Icon: {fileID: 0}
@@ -258,7 +258,7 @@ GameObject:
   - component: {fileID: 6226479599965828783}
   - component: {fileID: 7468306804208350468}
   - component: {fileID: 3148206600690511470}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Bone
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -341,7 +341,7 @@ GameObject:
   - component: {fileID: 3751656786360235520}
   - component: {fileID: 7881100528651481779}
   - component: {fileID: 8769928121505279337}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Bone (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -421,9 +421,25 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 7808429935605982489}
     m_Modifications:
+    - target: {fileID: 1059252159538354, guid: 7e5c9391871e33f40aec13b67cf0db13, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     - target: {fileID: 1161526018737128, guid: 7e5c9391871e33f40aec13b67cf0db13, type: 3}
       propertyPath: m_Name
       value: White aura
+      objectReference: {fileID: 0}
+    - target: {fileID: 1161526018737128, guid: 7e5c9391871e33f40aec13b67cf0db13, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 1388157206183702, guid: 7e5c9391871e33f40aec13b67cf0db13, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 1848492772684234, guid: 7e5c9391871e33f40aec13b67cf0db13, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 4777393788264462, guid: 7e5c9391871e33f40aec13b67cf0db13, type: 3}
       propertyPath: m_LocalScale.x
