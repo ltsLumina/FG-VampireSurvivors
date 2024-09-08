@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using JetBrains.Annotations;
 using UnityEngine;
 #endregion
 
@@ -10,6 +11,9 @@ public class InventoryManager : MonoBehaviour
     [Serializable]
     public struct Items
     {
+        [SerializeField] [HideInInspector] [UsedImplicitly]
+        public string name;
+
         [Tooltip("Level of the item. The level of the item can be increased by collecting the same item.")]
         [SerializeField] int level;
 
@@ -41,9 +45,17 @@ public class InventoryManager : MonoBehaviour
         else Destroy(gameObject);
     }
 
-    #region Utility | OnValidate; Enforce level limits
+    #region Utility | OnValidate
     void OnValidate()
     {
+        // set the name of the structs "name" variable to the name of the item
+        for (int i = 0; i < inventory.Count; i++)
+        {
+            Items itemEntry = inventory[i];
+            itemEntry.name = itemEntry.Item.Name;
+            inventory[i]   = itemEntry;
+        }
+
         // enforce level limit to 1
         if (inventory.Count <= 0) return;
 
@@ -62,6 +74,17 @@ public class InventoryManager : MonoBehaviour
                 itemEntry.Level = 8;
                 inventory[i]    = itemEntry;
             }
+        }
+    }
+
+    void ValidateInspectorName()
+    {
+        // set the name of the structs "name" variable to the name of the item
+        for (int i = 0; i < inventory.Count; i++)
+        {
+            Items itemEntry = inventory[i];
+            itemEntry.name = itemEntry.Item.Name;
+            inventory[i]   = itemEntry;
         }
     }
     #endregion
@@ -141,6 +164,8 @@ public class InventoryManager : MonoBehaviour
         inventory.Add
         (new ()
          { Item = item, Level = 1 });
+
+        ValidateInspectorName(); // Editor function to update the name of the item in the inspector (shows the name of the Item rather than "Element X")
 
         Debug.Log("Item added to inventory. \nItem: " + item);
         return item;

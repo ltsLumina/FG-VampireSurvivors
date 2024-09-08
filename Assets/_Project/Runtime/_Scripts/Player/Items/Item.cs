@@ -38,6 +38,8 @@ public abstract class Item : ScriptableObject
         }
 
         [Header("Item Stats")]
+        [SerializeField, HideInInspector, UsedImplicitly]
+        public string name;
         public int level;
         public BaseStats baseStats;
 
@@ -47,10 +49,26 @@ public abstract class Item : ScriptableObject
         public float Area => baseStats.Area;
     }
 
+    /// <summary>
+    ///     Contains the name and description of the item.
+    /// </summary>
     [Header("Item Details")]
     [SerializeField] Details details;
+
+    /// <summary>
+    ///     Contains a list of levels for the item.
+    /// </summary>
     [SerializeField] List<Levels> levelsList;
+
+    /// <summary>
+    ///     idk what this does but it is important
+    /// </summary>
     Levels levels;
+
+    /// <summary>
+    ///     This is literally only ever accessed by an Editor script (outside of this class)
+    /// </summary>
+    public List<Levels> LevelsList => levelsList;
 
     public ItemTypes ItemType => (ItemTypes) Enum.Parse(typeof(ItemTypes), GetType().Name);
 
@@ -60,6 +78,15 @@ public abstract class Item : ScriptableObject
     #region Utility | OnValidate
     void OnValidate()
     {
+        // Set the name of the structs' "name" variable to the level field
+        for (int i = 0; i < LevelsList.Count; i++)
+        {
+            Levels levels = LevelsList[i];
+            levels.name   = $"Level {levels.level}";
+            LevelsList[i] = levels;
+        }
+
+        // Set the name of the item to the name of the class
         details.name = string.Concat(GetType().Name.Select(x => char.IsUpper(x) ? " " + x : x.ToString())).TrimStart(' ');
 
         // ensure the list of levels is always 8
@@ -77,19 +104,19 @@ public abstract class Item : ScriptableObject
         {
             // bug: The list is empty for 1 frame when recompiling so I just don't throw an error if the list is empty
             // bug: and because of unity now its throwing an error saying that the item is level 0, which it isn't...
-            if (levelsList.Count == 0 || levels.level == 0) return;
+            if (LevelsList.Count == 0 || levels.level == 0) return;
 
-            if (levels.level < 1 || levels.level > levelsList.Count) Debug.LogError("Level out of bounds. Please enter a valid level." + "\nLevel entered: " + levels.level);
+            if (levels.level < 1 || levels.level > LevelsList.Count) Debug.LogError("Level out of bounds. Please enter a valid level." + "\nLevel entered: " + levels.level);
         }
 
         void NotInOrder()
         {
             // bug: same here
-            if (levelsList.Count == 0) return;
+            if (LevelsList.Count == 0) return;
 
-            for (int i = 0; i < levelsList.Count; i++)
+            for (int i = 0; i < LevelsList.Count; i++)
             {
-                Levels level = levelsList[i];
+                Levels level = LevelsList[i];
 
                 if (level.level != i + 1)
                 {
@@ -102,12 +129,12 @@ public abstract class Item : ScriptableObject
         void EnforcedLevelAmount()
         {
             // bug: and same thing here
-            if (levelsList.Count == 0) return;
+            if (LevelsList.Count == 0) return;
 
-            if (levelsList.Count != 8)
+            if (LevelsList.Count != 8)
             {
                 Debug.LogError("Levels list must contain 8 levels.");
-                while (levelsList.Count > 8) levelsList.RemoveAt(levelsList.Count - 1);
+                while (LevelsList.Count > 8) LevelsList.RemoveAt(LevelsList.Count - 1);
             }
         }
     }
@@ -133,13 +160,13 @@ public abstract class Item : ScriptableObject
     object GetStat(int level, Levels.StatTypes stat)
     {
         // if the level is out of bounds, return a string
-        if (level < 1 || level > levelsList.Count)
+        if (level < 1 || level > LevelsList.Count)
         {
             Debug.LogError("Level out of bounds. Please enter a valid level." + "\nLevel entered: " + level);
             return -1;
         }
 
-        Levels    levelData = levelsList[level - 1];
+        Levels    levelData = LevelsList[level - 1];
         BaseStats baseStats = levelData.baseStats;
 
         // Check if the stat is part of BaseStats

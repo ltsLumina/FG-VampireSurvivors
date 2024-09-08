@@ -6,6 +6,18 @@ public class ExperiencePickup : MonoBehaviour
 {
     [SerializeField] int expValue = 10;
 
+    Rigidbody rb;
+
+    void Start()
+    {
+        const float force  = 5;
+        const float torque = 3;
+
+        rb = GetComponent<Rigidbody>();
+        rb.AddForce(Vector3.up   * force, ForceMode.Impulse);
+        rb.AddTorque(Vector3.one * torque, ForceMode.Impulse);
+    }
+
     void OnTriggerEnter(Collider other)
     {
         if (!other.CompareTag("Player") || Player.IsDead) return;
@@ -14,4 +26,6 @@ public class ExperiencePickup : MonoBehaviour
         // play effect here
         Destroy(gameObject);
     }
+
+    public static ExperiencePickup Create(Vector3 position, Quaternion rotation) => Instantiate(Resources.Load<ExperiencePickup>("XP"), position, rotation);
 }

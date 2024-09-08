@@ -1,5 +1,6 @@
 #region
 using UnityEngine;
+using UnityEngine.Events;
 #endregion
 
 public sealed partial class Player : MonoBehaviour, IDamageable
@@ -11,6 +12,10 @@ public sealed partial class Player : MonoBehaviour, IDamageable
     [Space(20)]
     [Header("Effects")]
     [SerializeField] ParticleSystem levelUpAura;
+
+    [Header("Events")]
+    [SerializeField] UnityEvent<int> onHit;
+    [SerializeField] UnityEvent<CausesOfDeath.Cause> onDeath;
 
     InputManager inputManager;
     CausesOfDeath.Cause causeOfDeath;
@@ -33,12 +38,6 @@ public sealed partial class Player : MonoBehaviour, IDamageable
         get => speed;
         set => speed = value;
     }
-
-    public delegate void PlayerHit(int damage);
-    public static event PlayerHit OnPlayerHit;
-
-    public delegate void PlayerDeath(CausesOfDeath.Cause cause);
-    public static event PlayerDeath OnPlayerDeath;
 
     void OnEnable()
     {
@@ -89,7 +88,7 @@ public sealed partial class Player : MonoBehaviour, IDamageable
         Health -= damage;
 
         causeOfDeath = cause; // Set the cause of death to the latest instance of damage. Works 95% of the time :)
-        OnPlayerHit?.Invoke(damage);
+        onHit?.Invoke(damage);
     }
 
     void Death(CausesOfDeath.Cause cause)
@@ -97,7 +96,7 @@ public sealed partial class Player : MonoBehaviour, IDamageable
         Debug.Log("Player has died of " + cause);
         enabled = false;
 
-        OnPlayerDeath?.Invoke(cause);
+        onDeath?.Invoke(cause);
     }
     #endregion
 

@@ -1,17 +1,16 @@
 #region
 using DG.Tweening;
 using UnityEngine;
+using UnityEngine.Events;
 #endregion
 
 public class LevelUpManager : MonoBehaviour
 {
     [SerializeField] RectTransform levelUpMenu;
 
-    public delegate void MenuShown();
-    public static event MenuShown OnMenuShown;
-
-    public delegate void MenuHidden();
-    public static event MenuHidden OnMenuHidden;
+    [Header("Events")]
+    [SerializeField] UnityEvent onMenuShown;
+    [SerializeField] UnityEvent onMenuHidden;
 
     void Start()
     {
@@ -34,7 +33,7 @@ public class LevelUpManager : MonoBehaviour
         sequence.Append(levelUpMenu.DOScale(Vector3.one, scaleDuration));
         sequence.Join(levelUpMenu.DORotate(new (0, 0, 360), rotateDuration, RotateMode.FastBeyond360));
 
-        OnMenuShown?.Invoke();
+        onMenuShown?.Invoke();
     }
 
     public void HideLevelUpMenu()
@@ -68,6 +67,6 @@ public class LevelUpManager : MonoBehaviour
         sequence.Append(levelUpMenu.DOScale(Vector3.zero, scaleDuration));
         sequence.OnComplete(() => { levelUpMenu.gameObject.SetActive(false); });
 
-        OnMenuHidden?.Invoke();
+        onMenuHidden?.Invoke();
     }
 }

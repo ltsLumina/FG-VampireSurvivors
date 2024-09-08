@@ -1,5 +1,7 @@
 ﻿#region
 using UnityEngine;
+using UnityEngine.Events;
+using Random = UnityEngine.Random;
 #endregion
 
 public abstract class Enemy : MonoBehaviour, IDamageable
@@ -11,13 +13,11 @@ public abstract class Enemy : MonoBehaviour, IDamageable
     [SerializeField] int recoilDamage = 15;
     [SerializeField] float recoilInterval;
 
+    [Header("Events")]
+    [SerializeField] UnityEvent<int> onHit;
+    [SerializeField] UnityEvent<CausesOfDeath.Cause> onDeath;
+
     CausesOfDeath.Cause causeOfDeath;
-
-    public delegate void EnemyHit(int damage);
-    public static event EnemyHit OnEnemyHit;
-
-    public delegate void EnemyDeath(CausesOfDeath.Cause cause);
-    public static event EnemyDeath OnEnemyDeath;
 
     public int Health
     {
@@ -35,9 +35,7 @@ public abstract class Enemy : MonoBehaviour, IDamageable
         set => speed = value;
     }
 
-    void OnEnable() { }
-
-    void OnDisable() { }
+    public void InstantiateXP() => ExperiencePickup.Create(transform.position, Random.rotation);
 
     void Start()
     {
@@ -87,7 +85,7 @@ public abstract class Enemy : MonoBehaviour, IDamageable
         Health       -= damage;
         causeOfDeath =  CausesOfDeath.Cause.Player;
 
-        OnEnemyHit?.Invoke(damage);
+        onHit?.Invoke(damage);
     }
 
     void TakeRecoilDamage()
@@ -97,18 +95,12 @@ public abstract class Enemy : MonoBehaviour, IDamageable
         Health       -= recoilDamage;
         causeOfDeath =  CausesOfDeath.Cause.Player;
 
-        OnEnemyHit?.Invoke(recoilDamage);
+        onHit?.Invoke(recoilDamage);
     }
 
     void Death()
     {
-        OnEnemyDeath?.Invoke(causeOfDeath);
-
-        Vector3    randomOffset   = Random.insideUnitSphere * 3;
-        Quaternion randomRotation = Random.rotation;
-
-        var xp = Resources.Load<ExperiencePickup>("XP");
-        Instantiate(xp, transform.position + new Vector3(randomOffset.x, 1, randomOffset.z), randomRotation);
+        onDeath?.Invoke(causeOfDeath);
 
         Logger.Log("Enemy has died of " + causeOfDeath);
         Destroy(gameObject);

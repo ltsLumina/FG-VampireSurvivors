@@ -11,7 +11,7 @@ public partial class Player
     Coroutine lightningRingCoroutine;
     Coroutine garlicCoroutine;
 
-    void Update()
+    void Update() //TODO: Stop all coroutines or similar when player dies so that the attack-loop stops
     {
         List<InventoryManager.Items> inventory = InventoryManager.Instance.Inventory;
 
@@ -95,11 +95,11 @@ public partial class Player
 
     static IEnumerator LightningRingCooldown(LightningRing item)
     {
-        float cooldown = item.GetStat(Item.Levels.StatTypes.Speed);
-        Debug.Log("Cooldown: " + cooldown);
-
         while (true)
         {
+            float cooldown = item.GetStat(Item.Levels.StatTypes.Speed);
+            Debug.Log("Cooldown: " + cooldown);
+
             Smite(item, item.LightningEffect);
             yield return new WaitForSeconds(cooldown);
         }

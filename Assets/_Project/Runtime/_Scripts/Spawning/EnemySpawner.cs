@@ -43,7 +43,6 @@ public class EnemySpawner : MonoBehaviour
         Vector3    randomOffset   = Random.insideUnitSphere * debugSpawnRadius;
         Quaternion randomRotation = Random.rotation;
 
-        var xp = Resources.Load<ExperiencePickup>("XP");
-        Instantiate(xp, transform.position + new Vector3(randomOffset.x, 1, randomOffset.z), randomRotation);
+        ExperiencePickup.Create(transform.position + randomOffset, randomRotation);
     }
 }
