@@ -518,7 +518,7 @@ Canvas:
   m_GameObject: {fileID: 6396348704888679236}
   m_Enabled: 1
   serializedVersion: 3
-  m_RenderMode: 0
+  m_RenderMode: 1
   m_Camera: {fileID: 0}
   m_PlaneDistance: 100
   m_PixelPerfect: 0
@@ -701,6 +701,12 @@ MonoBehaviour:
   health: 100
   speed: 8
   levelUpAura: {fileID: 7527732922416701009}
+  onHit:
+    m_PersistentCalls:
+      m_Calls: []
+  onDeath:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!114 &4408447521130374457
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -713,9 +719,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b950967660b04140abaf887af9436faf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemsInInventory:
-  - item: {fileID: 11400000, guid: ee1a648d59885dc408f35f04ac14302c, type: 2}
-    level: 0
+  inventory:
+  - name: Lightning Ring
+    level: 1
+    item: {fileID: 11400000, guid: 525815cef62963248814760cc7e69324, type: 2}
 --- !u!136 &8663757204412334232
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -747,7 +754,7 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6680087432799634209}
   serializedVersion: 4
-  m_Mass: 9999
+  m_Mass: 99
   m_Drag: 0
   m_AngularDrag: 0
   m_CenterOfMass: {x: 0, y: 0, z: 0}
