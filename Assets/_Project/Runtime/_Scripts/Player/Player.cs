@@ -1,5 +1,4 @@
 #region
-using System.Collections.Generic;
 using UnityEngine;
 #endregion
 
@@ -70,18 +69,6 @@ public sealed class Player : MonoBehaviour, IDamageable
         }
     }
 
-    void Update()
-    {
-        #region Attack-loop
-        List<Inventory.Items> items = Inventory.Instance.ItemsInInventory;
-
-        foreach (Inventory.Items inventory in items) { inventory.item.Use(); }
-
-        var garlicEffect = GetComponentInChildren<ParticleSystem>();
-        garlicEffect.transform.position = FindObjectOfType<Player>().transform.position;
-        #endregion
-    }
-
     void FixedUpdate() => Movement(inputManager.MoveInput);
 
     #region Movement
@@ -113,23 +100,24 @@ public sealed class Player : MonoBehaviour, IDamageable
 
     void OnDrawGizmos()
     {
-        if (ValidityCheck(out Item item)) return;
+        if (!Inventory.Instance) return;
 
-        Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(transform.position, item.GetStat(Inventory.Instance.GetItemLevel(typeof(Garlic)), Item.Levels.StatTypes.Area));
+        // Garlic
+        Item garlic = Inventory.Instance.GetItem(typeof(Garlic));
 
-        return; // this is so unnecessary but whatever
-
-        bool ValidityCheck(out Item itemToCheck)
+        if (garlic != null)
         {
-            if (!Inventory.Instance)
-            {
-                itemToCheck = null;
-                return true;
-            }
+            Gizmos.color = Color.red;
+            Gizmos.DrawWireSphere(transform.position, garlic.GetStat(Item.Levels.StatTypes.Area));
+        }
 
-            itemToCheck = Inventory.Instance.GetItem(typeof(Garlic));
-            return !itemToCheck;
+        // Lightning Ring
+        Item lightningRing = Inventory.Instance.GetItem(typeof(LightningRing));
+
+        if (lightningRing != null)
+        {
+            Gizmos.color = Color.blue;
+            Gizmos.DrawWireSphere(transform.position, lightningRing.GetStat(Item.Levels.StatTypes.Area));
         }
     }
 }

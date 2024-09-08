@@ -2235,6 +2235,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Garlic Aura
       objectReference: {fileID: 0}
+    - target: {fileID: 8877596331768416466, guid: 6f4b628023cb4bc449d3bb2c00bad6af,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -3748,6 +3753,24 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   levelUpMenu: {fileID: 2086564206}
+--- !u!1 &1519655490 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6680087432799634209, guid: 35543b64ff04bda4d8e0ed7f1cc190a4,
+    type: 3}
+  m_PrefabInstance: {fileID: 1392127057200015359}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1519655495
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1519655490}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 045f6032836c1ba479ca2fa12638e85e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1537664462
 GameObject:
   m_ObjectHideFlags: 0
@@ -4903,6 +4926,11 @@ PrefabInstance:
       propertyPath: m_Camera
       value: 
       objectReference: {fileID: 1193072122}
+    - target: {fileID: 3002206488278963679, guid: 35543b64ff04bda4d8e0ed7f1cc190a4,
+        type: 3}
+      propertyPath: m_RenderMode
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3212860715267097180, guid: 35543b64ff04bda4d8e0ed7f1cc190a4,
         type: 3}
       propertyPath: m_UIInputModule
@@ -5012,7 +5040,11 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 926640643}
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 6680087432799634209, guid: 35543b64ff04bda4d8e0ed7f1cc190a4,
+        type: 3}
+      insertIndex: 3
+      addedObject: {fileID: 1519655495}
   m_SourcePrefab: {fileID: 100100000, guid: 35543b64ff04bda4d8e0ed7f1cc190a4, type: 3}
 --- !u!1001 &5054889933863086242
 PrefabInstance:

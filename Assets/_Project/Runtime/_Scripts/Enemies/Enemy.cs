@@ -5,7 +5,7 @@ using UnityEngine;
 public abstract class Enemy : MonoBehaviour, IDamageable
 {
     [SerializeField] int health = 100;
-    [SerializeField] int speed = 3;
+    [SerializeField] float speed = 3;
     [SerializeField] int damage = 5;
     [SerializeField] float damageInterval;
     [SerializeField] int recoilDamage = 15;
@@ -26,12 +26,11 @@ public abstract class Enemy : MonoBehaviour, IDamageable
         set
         {
             health = value;
-
             if (health <= 0) Death();
         }
     }
 
-    public int Speed
+    public float Speed
     {
         get => speed;
         set => speed = value;
