@@ -5,6 +5,7 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "Garlic", menuName = "Items/Garlic")]
 public class Garlic : Item
 {
+    [Header("Effects")]
     [SerializeField] GameObject garlicEffect;
 
     public override void Use()

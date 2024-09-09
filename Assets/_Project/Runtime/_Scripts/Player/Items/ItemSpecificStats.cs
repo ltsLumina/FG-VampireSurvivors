@@ -6,26 +6,25 @@ using Object = UnityEngine.Object;
 #endregion
 
 /// <summary>
-///     Includes the base stats such as damage, speed, duration, and area.
+///     Base stat object (not to be confused with the BaseStats class) that stores the item-specific stats such as knockback for the Garlic item.
 /// </summary>
-[CreateAssetMenu(menuName = "Items/Data/BaseStats", fileName = "Item BaseStats", order = 0)]
-public class BaseStats : ScriptableObject
+public abstract class ItemSpecificStats : ScriptableObject
 {
-    [Header("Base Stats")]
-    [SerializeField] int damage;
-    [SerializeField] float speed;    // reload speed
-    [SerializeField] float duration; // how long lingering effects last
-    [SerializeField] float area;     // area of effect
-
-    public int Damage => damage;
-    public float Speed => speed;
-    public float Duration => duration;
-    public float Area => area;
+    public enum Stats
+    {
+        // Garlic
+        Knockback,
+        
+        // Lightning Ring
+        LightningStrikes,
+    }
+    
+    public abstract float GetItemSpecificStat(Stats stat);
 }
 
-[CustomEditor(typeof(BaseStats), true)]
+[CustomEditor(typeof(ItemSpecificStats), true)]
 [CanEditMultipleObjects]
-public class BaseStatsEditor : Editor
+public class ItemStatsEditor : Editor
 {
     public override void OnInspectorGUI()
     {

@@ -18,8 +18,7 @@ public partial class Player
         foreach (InventoryManager.Items inventoryItem in inventory) { inventoryItem.Item.Use(); }
     }
 
-    public void Attack<T>()
-        where T : Item
+    public void Attack<T>() where T : Item
     {
         switch (typeof(T))
         {
@@ -36,34 +35,42 @@ public partial class Player
     void DamageZone()
     {
         var   garlic = InventoryManager.Instance.GetItem<Garlic>();
-        float area   = garlic.GetStat(Item.Levels.StatTypes.Area);
+        float area   = garlic.GetBaseStat(Item.Levels.StatTypes.Area);
 
         var        damageZoneObjects = new List<Collider>(5);
         Collider[] garlicColliders   = Physics.OverlapSphere(Instance.transform.position, area, LayerMask.GetMask("Enemy"));
-        Debug.Log("Total colliders: " + garlicColliders.Length);
+        Debug.Log("Total Garlic colliders: " + garlicColliders.Length);
 
         damageZoneObjects.AddRange(garlicColliders);
 
         foreach (Collider obj in damageZoneObjects)
         {
+            // Deal damage
             if (obj.TryGetComponent(out IDamageable damageable))
             {
                 if (damageable is Player) continue;
                 damageable.TakeDamage(garlic.GetStatInt(Item.Levels.StatTypes.Damage), CausesOfDeath.Cause.Garlic);
+            }
+            
+            // Knockback
+            if (obj.TryGetComponent(out Rigidbody rb))
+            {
+                Vector3 direction = (obj.transform.position - Instance.transform.position).normalized;
+                rb.AddForce(direction * garlic.GetItemSpecificStat(garlic.GetItemLevel(), ItemSpecificStats.Stats.Knockback), ForceMode.Impulse);
             }
         }
     }
 
     IEnumerator GarlicCooldown(Garlic garlic)
     {
-        float cooldown = garlic.GetStat(Item.Levels.StatTypes.Speed);
-        Debug.Log("Garlic Cooldown: " + cooldown);
+        float cooldown = garlic.GetBaseStat(Item.Levels.StatTypes.Speed);
 
         while (true)
         {
             DamageZone();
             yield return new WaitForSeconds(cooldown);
         }
+        // ReSharper disable once IteratorNeverReturns
     }
 
     static void Smite(LightningRing item, GameObject lightningEffect)
@@ -71,18 +78,19 @@ public partial class Player
         Debug.Log("Lightning Ring used." + "\nDealt " + item.GetStatInt(Item.Levels.StatTypes.Damage) + " damage.");
 
         int   damage  = item.GetStatInt(Item.Levels.StatTypes.Damage);
-        float area    = item.GetStat(Item.Levels.StatTypes.Area);
+        float area    = item.GetBaseStat(Item.Levels.StatTypes.Area);
         var   enemies = new List<Enemy>();
 
         Collider[] colliders = Physics.OverlapSphere(Instance.transform.position, area, LayerMask.GetMask("Enemy"));
+        Debug.Log("Total Lightning Ring colliders: " + colliders.Length);
 
         foreach (Collider collider in colliders)
         {
             if (collider.TryGetComponent(out Enemy enemy)) enemies.Add(enemy);
         }
-
-        // strike amountOfStrikes times
-        for (int i = 0; i < item.NumberOfStrikes; i++)
+        
+        // Strikes the amount of enemies equal to the item's lightning strikes stat
+        for (int i = 0; i < item.GetItemSpecificStat(item.GetItemLevel(), ItemSpecificStats.Stats.LightningStrikes); i++)
         {
             if (enemies.Count == 0) break;
 
@@ -97,9 +105,7 @@ public partial class Player
     {
         while (true)
         {
-            float cooldown = item.GetStat(Item.Levels.StatTypes.Speed);
-            Debug.Log("Cooldown: " + cooldown);
-
+            float cooldown = item.GetBaseStat(Item.Levels.StatTypes.Speed);
             Smite(item, item.LightningEffect);
             yield return new WaitForSeconds(cooldown);
         }

@@ -19,27 +19,38 @@ MonoBehaviour:
   - name: Level 1
     level: 1
     baseStats: {fileID: 11400000, guid: c160a13acd7ba6540b084c6e0c490d96, type: 2}
+    itemSpecificStats: {fileID: 11400000, guid: a62e0c5da21aa6b499f5e59cfc88b76f,
+      type: 2}
   - name: Level 2
     level: 2
     baseStats: {fileID: 11400000, guid: c9626eed522bf2e4aa5ddcebd8d418c5, type: 2}
+    itemSpecificStats: {fileID: 11400000, guid: 7caf42018aec7d346aa23e7a3bd1b726,
+      type: 2}
   - name: Level 3
     level: 3
     baseStats: {fileID: 11400000, guid: 0acc0e90ed2dadf4e8e3e72c66d58730, type: 2}
+    itemSpecificStats: {fileID: 11400000, guid: 43ed41d1fefe7784f826808d7da5fb70,
+      type: 2}
   - name: Level 4
     level: 4
     baseStats: {fileID: 11400000, guid: bf626b33515ad0f4d87c2de1ae3d9613, type: 2}
+    itemSpecificStats: {fileID: 11400000, guid: 5baa374b8588d2b46a9991db05acd512,
+      type: 2}
   - name: Level 5
     level: 5
     baseStats: {fileID: 11400000, guid: 2d9b1c9c8e2051146aa91988cda0e6b6, type: 2}
+    itemSpecificStats: {fileID: 0}
   - name: Level 6
     level: 6
     baseStats: {fileID: 11400000, guid: 7eb6efeaa4d475e49b8848ee29cb55b1, type: 2}
+    itemSpecificStats: {fileID: 0}
   - name: Level 7
     level: 7
     baseStats: {fileID: 11400000, guid: 75990f6af3acde847a476996ade85ca9, type: 2}
+    itemSpecificStats: {fileID: 0}
   - name: Level 8
     level: 8
     baseStats: {fileID: 11400000, guid: ccb4bd19ed141654889f0bc9f851dd0d, type: 2}
-  numberOfStrikes: 3
+    itemSpecificStats: {fileID: 0}
   lightningEffect: {fileID: 1617602193996184, guid: 37cc546003ea4944ca2f036db80baeab,
     type: 3}

@@ -38,10 +38,12 @@ public abstract class Item : ScriptableObject
         }
 
         [Header("Item Stats")]
-        [SerializeField, HideInInspector, UsedImplicitly]
+        [SerializeField, HideInInspector, UsedImplicitly] // The name field is used to rename the "Element X" in the inspector to match the item level
         public string name;
+        
         public int level;
         public BaseStats baseStats;
+        public ItemSpecificStats itemSpecificStats;
 
         public int Damage => baseStats.Damage;
         public float Speed => baseStats.Speed;
@@ -140,9 +142,13 @@ public abstract class Item : ScriptableObject
     }
     #endregion
 
-    #region Utility | GetStat methods
-    #region Old GetStat
-    // object GetStat(int level, Levels.StatTypes stat)
+    #region Utility | GetItemLevel method
+    public int GetItemLevel() => InventoryManager.Instance.GetItemLevel(GetType());
+    #endregion
+    
+    #region Utility | GetBaseStat methods
+    #region Old GetBaseStat
+    // object GetBaseStat(int level, Levels.StatTypes stat)
     // {
     //     // if the level is out of bounds, return a string
     //     if (level < 1 || level > levelsList.Count)
@@ -157,7 +163,7 @@ public abstract class Item : ScriptableObject
     // }
     #endregion
 
-    object GetStat(int level, Levels.StatTypes stat)
+    object GetBaseStat(int level, Levels.StatTypes stat)
     {
         // if the level is out of bounds, return a string
         if (level < 1 || level > LevelsList.Count)
@@ -190,7 +196,26 @@ public abstract class Item : ScriptableObject
         }
     }
 
-    public float GetStat(Levels.StatTypes stat) =>
+    public float GetItemSpecificStat(int level, Item item, ItemSpecificStats.Stats stat)
+    {
+        if (level < 1 || level > LevelsList.Count)
+        {
+            Debug.LogError("Level out of bounds. Please enter a valid level." + "\nLevel entered: " + level);
+            return -1;
+        }
+
+        ItemSpecificStats itemSpecificStats = item.LevelsList[level - 1].itemSpecificStats;
+
+        if (!itemSpecificStats)
+        {
+            Logger.LogError("Item Specific Stats not found. Make sure the Item Specific Stats Scriptable Object is assigned to each level.");
+            return -1;
+        } 
+        
+        return itemSpecificStats.GetItemSpecificStat(stat);
+    }
+
+    public float GetBaseStat(Levels.StatTypes stat) =>
 
         // if the level is out of bounds or the stat doesn't exist, debug log and return a string
         // if (levels.level < 1 || levels.level > levelsList.Count)
@@ -204,9 +229,9 @@ public abstract class Item : ScriptableObject
         //     Debug.Break();
         //     return -1;
         // }
-        (float) GetStat(InventoryManager.Instance.GetItemLevel(GetType()), stat);
+        (float) GetBaseStat(InventoryManager.Instance.GetItemLevel(GetType()), stat);
 
-    public float GetStat(Type item, Levels.StatTypes stat) => (float) GetStat(InventoryManager.Instance.GetItemLevel(item), stat);
+    public float GetBaseStat(Type item, Levels.StatTypes stat) => (float) GetBaseStat(InventoryManager.Instance.GetItemLevel(item), stat);
 
     public int GetStatInt(Levels.StatTypes stat) =>
 
@@ -222,9 +247,9 @@ public abstract class Item : ScriptableObject
         //     Debug.Break();
         //     return -1;
         // }
-        (int) GetStat(InventoryManager.Instance.GetItemLevel(GetType()), stat);
+        (int) GetBaseStat(InventoryManager.Instance.GetItemLevel(GetType()), stat);
 
-    public int GetStatInt(Type item, Levels.StatTypes stat) => (int) GetStat(InventoryManager.Instance.GetItemLevel(item), stat);
+    public int GetStatInt(Type item, Levels.StatTypes stat) => (int) GetBaseStat(InventoryManager.Instance.GetItemLevel(item), stat);
     #endregion
 
     #region Utility | Create method
@@ -266,4 +291,15 @@ public abstract class Item : ScriptableObject
     {
         // evolve item logic
     }
+}
+
+internal static class ItemExtensions
+{
+    public static float GetItemSpecificStat(this Item item, int level, ItemSpecificStats.Stats stat) => item.GetItemSpecificStat(level, item, stat);
+    
+    public static float GetBaseStat(this Item item, Item.Levels.StatTypes stat) => item.GetBaseStat(stat);
+    
+    public static int GetStatInt(this Item item, Item.Levels.StatTypes stat) => item.GetStatInt(stat);
+    
+    public static int GetItemLevel(this Item item) => item.GetItemLevel();
 }

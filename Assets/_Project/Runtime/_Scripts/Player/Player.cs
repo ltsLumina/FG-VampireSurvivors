@@ -41,13 +41,8 @@ public sealed partial class Player : MonoBehaviour, IDamageable
 
     void OnEnable()
     {
-        //OnPlayerHit += ;
+        onDeath.AddListener(_ => Logger.LogWarning("Player has died." + "\nStopping all coroutines executing on this MonoBehaviour."));
         Experience.OnLevelUp += () => EffectPlayer.PlayEffect(levelUpAura);
-    }
-
-    void OnDisable()
-    {
-        //OnPlayerHit -= ;
     }
 
     public static Player Instance { get; private set; }
@@ -110,7 +105,7 @@ public sealed partial class Player : MonoBehaviour, IDamageable
         if (garlic != null)
         {
             Gizmos.color = Color.red;
-            Gizmos.DrawWireSphere(transform.position, garlic.GetStat(Item.Levels.StatTypes.Area));
+            Gizmos.DrawWireSphere(transform.position, garlic.GetBaseStat(Item.Levels.StatTypes.Area));
         }
 
         // Lightning Ring
@@ -119,7 +114,7 @@ public sealed partial class Player : MonoBehaviour, IDamageable
         if (lightningRing != null)
         {
             Gizmos.color = Color.blue;
-            Gizmos.DrawWireSphere(transform.position, lightningRing.GetStat(Item.Levels.StatTypes.Area));
+            Gizmos.DrawWireSphere(transform.position, lightningRing.GetBaseStat(Item.Levels.StatTypes.Area));
         }
     }
 }

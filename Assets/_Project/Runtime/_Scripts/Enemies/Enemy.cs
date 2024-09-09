@@ -101,8 +101,6 @@ public abstract class Enemy : MonoBehaviour, IDamageable
     void Death()
     {
         onDeath?.Invoke(causeOfDeath);
-
-        Logger.Log("Enemy has died of " + causeOfDeath);
         Destroy(gameObject);
     }
 }
