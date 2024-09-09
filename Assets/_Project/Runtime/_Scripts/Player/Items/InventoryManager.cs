@@ -32,10 +32,10 @@ public class InventoryManager : MonoBehaviour
             set => item = value;
         }
     }
-
+    
     [SerializeField] List<Items> inventory = new ();
 
-    public List<Items> Inventory => inventory;
+    public IReadOnlyCollection<Items> Inventory => inventory;
 
     public static InventoryManager Instance { get; private set; }
 

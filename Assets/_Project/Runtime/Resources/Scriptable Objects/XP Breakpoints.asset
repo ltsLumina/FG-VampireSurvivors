@@ -13,101 +13,150 @@ MonoBehaviour:
   m_Name: XP Breakpoints
   m_EditorClassIdentifier: 
   breakpoints:
-  - level: 1
+  - name: 
+    level: 1
     xp: 100
-  - level: 2
+  - name: 
+    level: 2
     xp: 110
-  - level: 3
+  - name: 
+    level: 3
     xp: 121
-  - level: 4
+  - name: 
+    level: 4
     xp: 133
-  - level: 5
+  - name: 
+    level: 5
     xp: 146
-  - level: 6
+  - name: 
+    level: 6
     xp: 161
-  - level: 7
+  - name: 
+    level: 7
     xp: 177
-  - level: 8
+  - name: 
+    level: 8
     xp: 194
-  - level: 9
+  - name: 
+    level: 9
     xp: 214
-  - level: 10
+  - name: 
+    level: 10
     xp: 235
-  - level: 11
+  - name: 
+    level: 11
     xp: 259
-  - level: 12
+  - name: 
+    level: 12
     xp: 285
-  - level: 13
+  - name: 
+    level: 13
     xp: 313
-  - level: 14
+  - name: 
+    level: 14
     xp: 345
-  - level: 15
+  - name: 
+    level: 15
     xp: 379
-  - level: 16
+  - name: 
+    level: 16
     xp: 417
-  - level: 17
+  - name: 
+    level: 17
     xp: 459
-  - level: 18
+  - name: 
+    level: 18
     xp: 505
-  - level: 19
+  - name: 
+    level: 19
     xp: 555
-  - level: 20
+  - name: 
+    level: 20
     xp: 611
-  - level: 21
+  - name: 
+    level: 21
     xp: 672
-  - level: 22
+  - name: 
+    level: 22
     xp: 740
-  - level: 23
+  - name: 
+    level: 23
     xp: 814
-  - level: 24
+  - name: 
+    level: 24
     xp: 895
-  - level: 25
+  - name: 
+    level: 25
     xp: 984
-  - level: 26
+  - name: 
+    level: 26
     xp: 1083
-  - level: 27
+  - name: 
+    level: 27
     xp: 1191
-  - level: 28
+  - name: 
+    level: 28
     xp: 1311
-  - level: 29
+  - name: 
+    level: 29
     xp: 1442
-  - level: 30
+  - name: 
+    level: 30
     xp: 1586
-  - level: 31
+  - name: 
+    level: 31
     xp: 1744
-  - level: 32
+  - name: 
+    level: 32
     xp: 1919
-  - level: 33
+  - name: 
+    level: 33
     xp: 2111
-  - level: 34
+  - name: 
+    level: 34
     xp: 2322
-  - level: 35
+  - name: 
+    level: 35
     xp: 2554
-  - level: 36
+  - name: 
+    level: 36
     xp: 2810
-  - level: 37
+  - name: 
+    level: 37
     xp: 3091
-  - level: 38
+  - name: 
+    level: 38
     xp: 3400
-  - level: 39
+  - name: 
+    level: 39
     xp: 3740
-  - level: 40
+  - name: 
+    level: 40
     xp: 4114
-  - level: 41
+  - name: 
+    level: 41
     xp: 4525
-  - level: 42
+  - name: 
+    level: 42
     xp: 4978
-  - level: 43
+  - name: 
+    level: 43
     xp: 5476
-  - level: 44
+  - name: 
+    level: 44
     xp: 6024
-  - level: 45
+  - name: 
+    level: 45
     xp: 6626
-  - level: 46
+  - name: 
+    level: 46
     xp: 7289
-  - level: 47
+  - name: 
+    level: 47
     xp: 8017
-  - level: 48
+  - name: 
+    level: 48
     xp: 8819
-  - level: 49
+  - name: 
+    level: 49
     xp: 10000

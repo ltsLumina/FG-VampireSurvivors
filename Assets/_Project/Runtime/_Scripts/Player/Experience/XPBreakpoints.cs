@@ -1,6 +1,7 @@
 ﻿#region
 using System;
 using System.Collections.Generic;
+using JetBrains.Annotations;
 using UnityEngine;
 #endregion
 
@@ -12,13 +13,16 @@ public class XPBreakpoints : ScriptableObject
 {
     [Serializable] public struct XP_Breakpoints
     {
+        [HideInInspector, UsedImplicitly]
+        public string name;
         public int level;
         public int xp;
 
-        public XP_Breakpoints(int level, int xp)
+        public XP_Breakpoints(int level, int xp, string name = default)
         {
             this.level = level;
             this.xp    = xp;
+            this.name  = name;
         }
     }
 
@@ -38,6 +42,12 @@ public class XPBreakpoints : ScriptableObject
         // set the level of each breakpoint to its index + 1
         for (int i = 0; i < breakpoints.Count; i++) { breakpoints[i] = new (i + 1, breakpoints[i].xp); }
 
+        foreach (var breakpoint in breakpoints)
+        {
+            XP_Breakpoints xp_breakpoints = breakpoint;
+            xp_breakpoints.name = $"Level {xp_breakpoints.level}";
+        }
+        
         // cap the breakpoints at 48
         if (breakpoints.Count > 49)
         {

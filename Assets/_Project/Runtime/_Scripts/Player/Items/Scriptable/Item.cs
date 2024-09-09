@@ -41,6 +41,7 @@ public abstract class Item : ScriptableObject
         [SerializeField, HideInInspector, UsedImplicitly] // The name field is used to rename the "Element X" in the inspector to match the item level
         public string name;
         
+        [HideInInspector]
         public int level;
         public BaseStats baseStats;
         public ItemSpecificStats itemSpecificStats;
@@ -67,11 +68,6 @@ public abstract class Item : ScriptableObject
     /// </summary>
     Levels levels;
 
-    /// <summary>
-    ///     This is literally only ever accessed by an Editor script (outside of this class)
-    /// </summary>
-    public List<Levels> LevelsList => levelsList;
-
     public ItemTypes ItemType => (ItemTypes) Enum.Parse(typeof(ItemTypes), GetType().Name);
 
     [UsedImplicitly] public string Name => details.name;
@@ -81,11 +77,11 @@ public abstract class Item : ScriptableObject
     void OnValidate()
     {
         // Set the name of the structs' "name" variable to the level field
-        for (int i = 0; i < LevelsList.Count; i++)
+        for (int i = 0; i < levelsList.Count; i++)
         {
-            Levels levels = LevelsList[i];
-            levels.name   = $"Level {levels.level}";
-            LevelsList[i] = levels;
+            Levels levels = levelsList[i];
+            levels.name                    = $"Level {levels.level}";
+            levelsList[i] = levels;
         }
 
         // Set the name of the item to the name of the class
@@ -106,23 +102,24 @@ public abstract class Item : ScriptableObject
         {
             // bug: The list is empty for 1 frame when recompiling so I just don't throw an error if the list is empty
             // bug: and because of unity now its throwing an error saying that the item is level 0, which it isn't...
-            if (LevelsList.Count == 0 || levels.level == 0) return;
+            if (levelsList.Count == 0 || levels.level == 0) return;
 
-            if (levels.level < 1 || levels.level > LevelsList.Count) Debug.LogError("Level out of bounds. Please enter a valid level." + "\nLevel entered: " + levels.level);
+            if (levels.level < 1 || levels.level > levelsList.Count) Debug.LogError("Level out of bounds. Please enter a valid level." + "\nLevel entered: " + levels.level);
         }
 
         void NotInOrder()
         {
             // bug: same here
-            if (LevelsList.Count == 0) return;
+            if (levelsList.Count == 0) return;
 
-            for (int i = 0; i < LevelsList.Count; i++)
+            for (int i = 0; i < levelsList.Count; i++)
             {
-                Levels level = LevelsList[i];
+                Levels level = levelsList[i];
 
                 if (level.level != i + 1)
                 {
-                    Debug.LogWarning($"Element {i} is out of order. It is set to level {level.level} when it should be level {i + 1}.");
+                    Debug.LogWarning($"Element {i} is out of order. It is set to level {level.level} when it should be level {i + 1}." 
+                                     + "\nThe \"level\" field is marked as [HideInInspector] so make sure to remove that attribute to see the level field in the inspector.");
                     level.level = i + 1;
                 }
             }
@@ -131,12 +128,12 @@ public abstract class Item : ScriptableObject
         void EnforcedLevelAmount()
         {
             // bug: and same thing here
-            if (LevelsList.Count == 0) return;
+            if (levelsList.Count == 0) return;
 
-            if (LevelsList.Count != 8)
+            if (levelsList.Count != 8)
             {
                 Debug.LogError("Levels list must contain 8 levels.");
-                while (LevelsList.Count > 8) LevelsList.RemoveAt(LevelsList.Count - 1);
+                while (levelsList.Count > 8) levelsList.RemoveAt(levelsList.Count - 1);
             }
         }
     }
@@ -166,13 +163,13 @@ public abstract class Item : ScriptableObject
     object GetBaseStat(int level, Levels.StatTypes stat)
     {
         // if the level is out of bounds, return a string
-        if (level < 1 || level > LevelsList.Count)
+        if (level < 1 || level > levelsList.Count)
         {
             Debug.LogError("Level out of bounds. Please enter a valid level." + "\nLevel entered: " + level);
             return -1;
         }
 
-        Levels    levelData = LevelsList[level - 1];
+        Levels    levelData = levelsList[level - 1];
         BaseStats baseStats = levelData.baseStats;
 
         // Check if the stat is part of BaseStats
@@ -198,13 +195,13 @@ public abstract class Item : ScriptableObject
 
     public float GetItemSpecificStat(int level, Item item, ItemSpecificStats.Stats stat)
     {
-        if (level < 1 || level > LevelsList.Count)
+        if (level < 1 || level > levelsList.Count)
         {
             Debug.LogError("Level out of bounds. Please enter a valid level." + "\nLevel entered: " + level);
             return -1;
         }
 
-        ItemSpecificStats itemSpecificStats = item.LevelsList[level - 1].itemSpecificStats;
+        ItemSpecificStats itemSpecificStats = item.levelsList[level - 1].itemSpecificStats;
 
         if (!itemSpecificStats)
         {
@@ -285,7 +282,11 @@ public abstract class Item : ScriptableObject
     }
     #endregion
 
-    public abstract void Use();
+    public virtual void Use()
+    {
+        Debug.Log($"{nameof(Item)} used." + "\nDealt " + GetStatInt(Levels.StatTypes.Damage) + " damage.");
+        Player.Instance.Attack<Item>();
+    }
 
     public void Evolve()
     {

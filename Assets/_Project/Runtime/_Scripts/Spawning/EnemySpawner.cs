@@ -1,4 +1,5 @@
 #region
+using System.Collections.Generic;
 using UnityEngine;
 using VInspector;
 #endregion
@@ -44,5 +45,11 @@ public class EnemySpawner : MonoBehaviour
         Quaternion randomRotation = Random.rotation;
 
         ExperiencePickup.Create(transform.position + randomOffset, randomRotation);
+    }
+
+    public void RemoveFromList(Enemy enemy)
+    {
+        List<Enemy> enemies = new ();
+        enemies.Remove(enemy);
     }
 }

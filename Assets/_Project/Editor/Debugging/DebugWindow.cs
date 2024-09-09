@@ -12,7 +12,7 @@ using static UnityEngine.GUILayout;
 
 namespace Lumina.Debugging
 {
-[EditorWindowTitle(title = "Debug", useTypeNameAsIconName = true)]
+[EditorWindowTitle(title = "Debug", icon = "Debug.png")]
 public class DebugWindow : EditorWindow
 {
     static Action activeMenu;
@@ -45,7 +45,7 @@ public class DebugWindow : EditorWindow
         var  window            = GetWindow<DebugWindow>("Debug", true, desiredDockNextTo);
 
         // Set the icon. The icon is found in the Icons folder. Name of icon is "Debug.png"
-        var icon = AssetDatabase.LoadAssetAtPath<Texture2D>("Assets/Editor/Icons/Debug.png");
+        var icon = AssetDatabase.LoadAssetAtPath<Texture2D>("Assets/Editor/Debugging/Icons/Debug.png");
         window.titleContent.image = icon;
         window.minSize            = new (350, 200);
         window.maxSize            = window.minSize;

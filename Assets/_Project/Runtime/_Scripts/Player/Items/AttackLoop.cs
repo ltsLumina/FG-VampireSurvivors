@@ -11,28 +11,29 @@ public partial class Player
     Coroutine lightningRingCoroutine;
     Coroutine garlicCoroutine;
 
-    void Update() //TODO: Stop all coroutines or similar when player dies so that the attack-loop stops
+    void Update()
     {
-        List<InventoryManager.Items> inventory = InventoryManager.Instance.Inventory;
-
-        foreach (InventoryManager.Items inventoryItem in inventory) { inventoryItem.Item.Use(); }
+        foreach (InventoryManager.Items inventoryItem in InventoryManager.Instance.Inventory)
+        {
+            inventoryItem.Item.Use();
+        }
     }
 
     public void Attack<T>() where T : Item
     {
         switch (typeof(T))
         {
-            case not null when typeof(T) == typeof(LightningRing):
-                lightningRingCoroutine ??= StartCoroutine(LightningRingCooldown(InventoryManager.Instance.GetItem<LightningRing>()));
-                break;
-
             case not null when typeof(T) == typeof(Garlic):
                 garlicCoroutine ??= StartCoroutine(GarlicCooldown(InventoryManager.Instance.GetItem<Garlic>()));
+                break;
+
+            case not null when typeof(T) == typeof(LightningRing):
+                lightningRingCoroutine ??= StartCoroutine(LightningRingCooldown(InventoryManager.Instance.GetItem<LightningRing>()));
                 break;
         }
     }
 
-    void DamageZone()
+    void Garlic()
     {
         var   garlic = InventoryManager.Instance.GetItem<Garlic>();
         float area   = garlic.GetBaseStat(Item.Levels.StatTypes.Area);
@@ -61,19 +62,7 @@ public partial class Player
         }
     }
 
-    IEnumerator GarlicCooldown(Garlic garlic)
-    {
-        float cooldown = garlic.GetBaseStat(Item.Levels.StatTypes.Speed);
-
-        while (true)
-        {
-            DamageZone();
-            yield return new WaitForSeconds(cooldown);
-        }
-        // ReSharper disable once IteratorNeverReturns
-    }
-
-    static void Smite(LightningRing item, GameObject lightningEffect)
+    static void LightningRing(LightningRing item, GameObject lightningEffect)
     {
         Debug.Log("Lightning Ring used." + "\nDealt " + item.GetStatInt(Item.Levels.StatTypes.Damage) + " damage.");
 
@@ -101,13 +90,33 @@ public partial class Player
         }
     }
 
+    void Knife()
+    {
+        Debug.Log("throwing a knife lol");
+    }
+
+    #region Cooldowns
+    IEnumerator GarlicCooldown(Garlic garlic)
+    {
+        float cooldown = garlic.GetBaseStat(Item.Levels.StatTypes.Speed);
+
+        while (true)
+        {
+            Garlic();
+            yield return new WaitForSeconds(cooldown);
+        }
+
+        // ReSharper disable once IteratorNeverReturns
+    }
+
     static IEnumerator LightningRingCooldown(LightningRing item)
     {
         while (true)
         {
             float cooldown = item.GetBaseStat(Item.Levels.StatTypes.Speed);
-            Smite(item, item.LightningEffect);
+            LightningRing(item, item.LightningEffect);
             yield return new WaitForSeconds(cooldown);
         }
     }
+    #endregion
 }
