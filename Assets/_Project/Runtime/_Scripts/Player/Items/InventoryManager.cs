@@ -32,7 +32,7 @@ public class InventoryManager : MonoBehaviour
             set => item = value;
         }
     }
-    
+
     [SerializeField] List<Items> inventory = new ();
 
     public IReadOnlyCollection<Items> Inventory => inventory;
@@ -175,4 +175,13 @@ public class InventoryManager : MonoBehaviour
     {
         // evolve item logic
     }
+}
+
+public static class InventoryManagerExtensions
+{
+    public static T GetItem<T>(this InventoryManager inventoryManager)
+        where T : Item => inventoryManager.GetItem<T>();
+
+    public static int GetItemLevel<T>(this InventoryManager inventoryManager)
+        where T : Item => inventoryManager.GetItemLevel<T>();
 }

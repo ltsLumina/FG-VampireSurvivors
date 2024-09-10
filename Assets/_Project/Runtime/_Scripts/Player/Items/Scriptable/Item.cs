@@ -15,7 +15,6 @@ public abstract class Item : ScriptableObject
     {
         Garlic,
         LightningRing,
-        Whip,
     }
 
     [Serializable]
@@ -40,7 +39,7 @@ public abstract class Item : ScriptableObject
         [Header("Item Stats")]
         [SerializeField, HideInInspector, UsedImplicitly] // The name field is used to rename the "Element X" in the inspector to match the item level
         public string name;
-        
+
         [HideInInspector]
         public int level;
         public BaseStats baseStats;
@@ -70,21 +69,21 @@ public abstract class Item : ScriptableObject
 
     public ItemTypes ItemType => (ItemTypes) Enum.Parse(typeof(ItemTypes), GetType().Name);
 
-    [UsedImplicitly] 
+    [UsedImplicitly]
     public string Name
     {
         get => details.name;
         set => details.name = value;
     }
-    
-    [UsedImplicitly] 
+
+    [UsedImplicitly]
     public string Description => details.description;
 
     #region Utility | OnValidate
     void OnValidate()
     {
         Name = name;
-        
+
         // Set the name of the structs' "name" variable to the index +1
         for (int i = 0; i < levelsList.Count; i++)
         {
@@ -92,7 +91,7 @@ public abstract class Item : ScriptableObject
             level.name    = "Level " + (i + 1);
             levelsList[i] = level;
         }
-        
+
         // Set the level value to the index +1
         for (int i = 0; i < levelsList.Count; i++)
         {
@@ -114,6 +113,7 @@ public abstract class Item : ScriptableObject
         OutOfBounds();
 
         return;
+
         void OutOfBounds()
         {
             // bug: The list is empty for 1 frame when recompiling so I just don't throw an error if the list is empty
@@ -134,8 +134,10 @@ public abstract class Item : ScriptableObject
 
                 if (level.level != i + 1)
                 {
-                    Debug.LogWarning($"Element {i} is out of order. It is set to level {level.level} when it should be level {i + 1}." 
-                                     + "\nThe \"level\" field is marked as [HideInInspector] so make sure to remove that attribute to see the level field in the inspector.");
+                    Debug.LogWarning
+                    ($"Element {i} is out of order. It is set to level {level.level} when it should be level {i + 1}." +
+                     "\nThe \"level\" field is marked as [HideInInspector] so make sure to remove that attribute to see the level field in the inspector.");
+
                     level.level = i + 1;
                 }
             }
@@ -158,7 +160,7 @@ public abstract class Item : ScriptableObject
     #region Utility | GetItemLevel method
     public int GetItemLevel() => InventoryManager.Instance.GetItemLevel(GetType());
     #endregion
-    
+
     #region Utility | GetBaseStat methods
     #region Old GetBaseStat
     // object GetBaseStat(int level, Levels.StatTypes stat)
@@ -176,93 +178,67 @@ public abstract class Item : ScriptableObject
     // }
     #endregion
 
-    object GetBaseStat(int level, Levels.StatTypes stat)
+    public T GetBaseStat<T>(Levels.StatTypes stat)
+        where T : struct // ints & floats both implement IComparable
     {
-        // if the level is out of bounds, return a string
+        int level = GetItemLevel();
+
         if (level < 1 || level > levelsList.Count)
         {
             Debug.LogError("Level out of bounds. Please enter a valid level." + "\nLevel entered: " + level);
-            return -1;
+            return default;
         }
 
         Levels    levelData = levelsList[level - 1];
         BaseStats baseStats = levelData.baseStats;
 
-        // Check if the stat is part of BaseStats
         switch (stat)
         {
             case Levels.StatTypes.Damage:
-                return baseStats.Damage;
+                if (typeof(T) == typeof(int)) return (T) (object) baseStats.Damage;
+                break;
 
             case Levels.StatTypes.Speed:
-                return baseStats.Speed;
-
             case Levels.StatTypes.Duration:
-                return baseStats.Duration;
-
             case Levels.StatTypes.Area:
-                return baseStats.Area;
+                if (typeof(T) == typeof(float)) return (T) baseStats.GetType().GetField(stat.ToString()).GetValue(baseStats);
+                break;
 
             default:
                 Debug.LogError("Stat type not found.");
-                return -1;
+                return default;
         }
+
+        Debug.LogError("Type mismatch for stat type.");
+        return default;
     }
 
-    public float GetItemSpecificStat(int level, Item item, ItemSpecificStats.Stats stat)
+    public T GetItemSpecificStat<T>(int level, ItemSpecificStats.Stats stat)
     {
         if (level < 1 || level > levelsList.Count)
         {
             Debug.LogError("Level out of bounds. Please enter a valid level." + "\nLevel entered: " + level);
-            return -1;
+            return default;
         }
 
-        ItemSpecificStats itemSpecificStats = item.levelsList[level - 1].itemSpecificStats;
+        Levels            levelData         = levelsList[level - 1];
+        ItemSpecificStats itemSpecificStats = levelData.itemSpecificStats;
 
-        if (!itemSpecificStats)
+        switch (stat)
         {
-            Logger.LogError("Item Specific Stats not found. Make sure the Item Specific Stats Scriptable Object is assigned to each level.");
-            return -1;
-        } 
-        
-        return itemSpecificStats.GetItemSpecificStat(stat);
+            case ItemSpecificStats.Stats.Knockback:
+            case ItemSpecificStats.Stats.LightningStrikes:
+                if (typeof(T) == typeof(int)) return (T) itemSpecificStats.GetType().GetField(stat.ToString()).GetValue(itemSpecificStats);
+                break;
+
+            default:
+                Debug.LogError("Stat type not found.");
+                return default;
+        }
+
+        Debug.LogError("Type mismatch for stat type.");
+        return default;
     }
-
-    public float GetBaseStat(Levels.StatTypes stat) =>
-
-        // if the level is out of bounds or the stat doesn't exist, debug log and return a string
-        // if (levels.level < 1 || levels.level > levelsList.Count)
-        // {
-        //     string error = "Level out of bounds or the provided stat is invalid. Returning -1. \n" +
-        //                    "<color=red>[NOTICE]</color> Make sure the Base Stats Scriptable Object is assigned to each level." +
-        //                    $"\nLevel entered: {levels.level}" + 
-        //                    $"\nStat entered: {stat}";
-        //     
-        //     Logger.LogError(error);
-        //     Debug.Break();
-        //     return -1;
-        // }
-        (float) GetBaseStat(InventoryManager.Instance.GetItemLevel(GetType()), stat);
-
-    public float GetBaseStat(Type item, Levels.StatTypes stat) => (float) GetBaseStat(InventoryManager.Instance.GetItemLevel(item), stat);
-
-    public int GetStatInt(Levels.StatTypes stat) =>
-
-        // if the level is out of bounds or the stat doesnt exist, debug log and return a string
-        // if (levels.level < 1 || levels.level > levelsList.Count)
-        // {
-        //     string error = "Level out of bounds or the provided stat is invalid. Returning -1. \n" + 
-        //                    "<color=red>[NOTICE]</color> Make sure the Base Stats Scriptable Object is assigned to each level." +
-        //                    $"\nLevel entered: {levels.level}" + 
-        //                    $"\nStat entered: {stat}";
-        //
-        //     Logger.LogError(error);
-        //     Debug.Break();
-        //     return -1;
-        // }
-        (int) GetBaseStat(InventoryManager.Instance.GetItemLevel(GetType()), stat);
-
-    public int GetStatInt(Type item, Levels.StatTypes stat) => (int) GetBaseStat(InventoryManager.Instance.GetItemLevel(item), stat);
     #endregion
 
     #region Utility | Create method
@@ -300,7 +276,7 @@ public abstract class Item : ScriptableObject
 
     public virtual void Use()
     {
-        Debug.Log($"{nameof(Item)} used." + "\nDealt " + GetStatInt(Levels.StatTypes.Damage) + " damage.");
+        Debug.Log($"{nameof(Item)} used." + "\nDealt " + GetBaseStat<int>(Levels.StatTypes.Damage) + " damage.");
         Player.Instance.Attack<Item>();
     }
 
@@ -308,15 +284,4 @@ public abstract class Item : ScriptableObject
     {
         // evolve item logic
     }
-}
-
-internal static class ItemExtensions
-{
-    public static float GetItemSpecificStat(this Item item, int level, ItemSpecificStats.Stats stat) => item.GetItemSpecificStat(level, item, stat);
-    
-    public static float GetBaseStat(this Item item, Item.Levels.StatTypes stat) => item.GetBaseStat(stat);
-    
-    public static int GetStatInt(this Item item, Item.Levels.StatTypes stat) => item.GetStatInt(stat);
-    
-    public static int GetItemLevel(this Item item) => item.GetItemLevel();
 }

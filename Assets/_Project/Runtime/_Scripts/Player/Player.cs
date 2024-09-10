@@ -102,19 +102,18 @@ public sealed partial class Player : MonoBehaviour, IDamageable
         // Garlic
         Item garlic = InventoryManager.Instance.GetItem<Garlic>();
 
-        if (garlic != null)
+        if (garlic)
         {
             Gizmos.color = Color.red;
-            Gizmos.DrawWireSphere(transform.position, garlic.GetBaseStat(Item.Levels.StatTypes.Area));
+            Gizmos.DrawWireSphere(transform.position, garlic.GetBaseStat<float>(Item.Levels.StatTypes.Area));
         }
 
         // Lightning Ring
-        Item lightningRing = InventoryManager.Instance.GetItem<LightningRing>();
-
-        if (lightningRing != null)
+        /*Item lightningRing = InventoryManager.Instance.GetItem<LightningRing>();
+        if (lightningRing)
         {
             Gizmos.color = Color.blue;
-            Gizmos.DrawWireSphere(transform.position, lightningRing.GetBaseStat(Item.Levels.StatTypes.Area));
-        }
+            Gizmos.DrawWireSphere(transform.position, lightningRing.GetBaseStat<float>(Item.Levels.StatTypes.Area));
+        }*/
     }
 }
