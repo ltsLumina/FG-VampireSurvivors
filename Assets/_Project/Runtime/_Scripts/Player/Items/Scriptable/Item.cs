@@ -70,18 +70,35 @@ public abstract class Item : ScriptableObject
 
     public ItemTypes ItemType => (ItemTypes) Enum.Parse(typeof(ItemTypes), GetType().Name);
 
-    [UsedImplicitly] public string Name => details.name;
-    [UsedImplicitly] public string Description => details.description;
+    [UsedImplicitly] 
+    public string Name
+    {
+        get => details.name;
+        set => details.name = value;
+    }
+    
+    [UsedImplicitly] 
+    public string Description => details.description;
 
     #region Utility | OnValidate
     void OnValidate()
     {
-        // Set the name of the structs' "name" variable to the level field
+        Name = name;
+        
+        // Set the name of the structs' "name" variable to the index +1
         for (int i = 0; i < levelsList.Count; i++)
         {
-            Levels levels = levelsList[i];
-            levels.name                    = $"Level {levels.level}";
-            levelsList[i] = levels;
+            Levels level = levelsList[i];
+            level.name    = "Level " + (i + 1);
+            levelsList[i] = level;
+        }
+        
+        // Set the level value to the index +1
+        for (int i = 0; i < levelsList.Count; i++)
+        {
+            Levels level = levelsList[i];
+            level.level   = i + 1;
+            levelsList[i] = level;
         }
 
         // Set the name of the item to the name of the class
@@ -97,7 +114,6 @@ public abstract class Item : ScriptableObject
         OutOfBounds();
 
         return;
-
         void OutOfBounds()
         {
             // bug: The list is empty for 1 frame when recompiling so I just don't throw an error if the list is empty

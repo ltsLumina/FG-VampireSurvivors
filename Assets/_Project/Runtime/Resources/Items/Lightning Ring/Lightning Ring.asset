@@ -39,18 +39,22 @@ MonoBehaviour:
   - name: Level 5
     level: 5
     baseStats: {fileID: 11400000, guid: 2d9b1c9c8e2051146aa91988cda0e6b6, type: 2}
-    itemSpecificStats: {fileID: 0}
+    itemSpecificStats: {fileID: 11400000, guid: bcad3faf9c6264f42be84a6702792e8a,
+      type: 2}
   - name: Level 6
     level: 6
     baseStats: {fileID: 11400000, guid: 7eb6efeaa4d475e49b8848ee29cb55b1, type: 2}
-    itemSpecificStats: {fileID: 0}
+    itemSpecificStats: {fileID: 11400000, guid: f641521832db08a4497fb0e74aec19af,
+      type: 2}
   - name: Level 7
     level: 7
     baseStats: {fileID: 11400000, guid: 75990f6af3acde847a476996ade85ca9, type: 2}
-    itemSpecificStats: {fileID: 0}
+    itemSpecificStats: {fileID: 11400000, guid: 511be5511305fea469f0afbe2f16d419,
+      type: 2}
   - name: Level 8
     level: 8
     baseStats: {fileID: 11400000, guid: ccb4bd19ed141654889f0bc9f851dd0d, type: 2}
-    itemSpecificStats: {fileID: 0}
+    itemSpecificStats: {fileID: 11400000, guid: d64baf637af92d540a377c93705a5f8c,
+      type: 2}
   lightningEffect: {fileID: 1617602193996184, guid: 37cc546003ea4944ca2f036db80baeab,
     type: 3}

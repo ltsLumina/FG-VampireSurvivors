@@ -21,6 +21,8 @@ public partial class Player
 
     public void Attack<T>() where T : Item
     {
+        //StartCoroutine($"{itemName}Cooldown");
+        
         switch (typeof(T))
         {
             case not null when typeof(T) == typeof(Garlic):

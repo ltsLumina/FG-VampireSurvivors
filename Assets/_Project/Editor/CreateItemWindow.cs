@@ -1,5 +1,6 @@
 ﻿#region
 using System;
+using System.Collections;
 using System.IO;
 using UnityEditor;
 using UnityEngine;
@@ -99,30 +100,6 @@ public class CreateItemWindow : EditorWindow
     }
 
     #region Asset Creation
-    void CreateNewItemAsset()
-    {
-        // Note: Saving and refreshing before creating the asset is necessary as the script file isn't "loaded" until we save and refresh.
-
-        AssetDatabase.SaveAssets();
-        AssetDatabase.Refresh();
-
-        string directory = $"Assets/_Project/Runtime/Resources/Items/{itemName}";
-        string path      = EditorUtility.SaveFilePanelInProject("Save Item", itemName, "asset", "message?", directory);
-
-        // Create the directory if it doesn't exist
-        if (!AssetDatabase.IsValidFolder(directory)) AssetDatabase.CreateFolder("Assets/_Project/Runtime/Resources/Items", itemName);
-
-        // create an instance of an item based on its string name
-        ScriptableObject item = CreateInstance(itemName);
-        AssetDatabase.CreateAsset(item, path);
-
-        AssetDatabase.SaveAssets();
-        AssetDatabase.Refresh();
-        
-        success  = true;
-        itemName = string.Empty;
-    }
-
     void CreateScript()
     {
         const string directory    = "Assets/_Project/Runtime/_Scripts/Player/Items/Scriptable";
@@ -131,7 +108,11 @@ public class CreateItemWindow : EditorWindow
 
         string assetPath = EditorUtility.SaveFilePanel("Save Item", directory, itemName, "cs");
 
-        if (string.IsNullOrEmpty(assetPath)) return;
+        if (string.IsNullOrEmpty(assetPath))
+        {
+            EditorUtility.DisplayDialog("Script creation aborted", "Cancel button pressed." + "\nAborting script creation.", "OK");
+            return;
+        }
 
         try
         {
@@ -151,6 +132,45 @@ public class CreateItemWindow : EditorWindow
             Debug.LogError($"Failed to create script: {e.Message}");
             throw;
         }
+    }
+
+    void CreateNewItemAsset()
+    {
+        // Note: Saving and refreshing before creating the asset is necessary as the script file isn't "loaded" until we save and refresh.
+
+        AssetDatabase.SaveAssets();
+        AssetDatabase.Refresh();
+
+        const string directory = "Assets/_Project/Runtime/Resources/Items";
+
+        // Create the directory if it doesn't exist
+        string folderPath = $"{directory}/{itemName}";
+
+        if (!AssetDatabase.IsValidFolder(folderPath))
+        {
+            AssetDatabase.CreateFolder(directory, itemName);
+            AssetDatabase.SaveAssets();
+            AssetDatabase.Refresh();
+        }
+
+        string path = EditorUtility.SaveFilePanel("Save Item", folderPath, $"{itemName}", "asset");
+        path = path.Replace(Application.dataPath, "Assets");
+        
+        if (string.IsNullOrEmpty(path))
+        {
+            EditorUtility.DisplayDialog("Asset creation aborted", "Cancel button pressed." + "\nAborting asset creation.", "OK");
+            return;
+        }
+
+        // create an instance of an item based on its string name
+        ScriptableObject item = CreateInstance(itemName);
+        AssetDatabase.CreateAsset(item, path);
+
+        AssetDatabase.SaveAssets();
+        AssetDatabase.Refresh();
+
+        success  = true;
+        itemName = string.Empty;
     }
     #endregion
 }
