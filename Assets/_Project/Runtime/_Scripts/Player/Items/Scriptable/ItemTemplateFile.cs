@@ -5,5 +5,8 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "ItemTemplateFile", menuName = "Items/Create ItemTemplateFile")]
 public class ItemTemplateFile : Item
 {
-    
+    public override void Use()
+    {
+        
+    }
 }

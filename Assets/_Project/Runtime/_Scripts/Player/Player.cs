@@ -38,6 +38,8 @@ public sealed partial class Player : MonoBehaviour, IDamageable
         get => speed;
         set => speed = value;
     }
+    
+    public static Vector3 Position => Instance.transform.position;
 
     void OnEnable()
     {

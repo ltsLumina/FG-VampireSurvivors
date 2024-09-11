@@ -10,6 +10,12 @@ public class Garlic : Item
     [Header("Effects")]
     [SerializeField] GameObject garlicEffect;
 
+    public override void Use()
+    {
+        Debug.Log($"{nameof(Garlic)} used." + "\nDealt " + GetBaseStat<int>(Levels.StatTypes.Damage) + " damage.");
+        Player.Instance.Attack<Garlic>();
+    }
+    
     void Attack()
     {
         float area = GetBaseStat<float>(Levels.StatTypes.Area);
@@ -33,7 +39,7 @@ public class Garlic : Item
             if (obj.TryGetComponent(out Rigidbody rb))
             {
                 Vector3 direction = (obj.transform.position - Player.Instance.transform.position).normalized;
-                rb.AddForce(direction * GetItemSpecificStat<float>(GetItemLevel(), ItemSpecificStats.Stats.Knockback), ForceMode.Impulse);
+                rb.AddForce(direction * GetItemSpecificStat(GetItemLevel(), ItemSpecificStats.Stats.Knockback), ForceMode.Impulse);
             }
         }
     }

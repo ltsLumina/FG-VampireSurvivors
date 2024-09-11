@@ -22,6 +22,7 @@ public abstract class ItemSpecificStats : ScriptableObject
     public abstract float GetItemSpecificStat(Stats stat);
 }
 
+#if UNITY_EDITOR
 [CustomEditor(typeof(ItemSpecificStats), true)]
 [CanEditMultipleObjects]
 public class ItemStatsEditor : Editor
@@ -75,3 +76,4 @@ public class ItemStatsEditor : Editor
         DrawDefaultInspector();
     }
 }
+#endif

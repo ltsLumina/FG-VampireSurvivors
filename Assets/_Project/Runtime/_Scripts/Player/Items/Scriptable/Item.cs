@@ -199,9 +199,15 @@ public abstract class Item : ScriptableObject
                 break;
 
             case Levels.StatTypes.Speed:
+                if (typeof(T) == typeof(float)) return (T) (object) baseStats.Speed;
+                break;
+
             case Levels.StatTypes.Duration:
+                if (typeof(T) == typeof(float)) return (T) (object) baseStats.Duration;
+                break;
+
             case Levels.StatTypes.Area:
-                if (typeof(T) == typeof(float)) return (T) baseStats.GetType().GetField(stat.ToString()).GetValue(baseStats);
+                if (typeof(T) == typeof(float)) return (T) (object) baseStats.Area;
                 break;
 
             default:
@@ -213,31 +219,23 @@ public abstract class Item : ScriptableObject
         return default;
     }
 
-    public T GetItemSpecificStat<T>(int level, ItemSpecificStats.Stats stat)
+    public float GetItemSpecificStat(int level, ItemSpecificStats.Stats stat)
     {
         if (level < 1 || level > levelsList.Count)
         {
             Debug.LogError("Level out of bounds. Please enter a valid level." + "\nLevel entered: " + level);
-            return default;
+            return -1;
         }
 
-        Levels            levelData         = levelsList[level - 1];
-        ItemSpecificStats itemSpecificStats = levelData.itemSpecificStats;
+        ItemSpecificStats itemSpecificStats = levelsList[level - 1].itemSpecificStats;
 
-        switch (stat)
+        if (!itemSpecificStats)
         {
-            case ItemSpecificStats.Stats.Knockback:
-            case ItemSpecificStats.Stats.LightningStrikes:
-                if (typeof(T) == typeof(int)) return (T) itemSpecificStats.GetType().GetField(stat.ToString()).GetValue(itemSpecificStats);
-                break;
-
-            default:
-                Debug.LogError("Stat type not found.");
-                return default;
-        }
-
-        Debug.LogError("Type mismatch for stat type.");
-        return default;
+            Logger.LogError("Item Specific Stats not found. Make sure the Item Specific Stats Scriptable Object is assigned to each level.");
+            return -1;
+        } 
+        
+        return itemSpecificStats.GetItemSpecificStat(stat);
     }
     #endregion
 
@@ -253,32 +251,7 @@ public abstract class Item : ScriptableObject
     }
     #endregion
 
-    #region Utility | LoadFromFile method
-    public static Item LoadFromFile(string path, Item item)
-    {
-        if (!File.Exists(path))
-        {
-            Debug.LogError("File not found: " + path);
-            return null;
-        }
-
-        if (EditorUtility.DisplayDialog("Load Item Stats", "Are you sure you want to load the item stats from the file? \nThis will overwrite the current values.", "Yes", "No"))
-        {
-            string json = File.ReadAllText(path);
-            JsonUtility.FromJsonOverwrite(json, item);
-            return item;
-        }
-
-        Debug.LogWarning("Load cancelled.");
-        return null;
-    }
-    #endregion
-
-    public virtual void Use()
-    {
-        Debug.Log($"{nameof(Item)} used." + "\nDealt " + GetBaseStat<int>(Levels.StatTypes.Damage) + " damage.");
-        Player.Instance.Attack<Item>();
-    }
+    public abstract void Use();
 
     public void Evolve()
     {

@@ -11,11 +11,13 @@ public partial class Player
 
     void Update()
     {
-        foreach (InventoryManager.Items inventoryItem in InventoryManager.Instance.Inventory) { inventoryItem.Item.Use(); }
+        foreach (InventoryManager.Items inventoryItem in InventoryManager.Instance.Inventory)
+        {
+            inventoryItem.Item.Use();
+        }
     }
 
-    public void Attack<T>()
-        where T : Item
+    public void Attack<T>() where T : Item
     {
         //StartCoroutine($"{itemName}Cooldown");
 

@@ -23,14 +23,15 @@ public class BaseStats : ScriptableObject
     public float Area => area;
 }
 
+#if UNITY_EDITOR
 [CustomEditor(typeof(BaseStats), true)]
 [CanEditMultipleObjects]
 public class BaseStatsEditor : Editor
 {
     public override void OnInspectorGUI()
     {
-        BaseStats singleTarget = (BaseStats) target; // If only one target is selected
-        Object[] baseStatsArray = targets; // If multiple targets are selected
+        BaseStats singleTarget   = (BaseStats) target; // If only one target is selected
+        Object[]  baseStatsArray = targets;            // If multiple targets are selected
 
         if (GUILayout.Button("Save Base Stats to File", GUILayout.Height(30)))
         {
@@ -85,3 +86,4 @@ public class BaseStatsEditor : Editor
         DrawDefaultInspector();
     }
 }
+#endif

@@ -10,10 +10,14 @@ public class LightningRing : Item
     [Header("Other")]
     [SerializeField] GameObject lightningEffect;
 
+    public override void Use()
+    {
+        Debug.Log($"{nameof(LightningRing)} used." + "\nDealt " + GetBaseStat<int>(Levels.StatTypes.Damage) + " damage.");
+        Player.Instance.Attack<LightningRing>(); 
+    }
+    
     void Attack()
     {
-        Debug.Log("Lightning Ring used." + "\nDealt " + GetBaseStat<int>(Levels.StatTypes.Damage) + " damage.");
-
         int   damage  = GetBaseStat<int>(Levels.StatTypes.Damage);
         float area    = GetBaseStat<float>(Levels.StatTypes.Area);
         var   enemies = new List<Enemy>();
@@ -27,7 +31,7 @@ public class LightningRing : Item
         }
 
         // Strikes the amount of enemies equal to the item's lightning strikes stat
-        for (int i = 0; i < GetItemSpecificStat<float>(GetItemLevel(), ItemSpecificStats.Stats.LightningStrikes); i++)
+        for (int i = 0; i < GetItemSpecificStat(GetItemLevel(), ItemSpecificStats.Stats.LightningStrikes); i++)
         {
             if (enemies.Count == 0) break;
 

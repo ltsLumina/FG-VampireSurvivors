@@ -1,5 +1,7 @@
 ﻿#region
+using System;
 using UnityEngine;
+using UnityEngine.AI;
 using UnityEngine.Events;
 using Random = UnityEngine.Random;
 #endregion
@@ -35,15 +37,43 @@ public abstract class Enemy : MonoBehaviour, IDamageable
         set => speed = value;
     }
 
-    public void InstantiateXP() => ExperiencePickup.Create(transform.position, Random.rotation);
+    public NavMeshAgent Agent { get; set; }
 
-    void Start()
+    /// <summary>
+    /// Make sure to call the base method when overriding this method.
+    /// </summary>
+    protected virtual void Awake()
+    {
+        Agent = GetComponent<NavMeshAgent>();
+        if (!Agent) Logger.LogError("NavMeshAgent component not found on Enemy!");
+    }
+
+    /// <summary>
+    /// Make sure to call the base method when overriding this method.
+    /// </summary>
+    protected virtual void Start()
     {
         Init();
 
         return;
 
-        void Init() => transform.LookAt(Player.Instance.transform);
+        void Init()
+        {
+            onDeath.AddListener(_ => InstantiateXP());
+            Agent.speed = Speed;
+            transform.LookAt(Player.Instance.transform);
+        }
+    }
+
+    protected virtual void Update()
+    {
+        Agent.speed = Speed;
+        
+        if (Player.IsDead)
+        {
+            // Make the enemy move to a random position
+            Agent.destination = new (Random.Range(-50, 50), 1, Random.Range(-50, 50));
+        }
     }
 
     void OnTriggerStay(Collider other)
@@ -72,6 +102,8 @@ public abstract class Enemy : MonoBehaviour, IDamageable
         }
     }
 
+    public void InstantiateXP() => ExperiencePickup.Create(transform.position, Random.rotation);
+    
     void DealDamage()
     {
         Player.Instance.TryGetComponent(out IDamageable damageable);
