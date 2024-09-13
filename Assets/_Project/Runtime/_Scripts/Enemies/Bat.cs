@@ -1,6 +1,12 @@
+#region
 using Lumina.Essentials.Attributes;
 using UnityEngine;
+using UnityEngine.AI;
+#endregion
 
+/// <summary>
+///     Moves toward the player in a circular motion.
+/// </summary>
 public class Bat : Enemy
 {
     [SerializeField] float oscillationSpeed;
@@ -12,44 +18,39 @@ public class Bat : Enemy
 
     float orbitAngle;
 
-    protected override void Start()
-    {
-        base.Start();
-    }
-
     protected override void Update()
     {
+        // Note: Currently, the base Update method makes all enemies move to a random position if the player has died. 
         base.Update();
-        
-        // if within stopping distance, orbit around player
-        if (Vector3.Distance(transform.position, Player.Position) < Agent.stoppingDistance)
-        {
-            Debug.Log("Orbiting");
-            Agent.destination = Orbit();
-        }
-        else
-        {
-            Debug.Log("Chasing");
-            Agent.destination = Player.Position;
-        }
+
+        Agent.destination = Orbit();
     }
-    
+
+    /// <summary>
+    ///     Orbits the player in a circular motion.
+    ///     The bat will oscillate up and down while orbiting.
+    ///     Occasionally the bat misses its trajectory and collides with the player. This is the intended way for the bat to
+    ///     attack the player.
+    /// </summary>
+    /// <returns> The destination for the <see cref="NavMeshAgent" /> to move towards. </returns>
     Vector3 Orbit()
     {
-        // Update orbit angle
         orbitAngle += orbitSpeed * Time.deltaTime;
         if (orbitAngle > 360f) orbitAngle -= 360f;
 
-        // Calculate new position
-        Vector3 playerPosition = Player.Position;
-        float   x              = playerPosition.x + Mathf.Cos(orbitAngle) * orbitRadius;
-        float   z              = playerPosition.z + Mathf.Sin(orbitAngle) * orbitRadius;
-        float   y              = Oscillate();
+        Vector3 playerPos = Player.Position;
 
-        // Apply new position
+        float x = playerPos.x + Mathf.Cos(orbitAngle) * orbitRadius;
+        float z = playerPos.z + Mathf.Sin(orbitAngle) * orbitRadius;
+        float y = Oscillate();
+
         var result = new Vector3(x, y, z);
         return result;
     }
 
+    /// <summary>
+    ///     Oscillate the bat up and down to simulate sporadic flight.
+    /// </summary>
+    /// <returns></returns>
     float Oscillate() => Mathf.Lerp(oscillationRange.min, oscillationRange.max, (Mathf.Sin(Time.time * oscillationSpeed) + 1) / 2);
 }

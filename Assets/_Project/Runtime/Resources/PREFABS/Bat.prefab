@@ -107,7 +107,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   health: 100
-  speed: 10
+  speed: 8
   damage: 5
   damageInterval: 0.1
   recoilDamage: 15
@@ -122,11 +122,8 @@ MonoBehaviour:
   oscillationRange:
     min: 2
     max: 3
-  offsetRange: 3
-  changeInterval: 0.25
-  stoppingDistance: 6
-  circlingSpeed: 10
-  circlingRadius: 10
+  orbitRadius: 15
+  orbitSpeed: 1
 --- !u!195 &7504856167651767333
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -136,17 +133,17 @@ NavMeshAgent:
   m_GameObject: {fileID: 2017665658324139196}
   m_Enabled: 1
   m_AgentTypeID: 0
-  m_Radius: 0.1
-  m_Speed: 1
+  m_Radius: 0.5000001
+  m_Speed: 3.5
   m_Acceleration: 8
   avoidancePriority: 50
-  m_AngularSpeed: 270
-  m_StoppingDistance: 6
+  m_AngularSpeed: 720
+  m_StoppingDistance: 0
   m_AutoTraverseOffMeshLink: 1
   m_AutoBraking: 1
   m_AutoRepath: 1
   m_Height: 2
-  m_BaseOffset: 1
+  m_BaseOffset: 3
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
 --- !u!33 &8845938588341079787

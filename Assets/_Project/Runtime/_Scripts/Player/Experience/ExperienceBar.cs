@@ -78,11 +78,7 @@ public class ExperienceBar : MonoBehaviour
         slider.maxValue = Experience.XPToLevelUp;
     }
 
-    void ShowLevelUpMenu()
-    {
-        var levelUpManager = FindObjectOfType<LevelUpManager>();
-        levelUpManager.ShowLevelUpMenu();
-    }
+    void ShowLevelUpMenu() => LevelUpManager.Instance.ShowLevelUpMenu();
 
     void Awake() => slider = GetComponentInChildren<Slider>();
 

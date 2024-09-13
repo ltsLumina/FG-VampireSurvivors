@@ -20,6 +20,8 @@ public sealed partial class Player : MonoBehaviour, IDamageable
     InputManager inputManager;
     CausesOfDeath.Cause causeOfDeath;
 
+    public static Player Instance { get; private set; }
+
     public static bool IsDead => Instance.Health <= 0;
 
     public int Health
@@ -38,7 +40,7 @@ public sealed partial class Player : MonoBehaviour, IDamageable
         get => speed;
         set => speed = value;
     }
-    
+
     public static Vector3 Position => Instance.transform.position;
 
     void OnEnable()
@@ -46,8 +48,6 @@ public sealed partial class Player : MonoBehaviour, IDamageable
         onDeath.AddListener(_ => Logger.LogWarning("Player has died." + "\nStopping all coroutines executing on this MonoBehaviour."));
         Experience.OnLevelUp += () => EffectPlayer.PlayEffect(levelUpAura);
     }
-
-    public static Player Instance { get; private set; }
 
     void Awake()
     {
@@ -68,10 +68,11 @@ public sealed partial class Player : MonoBehaviour, IDamageable
         }
     }
 
+    // Note: Using FixedUpdate() as AttackLoop.cs (partial of Player.cs) uses Update(), and I would rather keep the attack logic in one place.
     void FixedUpdate() => Movement(inputManager.MoveInput);
 
     #region Movement
-    void Movement(Vector2 dir)
+    void Movement(Vector3 dir)
     {
         var moveDir = new Vector3(dir.x, 0, dir.y);
         transform.position += moveDir * (Speed * Time.deltaTime);
@@ -111,11 +112,12 @@ public sealed partial class Player : MonoBehaviour, IDamageable
         }
 
         // Lightning Ring
-        /*Item lightningRing = InventoryManager.Instance.GetItem<LightningRing>();
+        Item lightningRing = InventoryManager.Instance.GetItem<LightningRing>();
+
         if (lightningRing)
         {
             Gizmos.color = Color.blue;
             Gizmos.DrawWireSphere(transform.position, lightningRing.GetBaseStat<float>(Item.Levels.StatTypes.Area));
-        }*/
+        }
     }
 }

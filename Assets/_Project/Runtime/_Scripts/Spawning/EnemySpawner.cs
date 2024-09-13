@@ -1,5 +1,4 @@
 #region
-using System.Collections.Generic;
 using UnityEngine;
 using VInspector;
 #endregion
@@ -35,9 +34,6 @@ public class EnemySpawner : MonoBehaviour
     {
         Vector3 spawnPosition = new Vector3(Random.insideUnitSphere.x * spawnRadius, 1, Random.insideUnitSphere.z * spawnRadius);
         Instantiate(enemyPrefab, spawnPosition, Quaternion.identity);
-        
-        int enemyCount = FindObjectsOfType<Enemy>().Length;
-        Logger.LogError(enemyCount + " enemies spawned.");
     }
 
     void DEBUG_SpawnObject()

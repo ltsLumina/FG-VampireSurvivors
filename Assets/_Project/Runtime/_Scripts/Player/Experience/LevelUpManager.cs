@@ -12,6 +12,14 @@ public class LevelUpManager : MonoBehaviour
     [SerializeField] UnityEvent onMenuShown;
     [SerializeField] UnityEvent onMenuHidden;
 
+    public static LevelUpManager Instance { get; private set; }
+
+    void Awake()
+    {
+        if (Instance == null) Instance = this;
+        else Destroy(gameObject);
+    }
+
     void Start()
     {
         levelUpMenu.localScale = Vector3.zero;
