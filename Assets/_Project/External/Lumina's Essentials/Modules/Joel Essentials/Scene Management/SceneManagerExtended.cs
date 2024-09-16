@@ -6,36 +6,14 @@ using UnityEngine.SceneManagement;
 
 public static class SceneManagerExtended
 {
-    public static int Intro => 0;
-    public static int MainMenu => 1;
-    public static int CharacterSelect => 2;
-    public static int Game => ActiveSceneName switch
-    { "Bar"    => 3,
-      "Street" => 4,
-      _        => 3 };
-
-    public static int Bar => 3;
-    public static int Street => 4;
-
-    public static int PreviousScene { get; set; }
-    public static string ActiveSceneName => SceneManager.GetActiveScene().name;
     public static int ActiveScene => SceneManager.GetActiveScene().buildIndex;
-
-    public static bool IntroScene => SceneManager.GetActiveScene().buildIndex           == Intro;
-    public static bool MainMenuScene => SceneManager.GetActiveScene().buildIndex        == MainMenu;
-    public static bool CharacterSelectScene => SceneManager.GetActiveScene().buildIndex == CharacterSelect;
-    public static bool GameScene => SceneManager.GetActiveScene().buildIndex == Game || SceneManager.GetActiveScene().buildIndex == Bar || SceneManager.GetActiveScene().buildIndex == Street;
+    public static string ActiveSceneName => SceneManager.GetActiveScene().name;
 
     /// <summary>
     ///     Loads the scene with the specified build index.
     /// </summary>
     /// <param name="buildIndex"></param>
-    public static void LoadScene(int buildIndex)
-    {
-        PreviousScene = SceneManager.GetActiveScene().buildIndex;
-
-        SceneManager.LoadScene(ClampBuildIndex(buildIndex));
-    }
+    public static void LoadScene(int buildIndex) => SceneManager.LoadScene(ClampBuildIndex(buildIndex));
 
     /// <summary>
     ///     Reloads the currently active scene.
@@ -68,11 +46,7 @@ public static class SceneManagerExtended
     /// <summary>
     ///     Loads the next scene according to build index order.
     /// </summary>
-    public static void LoadNextScene()
-    {
-        PreviousScene = SceneManager.GetActiveScene().buildIndex;
-        SceneManager.LoadScene(ClampBuildIndex(SceneManager.GetActiveScene().buildIndex + 1));
-    }
+    public static void LoadNextScene() => SceneManager.LoadScene(ClampBuildIndex(SceneManager.GetActiveScene().buildIndex + 1));
 
     /// <summary>
     /// This extension method allows a MonoBehaviour to load the next scene after a specified delay.
@@ -93,11 +67,6 @@ public static class SceneManagerExtended
             LoadNextScene();
         }
     }
-
-    /// <summary>
-    ///     Loads the previously loaded scene.
-    /// </summary>
-    public static void LoadPreviousScene() => SceneManager.LoadScene(ClampBuildIndex(PreviousScene));
 
     /// <summary>
     ///     Asynchronously loads the scene with the specified build index.

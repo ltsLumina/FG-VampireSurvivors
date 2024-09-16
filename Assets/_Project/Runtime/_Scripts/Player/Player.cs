@@ -102,7 +102,6 @@ public sealed partial class Player : MonoBehaviour, IDamageable
     {
         if (!InventoryManager.Instance) return;
 
-        // Garlic
         Item garlic = InventoryManager.Instance.GetItem<Garlic>();
 
         if (garlic)
@@ -111,7 +110,6 @@ public sealed partial class Player : MonoBehaviour, IDamageable
             Gizmos.DrawWireSphere(transform.position, garlic.GetBaseStat<float>(Item.Levels.StatTypes.Area));
         }
 
-        // Lightning Ring
         Item lightningRing = InventoryManager.Instance.GetItem<LightningRing>();
 
         if (lightningRing)
