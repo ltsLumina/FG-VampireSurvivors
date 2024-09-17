@@ -5,7 +5,15 @@ using UnityEngine.InputSystem;
 
 public class InputManager : MonoBehaviour
 {
+    PlayerInput playerInput;
+    
     public Vector2 MoveInput { get; private set; }
+
+    void Awake()
+    {
+        playerInput = GetComponent<PlayerInput>();
+        if (!playerInput) Logger.LogError("PlayerInput component not found on InputManager!");
+    }
 
     // -- Player Input Actions --
 

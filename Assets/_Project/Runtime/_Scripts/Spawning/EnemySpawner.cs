@@ -19,6 +19,7 @@ public class EnemySpawner : MonoBehaviour
     [SerializeField] float debugSpawnRadius;
     [SerializeField] float debugSpawnInterval;
     [EndFoldout]
+    
     void Start()
     {
         if (enemyPrefab && !debugObject)

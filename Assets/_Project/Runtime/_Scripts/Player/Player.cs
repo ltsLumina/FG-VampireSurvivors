@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.Events;
 #endregion
 
-public sealed partial class Player : MonoBehaviour, IDamageable
+public sealed partial class Player : MonoBehaviour, IDamageable, IDisableable
 {
     [Header("Levels")]
     [SerializeField] int health = 100;
@@ -118,4 +118,6 @@ public sealed partial class Player : MonoBehaviour, IDamageable
             Gizmos.DrawWireSphere(transform.position, lightningRing.GetBaseStat<float>(Item.Levels.StatTypes.Area));
         }
     }
+
+    public void Toggle() => enabled = !enabled;
 }
