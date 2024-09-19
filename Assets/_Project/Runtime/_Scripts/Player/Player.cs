@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.Events;
 #endregion
 
-public sealed partial class Player : MonoBehaviour, IDamageable, IDisableable
+public sealed partial class Player : MonoBehaviour, IDamageable, IPausable
 {
     [Header("Levels")]
     [SerializeField] int health = 100;
@@ -119,5 +119,5 @@ public sealed partial class Player : MonoBehaviour, IDamageable, IDisableable
         }
     }
 
-    public void Toggle() => enabled = !enabled;
+    public void Pause() => enabled = !enabled;
 }

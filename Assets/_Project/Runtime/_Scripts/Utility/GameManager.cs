@@ -20,12 +20,12 @@ public class GameManager : MonoBehaviour
         return;
         void ToggleUpdateLoops()
         {
-            var disableables = FindObjectsOfType<MonoBehaviour>().OfType<IDisableable>();
+            var pausables = FindObjectsOfType<MonoBehaviour>().OfType<IPausable>();
 
-            foreach (IDisableable disableable in disableables)
+            foreach (IPausable pausable in pausables)
             {
-                disableable.Toggle();
-                Debug.Log($"Toggled: {disableable}", disableable as Object);
+                pausable.Pause();
+                Debug.Log($"Toggled: {pausable}", pausable as Object);
             }
         }
     }

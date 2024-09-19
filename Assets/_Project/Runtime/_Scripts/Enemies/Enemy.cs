@@ -6,7 +6,7 @@ using UnityEngine.Events;
 using Random = UnityEngine.Random;
 #endregion
 
-public abstract class Enemy : MonoBehaviour, IDamageable, IDisableable
+public abstract class Enemy : MonoBehaviour, IDamageable, IPausable
 {
     [SerializeField] int health = 100;
     [SerializeField] float speed = 3;
@@ -136,7 +136,7 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IDisableable
         Destroy(gameObject);
     }
 
-    public void Toggle()
+    public void Pause()
     {
         enabled = !enabled;
         Agent.enabled = !Agent.enabled;
