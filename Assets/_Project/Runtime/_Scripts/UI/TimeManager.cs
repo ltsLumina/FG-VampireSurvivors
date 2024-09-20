@@ -1,10 +1,11 @@
 #region
+using System;
 using Lumina.Essentials.Attributes;
 using TMPro;
 using UnityEngine;
 #endregion
 
-public class RoundTimer : MonoBehaviour
+public class TimeManager : MonoBehaviour
 {
     [Header("Reference"), Space(10), ReadOnly]
     [SerializeField] TextMeshProUGUI timerText;
@@ -31,13 +32,16 @@ public class RoundTimer : MonoBehaviour
 
     public delegate void TimerEnded();
     public static event TimerEnded OnTimerEnded;
-
+    
     // -- Properties --
-    public float CurrentTime
+    public static TimeManager Instance { get; private set; }
+    public TimeSpan Time
     {
-        get => currentTime;
-        set => currentTime = value;
+        get => TimeSpan.FromSeconds(currentTime);
+        set => currentTime = (float)value.TotalSeconds;
     }
+
+    public void AddTime(float time) => currentTime += 60;
 
     public bool Finished
     {
@@ -45,19 +49,18 @@ public class RoundTimer : MonoBehaviour
         set => finished = value;
     }
 
-    void Awake() => timerText = GetComponent<TextMeshProUGUI>();
+    void Awake()
+    {
+        timerText = GetComponent<TextMeshProUGUI>();
+        
+        if (Instance == null) Instance = this;
+        else Destroy(gameObject);
+    }
 
     void Start() => Finished = false;
 
-    void OnEnable()
-    {
-        OnTimerEnded         += TimerFinishedEvent;
-    }
-
-    void OnDisable()
-    {
-        OnTimerEnded -= TimerFinishedEvent;
-    }
+    void OnEnable() => OnTimerEnded += TimerFinishedEvent;
+    void OnDisable() => OnTimerEnded -= TimerFinishedEvent;
 
     void TimerFinishedEvent()
     {
@@ -79,8 +82,8 @@ public class RoundTimer : MonoBehaviour
     {
         if (timerText == null) return;
 
-        if (countdownMode) DecreaseTime(Time.deltaTime);
-        else IncreaseTime(Time.deltaTime);
+        if (countdownMode) DecreaseTime(UnityEngine.Time.deltaTime);
+        else IncreaseTime(UnityEngine.Time.deltaTime);
 
         UpdateTimerText();
     }
@@ -88,27 +91,27 @@ public class RoundTimer : MonoBehaviour
     #region Timer Methods
     void IncreaseTime(float delta)
     {
-        CurrentTime += delta;
-        if (hasTimeLimit && CurrentTime > timeLimit) CurrentTime = timeLimit;
+        currentTime = currentTime + delta;
+        if (hasTimeLimit && currentTime > timeLimit) currentTime = timeLimit;
     }
 
     void DecreaseTime(float delta)
     {
-        CurrentTime -= delta;
-        if (CurrentTime < 0.0f) CurrentTime                      = 0.0f;
-        if (hasTimeLimit && CurrentTime < timeLimit) CurrentTime = timeLimit;
+        currentTime = currentTime - delta;
+        if (currentTime < 0.0f) currentTime                      = 0.0f;
+        if (hasTimeLimit && currentTime < timeLimit) currentTime = timeLimit;
     }
 
-    public void SetTimer(float newTime) => CurrentTime = newTime;
+    public void SetTimer(float newTime) => currentTime = newTime;
 
-    public void ResetTimer() => CurrentTime = timeLimit;
+    public void ResetTimer() => currentTime = timeLimit;
     #endregion
 
     void UpdateTimerText()
     {
         // Format the time as MM:SS
-        int minutes = Mathf.FloorToInt(CurrentTime / 60F);
-        int seconds = Mathf.FloorToInt(CurrentTime % 60F);
+        int minutes = Mathf.FloorToInt(currentTime / 60F);
+        int seconds = Mathf.FloorToInt(currentTime % 60F);
         timerText.text = $"{minutes:00}:{seconds:00}";
 
         // Set the timer color
@@ -116,20 +119,20 @@ public class RoundTimer : MonoBehaviour
 
         if (customFormat) // If the custom format is enabled, use the color switch values.
         {
-            if (countdownMode) timerText.color = CurrentTime <= colorSwitchValue ? Color.red : defaultColor;
-            else timerText.color               = CurrentTime >= colorSwitchValue ? Color.red : defaultColor;
+            if (countdownMode) timerText.color = currentTime <= colorSwitchValue ? Color.red : defaultColor;
+            else timerText.color               = currentTime >= colorSwitchValue ? Color.red : defaultColor;
         }
 
         switch (countdownMode)
         {
             // If the timer has finished, invoke the OnTimerEnded event
             case true: {
-                if (CurrentTime <= 0.0f && !Finished) OnTimerEnded?.Invoke();
+                if (currentTime <= 0.0f && !Finished) OnTimerEnded?.Invoke();
                 break;
             }
 
             default: {
-                if (CurrentTime >= timeLimit && !Finished) OnTimerEnded?.Invoke();
+                if (currentTime >= timeLimit && !Finished) OnTimerEnded?.Invoke();
                 break;
             }
         }

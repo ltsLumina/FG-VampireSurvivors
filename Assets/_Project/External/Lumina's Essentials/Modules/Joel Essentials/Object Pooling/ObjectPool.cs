@@ -11,10 +11,11 @@ public class ObjectPool : MonoBehaviour
 
     readonly List<GameObject> pooledObjects = new ();
 
-    void Awake() =>
-
+    void Awake()
+    {
         // Clear the pooledObjects list in case it's not empty. This prevents errors when using Unity Editor Mode options.
         pooledObjects.Clear();
+    }
 
     void Start()
     {

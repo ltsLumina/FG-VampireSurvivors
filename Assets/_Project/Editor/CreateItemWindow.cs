@@ -165,6 +165,7 @@ public class CreateItemWindow : EditorWindow
         // create an instance of an item based on its string name
         ScriptableObject item = CreateInstance(itemName);
         AssetDatabase.CreateAsset(item, path);
+        // manual string: "Assets/_Project/Runtime/Resources/Items/" + itemName + "/" + itemName + ".asset"
 
         AssetDatabase.SaveAssets();
         AssetDatabase.Refresh();

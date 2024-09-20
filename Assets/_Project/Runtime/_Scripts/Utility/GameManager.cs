@@ -1,17 +1,18 @@
 #region
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.Events;
+using Object = UnityEngine.Object;
 #endregion
 
 public class GameManager : MonoBehaviour
 {
     public static bool IsPaused => Time.timeScale == 0;
-
-    #region Accessed by Level-Up Canvas
-    public void PauseGame() => Time.timeScale = 0;
-    public void ResumeGame() => Time.timeScale = 1;
-    #endregion
+    
+    public static void PauseGame() => Time.timeScale = 0;
+    public static void ResumeGame() => Time.timeScale = 1;
 
     public static void TogglePause()
     {

@@ -1,49 +1,96 @@
+// EnemySpawner.cs
 #region
+using System;
+using System.Collections.Generic;
 using UnityEngine;
 using VInspector;
 #endregion
 
-public class EnemySpawner : MonoBehaviour
+public class EnemySpawner : MonoBehaviour, IPausable
 {
     // spawn enemies outside of player's view
     // spawn enemies at random intervals
     // spawn enemies at random locations (outside of player's view)
 
-    [Header("Enemy Spawner")]
-    [SerializeField] Enemy enemyPrefab;
-    [SerializeField] float spawnInterval;
-    [SerializeField] float spawnRadius;
+    [Tooltip("List of waves that will spawn.")]
+    [SerializeField] List<Wave> waves;
 
-    [Foldout("Debug")]
-    [SerializeField] GameObject debugObject;
-    [SerializeField] float debugSpawnRadius;
-    [SerializeField] float debugSpawnInterval;
-    [EndFoldout]
-    
-    void Start()
+    /// <summary>
+    /// The pools of enemies that will be spawned.
+    /// Provides easy lookup to each pool.
+    /// </summary>
+    public static List<ObjectPool> Pools { get; } = new ();
+
+    /// <summary>
+    /// List of waves that will spawn.
+    /// <remarks> The position of the wave in the list corresponds to the minute it will spawn. </remarks>
+    /// </summary>
+    public List<Wave> EnemyWaves
     {
-        if (enemyPrefab && !debugObject)
+        get => waves;
+        set => waves = value;
+    }
+
+    [Button("Skip Wave")]
+    public void SkipWave()
+    {
+        int currentMinute = TimeManager.Instance.Time.Minutes;
+        int nextMinute    = currentMinute + 1;
+        TimeManager.Instance.AddTime(60);
+        Debug.Log(TimeManager.Instance.Time);
+
+        if (nextMinute < waves.Count)
         {
-            InvokeRepeating(nameof(SpawnEnemy), 0f, spawnInterval);
-            return;
+            // Cancel the current InvokeRepeating
+            CancelInvoke(nameof(SpawnWaves));
+
+            // Spawn the next wave
+            waves[nextMinute].Spawn();
+            Debug.Log("Spawning wave " + waves[nextMinute].name);
+
+            // Re-invoke the SpawnWaves method to continue spawning waves every 60 seconds
+            InvokeRepeating(nameof(SpawnWaves), 60f - TimeManager.Instance.Time.Seconds, 60f);
+        }
+    }
+
+    void Awake()
+    {
+        Pools.Clear(); // Clear the pools list in case it's not empty. This prevents errors when using Unity Editor Mode options.
+
+        // Initialize each wave's enemy pools so that each enemy type has its own pool.
+        foreach (Wave wave in waves)
+        {
+            wave.EnemyGroups.ForEach(enemyGroup =>
+            {
+                var pool = ObjectPoolManager.CreateNewPool(enemyGroup.enemy.gameObject, enemyGroup.amount);
+                Pools.Add(pool);
+                pool.name += $" | ({wave.name})";
+            });
         }
 
-        InvokeRepeating(nameof(DEBUG_SpawnObject), 0f, debugSpawnInterval);
+        ObjectPoolManager.ObjectPoolParent.parent = transform;
     }
 
-    void SpawnEnemy()
+    void Start()
     {
-        Vector3 spawnPosition = new Vector3(Random.insideUnitSphere.x * spawnRadius, 1, Random.insideUnitSphere.z * spawnRadius);
-        Instantiate(enemyPrefab, spawnPosition, Quaternion.identity);
+        Debug.Assert(waves.Count > 0, "No waves have been set up in the EnemySpawner.");
+
+        // Start spawning waves every 60 seconds. (Also spawn the first wave immediately.)
+        InvokeRepeating(nameof(SpawnWaves), 0f, 60f);
     }
 
-    void DEBUG_SpawnObject()
+    public void SpawnWaves()
     {
-        Logger.LogWarning("DEBUG: Spawning a debug object." + "\nOnly the debug object will be spawned.");
+        int currentMinute = TimeManager.Instance.Time.Minutes;
+        if (currentMinute < waves.Count)
+        {
+            waves[currentMinute].Spawn();
+            Debug.Log("Spawning wave " + waves[currentMinute].name);
+        }
+    }
 
-        Vector3    randomOffset   = Random.insideUnitSphere * debugSpawnRadius;
-        Quaternion randomRotation = Random.rotation;
-
-        ExperiencePickup.Create(transform.position + randomOffset, randomRotation);
+    public void Pause()
+    {
+        CancelInvoke(nameof(SpawnWaves));
     }
 }

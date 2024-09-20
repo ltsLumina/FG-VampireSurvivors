@@ -1,4 +1,5 @@
 #region
+using System.Collections;
 using UnityEngine;
 #endregion
 
@@ -19,7 +20,7 @@ public partial class Player
 
     public void Attack<T>() where T : Item
     {
-        //StartCoroutine($"{itemName}Cooldown");
+        //StartCoroutine($"{nameof(T)}Cooldown");
 
         switch (typeof(T))
         {

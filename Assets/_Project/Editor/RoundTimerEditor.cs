@@ -1,7 +1,7 @@
 ﻿using UnityEditor;
 using UnityEngine;
 
-[CustomEditor(typeof(RoundTimer))]
+[CustomEditor(typeof(TimeManager))]
 public class RoundTimerEditor : Editor
 {
     float newTime;
@@ -10,7 +10,7 @@ public class RoundTimerEditor : Editor
     {
         base.OnInspectorGUI();
 
-        var timer = (RoundTimer) target;
+        var timer = (TimeManager) target;
 
         GUILayout.Space(20);
 

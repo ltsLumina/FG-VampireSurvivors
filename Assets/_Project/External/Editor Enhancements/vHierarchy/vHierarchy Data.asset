@@ -57,6 +57,8 @@ MonoBehaviour:
         - GlobalObjectId_V1-2-99c9720ab356a0642a771bea13969a05-1877110110-0
         - GlobalObjectId_V1-2-99c9720ab356a0642a771bea13969a05-1382748287-0
         - GlobalObjectId_V1-2-99c9720ab356a0642a771bea13969a05-1111569614-0
+        - GlobalObjectId_V1-2-99c9720ab356a0642a771bea13969a05-794891615-0
+        - GlobalObjectId_V1-2-99c9720ab356a0642a771bea13969a05-535868759-0
         values:
         - iColor: 0
           icon: d_eyeDropper.sml
@@ -120,8 +122,12 @@ MonoBehaviour:
           icon: d_eyeDropper.sml
         - iColor: 0
           icon: d_eyeDropper.sml
+        - iColor: 0
+          icon: Canvas Icon
+        - iColor: 0
+          icon: 
       goDatasByInstanceId:
-        keys: 7c750000ec7400001e760000107600003c76000028760000f2740000a0750000307600002475000048760000e47500000276000084750000147600002c7500009c750000c4740000f8740000907500004c7600004276000080f9ffffca740000eee7ffff0abaffffb0bdffffeec2ffffe297ffff5c97ffff4697ffff3097ffff
+        keys: 0e7200000871000000730000ea7200003a7300000a7300001871000048720000227300006871000046730000be720000dc7200001672000064720000f67200000e7100007071000044720000ba7000001e710000267200005473000040730000a2faffffc0700000d27100001a720000347300007a7200002e720000c8dff0ffb2d8f0ff
         values:
         - iColor: 0
           icon: d_eyeDropper.sml
@@ -152,7 +158,11 @@ MonoBehaviour:
         - iColor: 0
           icon: d_eyeDropper.sml
         - iColor: 0
+          icon: Folder Icon
+        - iColor: 0
           icon: 
+        - iColor: 0
+          icon: Canvas Icon
         - iColor: 0
           icon: d_eyeDropper.sml
         - iColor: 0
@@ -172,10 +182,6 @@ MonoBehaviour:
         - iColor: 0
           icon: d_eyeDropper.sml
         - iColor: 0
-          icon: Canvas Icon
-        - iColor: 0
-          icon: Folder Icon
-        - iColor: 0
           icon: PreMatQuad
         - iColor: 0
           icon: 
@@ -186,7 +192,9 @@ MonoBehaviour:
         - iColor: 0
           icon: d_eyeDropper.sml
         - iColor: 0
-          icon: d_eyeDropper.sml
+          icon: Canvas Icon
+        - iColor: 0
+          icon: 
     - goDatasByGlobalId:
         keys:
         - GlobalObjectId_V1-2-5bc5791ab5324d5419157ef8fef1e8d3-713233058-0
@@ -194,7 +202,5 @@ MonoBehaviour:
         - iColor: 0
           icon: Settings Icon
       goDatasByInstanceId:
-        keys: f22fffff
-        values:
-        - iColor: 0
-          icon: Settings Icon
+        keys: 
+        values: []

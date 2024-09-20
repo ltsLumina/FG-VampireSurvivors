@@ -31,13 +31,17 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IPausable
         }
     }
 
-    public float Speed
-    {
-        get => speed;
-        set => speed = value;
-    }
-
     public NavMeshAgent Agent { get; set; }
+
+    void Reset()
+    {
+        Health = 100;
+        speed  = 5;
+        damage = 5;
+        damageInterval = 0.1f;
+        recoilDamage = 15;
+        recoilInterval = 0.1f;
+    }
 
     /// <summary>
     /// Make sure to call the base method when overriding this method.
@@ -59,15 +63,19 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IPausable
 
         void Init()
         {
-            onDeath.AddListener(_ => InstantiateXP());
-            Agent.speed = Speed;
+            onDeath.AddListener(_ =>
+            {
+                if (!gameObject.activeSelf) return;
+                InstantiateXP();
+            });
+            Agent.speed = speed;
             transform.LookAt(Player.Instance.transform);
         }
     }
 
     protected virtual void Update()
     {
-        Agent.speed = Speed;
+        Agent.speed = speed;
         
         if (Player.IsDead)
         {
@@ -133,7 +141,9 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IPausable
     void Death()
     {
         onDeath?.Invoke(causeOfDeath);
-        Destroy(gameObject);
+
+        Reset();
+        gameObject.SetActive(false); // Return to pool.
     }
 
     public void Pause()

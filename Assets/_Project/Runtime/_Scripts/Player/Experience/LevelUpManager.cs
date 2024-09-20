@@ -18,6 +18,9 @@ public class LevelUpManager : MonoBehaviour
     {
         if (Instance == null) Instance = this;
         else Destroy(gameObject);
+        
+        onMenuShown.AddListener(GameManager.TogglePause);
+        onMenuHidden.AddListener(GameManager.TogglePause);
     }
 
     void Start()

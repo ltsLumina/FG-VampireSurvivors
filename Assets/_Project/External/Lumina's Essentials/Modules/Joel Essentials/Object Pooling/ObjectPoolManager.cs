@@ -8,7 +8,7 @@ public static class ObjectPoolManager
     static List<ObjectPool> objectPools = new ();
 
     static Transform objectPoolParent;
-    static Transform ObjectPoolParent
+    public static Transform ObjectPoolParent
     {
         get
         {
@@ -41,8 +41,9 @@ public static class ObjectPoolManager
     /// <summary>
     ///     Creates a new object pool as a new gameobject.
     /// </summary>
-    /// <param name="objectPrefab"></param>
-    /// <param name="startAmount"></param>
+    /// <param name="objectPrefab"> The object prefab to pool. </param>
+    /// <param name="startAmount"> The number of objects to instantiate at the start. </param>
+    /// <param name="parent"> The parent transform for the new pool. </param>
     /// <returns>The pool that was created.</returns>
     public static ObjectPool CreateNewPool(GameObject objectPrefab, int startAmount = 5)
     {
@@ -59,7 +60,7 @@ public static class ObjectPoolManager
     }
 
     // Dictionary to cache the object pools by prefab for faster lookup.
-    readonly static Dictionary<GameObject, ObjectPool> ObjectPoolLookup = new ();
+    public readonly static Dictionary<GameObject, ObjectPool> ObjectPoolLookup = new ();
 
     /// <summary>
     ///     Returns the pool containing the specified object prefab.

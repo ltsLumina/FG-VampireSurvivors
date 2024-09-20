@@ -1,41 +1,45 @@
+#region
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using JetBrains.Annotations;
 using UnityEngine;
-
-// using static VInspector.Libs.VUtils;
-// using static VInspector.Libs.VGUI;
-// 
+#endregion
 
 namespace VInspector
 {
 [Serializable]
 public class SerializedDictionary<TKey, TValue> : Dictionary<TKey, TValue>, ISerializationCallbackReceiver
 {
-    public List<SerializedKeyValuePair<TKey, TValue>> serializedKvps = new List<SerializedKeyValuePair<TKey, TValue>>();
+    public List<SerializedKeyValuePair<TKey, TValue>> serializedKvps = new ();
 
-    public float dividerPos = .33f;
+    [UsedImplicitly] public float dividerPos = .33f;
 
     public void OnBeforeSerialize()
     {
-        foreach (var kvp in this)
-            if (serializedKvps.FirstOrDefault(r => this.Comparer.Equals(r.Key, kvp.Key)) is SerializedKeyValuePair<TKey, TValue> serializedKvp) serializedKvp.Value = kvp.Value;
+        foreach (KeyValuePair<TKey, TValue> kvp in this)
+        {
+            SerializedKeyValuePair<TKey, TValue> serializedKvp = serializedKvps.FirstOrDefault(r => Comparer.Equals(r.Key, kvp.Key));
+
+            if (serializedKvp != null) serializedKvp.Value = kvp.Value;
             else serializedKvps.Add(kvp);
+        }
 
-        serializedKvps.RemoveAll(r => !this.ContainsKey(r.Key));
+        serializedKvps.RemoveAll(r => !ContainsKey(r.Key));
 
-        for (int i = 0; i < serializedKvps.Count; i++) serializedKvps[i].index = i;
+        for (int i = 0; i < serializedKvps.Count; i++) { serializedKvps[i].index = i; }
     }
 
     public void OnAfterDeserialize()
     {
-        this.Clear();
+        Clear();
 
         serializedKvps.RemoveAll(r => r.Key == null);
 
-        foreach (var serializedKvp in serializedKvps)
-            if (!(serializedKvp.isKeyRepeated = this.ContainsKey(serializedKvp.Key)))
-                this.Add(serializedKvp.Key, serializedKvp.Value);
+        foreach (SerializedKeyValuePair<TKey, TValue> serializedKvp in serializedKvps)
+        {
+            if (!(serializedKvp.isKeyRepeated = ContainsKey(serializedKvp.Key))) Add(serializedKvp.Key, serializedKvp.Value);
+        }
     }
 
     [Serializable]
@@ -49,13 +53,13 @@ public class SerializedDictionary<TKey, TValue> : Dictionary<TKey, TValue>, ISer
 
         public SerializedKeyValuePair(TKey_ key, TValue_ value)
         {
-            this.Key   = key;
-            this.Value = value;
+            Key   = key;
+            Value = value;
         }
 
-        public static implicit operator SerializedKeyValuePair<TKey_, TValue_>(KeyValuePair<TKey_, TValue_> kvp) => new SerializedKeyValuePair<TKey_, TValue_>(kvp.Key, kvp.Value);
+        public static implicit operator SerializedKeyValuePair<TKey_, TValue_>(KeyValuePair<TKey_, TValue_> kvp) => new (kvp.Key, kvp.Value);
 
-        public static implicit operator KeyValuePair<TKey_, TValue_>(SerializedKeyValuePair<TKey_, TValue_> kvp) => new KeyValuePair<TKey_, TValue_>(kvp.Key, kvp.Value);
+        public static implicit operator KeyValuePair<TKey_, TValue_>(SerializedKeyValuePair<TKey_, TValue_> kvp) => new (kvp.Key, kvp.Value);
     }
 }
 }

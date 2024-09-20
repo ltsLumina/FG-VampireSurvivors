@@ -2,7 +2,7 @@
 using UnityEngine;
 #endregion
 
-public class ExperiencePickup : MonoBehaviour
+public class ExperiencePickup : MonoBehaviour, IPausable
 {
     [SerializeField] int expValue = 10;
 
@@ -27,5 +27,11 @@ public class ExperiencePickup : MonoBehaviour
         Destroy(gameObject);
     }
 
-    public static ExperiencePickup Create(Vector3 position, Quaternion rotation) => Instantiate(Resources.Load<ExperiencePickup>("XP"), position, rotation);
+    public static ExperiencePickup Create(Vector3 position, Quaternion rotation)
+    {
+        Debug.Log("XP pickup created.");
+        return Instantiate(Resources.Load<ExperiencePickup>("XP"), position, rotation);
+    }
+
+    public void Pause() => enabled = !enabled;
 }

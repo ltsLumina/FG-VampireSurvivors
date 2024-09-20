@@ -119,5 +119,9 @@ public sealed partial class Player : MonoBehaviour, IDamageable, IPausable
         }
     }
 
-    public void Pause() => enabled = !enabled;
+    public void Pause()
+    {
+        enabled = !enabled;
+        StopAllCoroutines(); // Stops the attack-loop coroutines.
+    }
 }
