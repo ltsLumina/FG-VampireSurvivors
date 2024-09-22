@@ -1,7 +1,7 @@
 #region
 #endregion
 
-public class Skeleton : Enemy
+public class EnemyTemplateFile : Enemy
 {
     protected override void Update()
     {
