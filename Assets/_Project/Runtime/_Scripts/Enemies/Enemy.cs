@@ -1,25 +1,46 @@
 ﻿#region
-using System;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.Events;
+using VInspector;
 using Random = UnityEngine.Random;
 #endregion
 
 public abstract class Enemy : MonoBehaviour, IDamageable, IPausable
 {
-    [SerializeField] int health = 100;
-    [SerializeField] float speed = 3;
-    [SerializeField] int damage = 5;
-    [SerializeField] float damageInterval;
-    [SerializeField] int recoilDamage = 15;
-    [SerializeField] float recoilInterval;
+    [Header("Info")]
+    [SerializeField] [Multiline] string description;
 
+    [Header("Stats")]
+    [SerializeField] int health = 100;
+    [SerializeField] int maxHealth = 100;
+    [SerializeField] float speed = 3;
+
+    [Header("Damage")]
+    [SerializeField] int damage = 5;
+    [SerializeField] int recoilDamage = 15;
+
+    [Foldout("Damage Intervals")]
+    [SerializeField] float damageInterval;
+    [SerializeField] float recoilInterval;
+    [EndFoldout]
+    [Space(10)]
     [Header("Events")]
     [SerializeField] UnityEvent<int> onHit;
     [SerializeField] UnityEvent<CausesOfDeath.Cause> onDeath;
 
     CausesOfDeath.Cause causeOfDeath;
+
+    #region NavMesh
+    protected NavMeshAgent Agent => GetComponent<NavMeshAgent>();
+    #endregion
+
+    #region Enemy Properties
+    public string Description
+    {
+        get => description;
+        set => description = value;
+    }
 
     public int Health
     {
@@ -31,26 +52,67 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IPausable
         }
     }
 
-    public NavMeshAgent Agent { get; set; }
+    public int MaxHealth
+    {
+        get => maxHealth;
+        set => maxHealth = value;
+    }
+
+    public float Speed
+    {
+        get => speed;
+        set => speed = value;
+    }
+
+    public int Damage
+    {
+        get => damage;
+        set => damage = value;
+    }
+
+    public int RecoilDamage
+    {
+        get => recoilDamage;
+        set => recoilDamage = value;
+    }
+
+    public float DamageInterval
+    {
+        get => damageInterval;
+        set => damageInterval = value;
+    }
+
+    public float RecoilInterval
+    {
+        get => recoilInterval;
+        set => recoilInterval = value;
+    }
+
+    public UnityEvent<int> OnHit
+    {
+        get => onHit;
+        set => onHit = value;
+    }
+
+    public UnityEvent<CausesOfDeath.Cause> OnDeath
+    {
+        get => onDeath;
+        set => onDeath = value;
+    }
+    #endregion
 
     void Reset()
     {
-        Health = 100;
-        speed  = 5;
-        damage = 5;
-        damageInterval = 0.1f;
-        recoilDamage = 15;
-        recoilInterval = 0.1f;
+        Health         = 100;
+        MaxHealth      = 100;
+        Speed          = 5;
+        Damage         = 5;
+        DamageInterval = 0.1f;
+        RecoilDamage   = 15;
+        RecoilInterval = 0.1f;
     }
 
-    /// <summary>
-    /// Make sure to call the base method when overriding this method.
-    /// </summary>
-    protected virtual void Awake()
-    {
-        Agent = GetComponent<NavMeshAgent>();
-        if (!Agent) Logger.LogError("NavMeshAgent component not found on Enemy!");
-    }
+    void OnValidate() => Agent.speed = Speed;
 
     /// <summary>
     /// Make sure to call the base method when overriding this method.
@@ -63,20 +125,20 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IPausable
 
         void Init()
         {
-            onDeath.AddListener(_ =>
+            onDeath.AddListener
+            (_ =>
             {
                 if (!gameObject.activeSelf) return;
                 InstantiateXP();
             });
-            Agent.speed = speed;
+
+            Agent.speed = Speed;
             transform.LookAt(Player.Instance.transform);
         }
     }
 
     protected virtual void Update()
     {
-        Agent.speed = speed;
-        
         if (Player.IsDead)
         {
             // Make the enemy move to a random position
@@ -111,7 +173,7 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IPausable
     }
 
     public void InstantiateXP() => ExperiencePickup.Create(transform.position, Random.rotation);
-    
+
     void DealDamage()
     {
         Player.Instance.TryGetComponent(out IDamageable damageable);
@@ -148,7 +210,7 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IPausable
 
     public void Pause()
     {
-        enabled = !enabled;
+        enabled       = !enabled;
         Agent.enabled = !Agent.enabled;
     }
 }

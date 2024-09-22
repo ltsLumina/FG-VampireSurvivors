@@ -1,7 +1,5 @@
 ﻿#region
 using System;
-using System.Collections;
-using System.IO;
 using UnityEditor;
 using UnityEngine;
 #endregion
@@ -10,8 +8,8 @@ using UnityEngine;
 public class CreateItemWindow : EditorWindow
 {
     static Action activeMenu;
-    string itemName = string.Empty;
-    bool success;
+    static string itemName = string.Empty;
+    static bool success;
 
     [MenuItem("Tools/Items/Create Item Window")]
     static void ShowWindow()
@@ -30,6 +28,7 @@ public class CreateItemWindow : EditorWindow
         EditorApplication.playModeStateChanged += PlayModeState;
 
         return;
+
         void Initialize()
         {
             activeMenu = DefaultMenu;
@@ -42,6 +41,7 @@ public class CreateItemWindow : EditorWindow
         Terminate();
 
         return;
+
         void Terminate()
         {
             // Remove the play mode state changed event.
@@ -59,8 +59,10 @@ public class CreateItemWindow : EditorWindow
 
     void OnGUI() => activeMenu();
 
-    void DefaultMenu()
+    public static void DefaultMenu()
     {
+        AssetCreationWindow.DrawBackButton();
+
         using (new GUILayout.VerticalScope(EditorStyles.helpBox))
         {
             GUILayout.Label("Create New Item", EditorStyles.boldLabel, GUILayout.Height(30));
@@ -70,19 +72,25 @@ public class CreateItemWindow : EditorWindow
             {
                 if (GUILayout.Button(new GUIContent("Create New Item", "Creates an entirely new item class."), GUILayout.Height(30), GUILayout.ExpandWidth(true)))
                 {
-                    CreateScript();
+                    const string directory    = "Assets/_Project/Runtime/_Scripts/Player/Items/Scriptable";
+                    const string className    = "ItemTemplateFile";
+                    string       templatePath = $"Assets/_Project/Runtime/_Scripts/Player/Items/Scriptable/{className}.cs";
+
+                    EditorGUIUtils.CreateScript(typeof(Item), directory, className, templatePath, itemName);
                     CreateNewItemAsset();
                     GUI.FocusControl(null); // Deselect the text field to clear it
                 }
             }
-            
+
             if (success)
             {
                 const string successMsg = "Item created successfully!";
                 EditorGUILayout.HelpBox(successMsg, MessageType.Info);
             }
 
-            if (string.IsNullOrEmpty(itemName) || itemName.Length < 4)
+            const int minLength = 4;
+
+            if (string.IsNullOrEmpty(itemName) || itemName.Length < minLength)
             {
                 if (!success)
                 {
@@ -94,47 +102,13 @@ public class CreateItemWindow : EditorWindow
             GUILayout.Space(10);
 
             #region Utility
-            bool ValidateItemName(string itemName) => string.IsNullOrEmpty(itemName) || itemName.Length < 4;
+            bool ValidateItemName(string itemName) => string.IsNullOrEmpty(itemName) || itemName.Length < minLength;
             #endregion
         }
     }
 
     #region Asset Creation
-    void CreateScript()
-    {
-        const string directory    = "Assets/_Project/Runtime/_Scripts/Player/Items/Scriptable";
-        const string className    = "ItemTemplateFile";
-        string       templatePath = $"Assets/_Project/Runtime/_Scripts/Player/Items/Scriptable/{className}.cs";
-
-        string assetPath = EditorUtility.SaveFilePanel("Save Item", directory, itemName, "cs");
-
-        if (string.IsNullOrEmpty(assetPath))
-        {
-            EditorUtility.DisplayDialog("Script creation aborted", "Cancel button pressed." + "\nAborting script creation.", "OK");
-            return;
-        }
-
-        try
-        {
-            // Read the template file
-            string templateContent = File.ReadAllText(templatePath);
-
-            // Write the template content to the new script file
-            File.WriteAllText(assetPath, templateContent);
-
-            // Replace the class name in the template with the name of the new script
-            string scriptContent = File.ReadAllText(assetPath);
-            scriptContent = scriptContent.Replace(className, itemName).Replace("ItemTemplateFile", itemName);
-
-            File.WriteAllText(assetPath, scriptContent);
-        } catch (Exception e)
-        {
-            Debug.LogError($"Failed to create script: {e.Message}");
-            throw;
-        }
-    }
-
-    void CreateNewItemAsset()
+    static void CreateNewItemAsset()
     {
         // Note: Saving and refreshing before creating the asset is necessary as the script file isn't "loaded" until we save and refresh.
 
@@ -155,7 +129,7 @@ public class CreateItemWindow : EditorWindow
 
         string path = EditorUtility.SaveFilePanel("Save Item", folderPath, $"{itemName}", "asset");
         path = path.Replace(Application.dataPath, "Assets");
-        
+
         if (string.IsNullOrEmpty(path))
         {
             EditorUtility.DisplayDialog("Asset creation aborted", "Cancel button pressed." + "\nAborting asset creation.", "OK");
@@ -165,6 +139,7 @@ public class CreateItemWindow : EditorWindow
         // create an instance of an item based on its string name
         ScriptableObject item = CreateInstance(itemName);
         AssetDatabase.CreateAsset(item, path);
+
         // manual string: "Assets/_Project/Runtime/Resources/Items/" + itemName + "/" + itemName + ".asset"
 
         AssetDatabase.SaveAssets();
