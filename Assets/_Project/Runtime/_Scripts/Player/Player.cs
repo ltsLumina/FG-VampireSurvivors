@@ -98,6 +98,16 @@ public sealed partial class Player : MonoBehaviour, IDamageable, IPausable
     }
     #endregion
 
+    void OnGUI()
+    {
+        // draw amount of garlic and lightning ring colliders
+        Garlic        garlic        = InventoryManager.Instance.GetItem<Garlic>();
+        LightningRing lightningRing = InventoryManager.Instance.GetItem<LightningRing>();
+
+        if (garlic        != null) GUI.Label(new (10, 100, 200, 20), "Garlic Colliders: "         + garlic.garlicColliders.Length, "box");
+        if (lightningRing != null) GUI.Label(new (10, 125, 200, 20), "Lightning Ring Colliders: " + lightningRing.lightningColliders.Length, "box");
+    }
+
     void OnDrawGizmos()
     {
         if (!InventoryManager.Instance) return;
@@ -119,9 +129,5 @@ public sealed partial class Player : MonoBehaviour, IDamageable, IPausable
         }
     }
 
-    public void Pause()
-    {
-        enabled = !enabled;
-        StopAllCoroutines(); // Stops the attack-loop coroutines.
-    }
+    public void Pause() => enabled = !enabled;
 }

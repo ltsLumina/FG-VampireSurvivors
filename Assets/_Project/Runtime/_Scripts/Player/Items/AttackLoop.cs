@@ -1,5 +1,4 @@
 #region
-using System.Collections;
 using UnityEngine;
 #endregion
 
@@ -12,13 +11,11 @@ public partial class Player
 
     void Update()
     {
-        foreach (InventoryManager.Items inventoryItem in InventoryManager.Instance.Inventory)
-        {
-            inventoryItem.Item.Use();
-        }
+        foreach (InventoryManager.Items inventoryItem in InventoryManager.Instance.Inventory) { inventoryItem.Item.Use(); }
     }
 
-    public void Attack<T>() where T : Item
+    public void SelectAttack<T>()
+        where T : Item
     {
         //StartCoroutine($"{nameof(T)}Cooldown");
 

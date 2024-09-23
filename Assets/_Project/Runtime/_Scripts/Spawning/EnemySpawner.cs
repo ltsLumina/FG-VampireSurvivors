@@ -1,7 +1,7 @@
 // EnemySpawner.cs
 #region
-using System;
 using System.Collections.Generic;
+using JetBrains.Annotations;
 using UnityEngine;
 using VInspector;
 #endregion
@@ -14,6 +14,8 @@ public class EnemySpawner : MonoBehaviour, IPausable
 
     [Tooltip("List of waves that will spawn.")]
     [SerializeField] List<Wave> waves;
+
+    float remainingTimeUntilNextWave; // Used to keep track of the time remaining until the next wave spawns.
 
     /// <summary>
     /// The pools of enemies that will be spawned.
@@ -32,6 +34,7 @@ public class EnemySpawner : MonoBehaviour, IPausable
     }
 
     [Button("Skip Wave")]
+    [UsedImplicitly]
     public void SkipWave()
     {
         int currentMinute = TimeManager.Instance.Time.Minutes;
@@ -60,7 +63,8 @@ public class EnemySpawner : MonoBehaviour, IPausable
         // Initialize each wave's enemy pools so that each enemy type has its own pool.
         foreach (Wave wave in waves)
         {
-            wave.EnemyGroups.ForEach(enemyGroup =>
+            wave.EnemyGroups.ForEach
+            (enemyGroup =>
             {
                 var pool = ObjectPoolManager.CreateNewPool(enemyGroup.enemy.gameObject, enemyGroup.amount);
                 Pools.Add(pool);
@@ -82,15 +86,21 @@ public class EnemySpawner : MonoBehaviour, IPausable
     public void SpawnWaves()
     {
         int currentMinute = TimeManager.Instance.Time.Minutes;
+
         if (currentMinute < waves.Count)
         {
             waves[currentMinute].Spawn();
-            Debug.Log("Spawning wave " + waves[currentMinute].name);
+            Debug.Log("Spawning " + waves[currentMinute].name);
         }
     }
 
     public void Pause()
     {
-        CancelInvoke(nameof(SpawnWaves));
+        if (IsInvoking(nameof(SpawnWaves)))
+        {
+            remainingTimeUntilNextWave = TimeManager.Instance.Time.Seconds;
+            CancelInvoke(nameof(SpawnWaves));
+        }
+        else { InvokeRepeating(nameof(SpawnWaves), remainingTimeUntilNextWave, 60f); }
     }
 }

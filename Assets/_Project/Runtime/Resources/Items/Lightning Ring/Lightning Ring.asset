@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   details:
     name: Lightning Ring
-    description: 
+    description: Strikes down enemies with bolts of lightning
   levelsList:
   - name: Level 1
     level: 1

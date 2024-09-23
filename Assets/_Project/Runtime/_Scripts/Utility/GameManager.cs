@@ -1,24 +1,24 @@
 #region
-using System;
-using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using UnityEngine.Events;
-using Object = UnityEngine.Object;
 #endregion
 
 public class GameManager : MonoBehaviour
 {
     public static bool IsPaused => Time.timeScale == 0;
-    
+
     public static void PauseGame() => Time.timeScale = 0;
+
     public static void ResumeGame() => Time.timeScale = 1;
 
     public static void TogglePause()
     {
+        Time.timeScale = IsPaused ? 1 : 0;
+
         ToggleUpdateLoops();
 
         return;
+
         void ToggleUpdateLoops()
         {
             var pausables = FindObjectsOfType<MonoBehaviour>().OfType<IPausable>();
@@ -26,7 +26,8 @@ public class GameManager : MonoBehaviour
             foreach (IPausable pausable in pausables)
             {
                 pausable.Pause();
-                Debug.Log($"Toggled: {pausable}", pausable as Object);
+
+                //Debug.Log($"Toggled: {pausable}", pausable as Object);
             }
         }
     }
@@ -39,7 +40,7 @@ public class GameManager : MonoBehaviour
     // }
 
     //public GameStates State;
-    
+
     // public void ChangeGameState(GameStates newState)
     // {
     //     State = newState;

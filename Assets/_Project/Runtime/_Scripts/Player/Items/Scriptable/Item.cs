@@ -1,10 +1,8 @@
 ﻿#region
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using JetBrains.Annotations;
-using UnityEditor;
 using UnityEngine;
 using Random = UnityEngine.Random;
 #endregion
@@ -179,7 +177,7 @@ public abstract class Item : ScriptableObject
     #endregion
 
     public T GetBaseStat<T>(Levels.StatTypes stat)
-        where T : struct // ints & floats both implement IComparable
+        where T : struct, IComparable // ints & floats both implement IComparable
     {
         int level = GetItemLevel();
 
@@ -231,10 +229,10 @@ public abstract class Item : ScriptableObject
 
         if (!itemSpecificStats)
         {
-            Logger.LogError("Item Specific Stats not found. Make sure the Item Specific Stats Scriptable Object is assigned to each level.");
+            Logger.LogError("Item Specific Stats not found. \nMake sure the Item Specific Stats Scriptable Object is assigned to each level.");
             return -1;
-        } 
-        
+        }
+
         return itemSpecificStats.GetItemSpecificStat(stat);
     }
     #endregion
@@ -251,7 +249,15 @@ public abstract class Item : ScriptableObject
     }
     #endregion
 
+    /// <summary>
+    /// Uses the item. (Basic attack loop)
+    /// </summary>
     public abstract void Use();
+
+    /// <summary>
+    /// Plays the card and its associated effects.
+    /// </summary>
+    public abstract void Play();
 
     public void Evolve()
     {

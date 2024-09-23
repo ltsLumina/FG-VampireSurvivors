@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   details:
     name: Garlic
-    description: Damages nearby enemies
+    description: Damages and knocks enemies back
   levelsList:
   - name: Level 1
     level: 1
@@ -29,26 +29,32 @@ MonoBehaviour:
   - name: Level 3
     level: 3
     baseStats: {fileID: 11400000, guid: e906be055c010814b83e1c9b61b92e7f, type: 2}
-    itemSpecificStats: {fileID: 0}
+    itemSpecificStats: {fileID: 11400000, guid: a770bb2ffa6133b4799cdb3d0bbc4a2a,
+      type: 2}
   - name: Level 4
     level: 4
     baseStats: {fileID: 11400000, guid: b5971420eededb740a46488aac5b5f7f, type: 2}
-    itemSpecificStats: {fileID: 0}
+    itemSpecificStats: {fileID: 11400000, guid: d967c9f14bc64fd4f8279b6e37509d3d,
+      type: 2}
   - name: Level 5
     level: 5
     baseStats: {fileID: 11400000, guid: 56cc6f282cf3658408292eaf1a872b02, type: 2}
-    itemSpecificStats: {fileID: 0}
+    itemSpecificStats: {fileID: 11400000, guid: da3662a522dfae44186bf7daa41f375d,
+      type: 2}
   - name: Level 6
     level: 6
     baseStats: {fileID: 11400000, guid: 734cd7ad1eb6ebb4e886fc2e10468972, type: 2}
-    itemSpecificStats: {fileID: 0}
+    itemSpecificStats: {fileID: 11400000, guid: 4c05b374cc7ae144ea9b1d1d67e2ff7a,
+      type: 2}
   - name: Level 7
     level: 7
     baseStats: {fileID: 11400000, guid: 008eff61be2bba440bc2d5cf99e73d5f, type: 2}
-    itemSpecificStats: {fileID: 0}
+    itemSpecificStats: {fileID: 11400000, guid: 042d5b4529cc579478c61eff767c2528,
+      type: 2}
   - name: Level 8
     level: 8
     baseStats: {fileID: 11400000, guid: 41bf874a36640f546aa0a3a42a3a0444, type: 2}
-    itemSpecificStats: {fileID: 0}
+    itemSpecificStats: {fileID: 11400000, guid: f584fa0f2f2efde4b905a2694371b615,
+      type: 2}
   garlicEffect: {fileID: 8877596331768416466, guid: 6f4b628023cb4bc449d3bb2c00bad6af,
     type: 3}
