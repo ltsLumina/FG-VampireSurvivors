@@ -14,6 +14,7 @@ public static class EditorGUIUtils
     public readonly static GUIContent descriptionContent = new ("Description", "The description of the move.");
     public readonly static GUIContent maxHealthContent = new ("Max Health", "The maximum health of the enemy.");
     public readonly static GUIContent speedContent = new ("Speed", "The speed of the enemy.");
+    public readonly static GUIContent xpYieldContent = new ("XP Yield", "The amount of experience the enemy yields when defeated.");
 
     public readonly static GUIContent animationContent = new ("Animation", "The animation to play during the move.");
     public readonly static GUIContent audioClipContent = new ("Audio Clip", "The audio clip to play during the move.");

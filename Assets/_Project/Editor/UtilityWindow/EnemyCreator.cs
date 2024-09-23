@@ -25,6 +25,7 @@ public static class EnemyCreator
     static int maxHealth;
     static int damage;
     static float speed;
+    static int xpYield;
     #endregion
 
     #region GUI
@@ -127,6 +128,7 @@ public static class EnemyCreator
                 maxHealth   = EditorGUILayout.IntField(maxHealthContent, maxHealth);
                 damage      = EditorGUILayout.IntField(damageContent, damage);
                 speed       = EditorGUILayout.FloatField(speedContent, speed);
+                xpYield     = EditorGUILayout.IntField(xpYieldContent, xpYield);
             }
         }
     }
@@ -195,6 +197,7 @@ public static class EnemyCreator
         enemyComponent.MaxHealth   = maxHealth;
         enemyComponent.Damage      = damage;
         enemyComponent.Speed       = speed;
+        enemyComponent.XPYield     = xpYield;
 
         // Save the GameObject as a prefab
         string prefabsFolder = "Assets/_Project/Runtime/Resources/PREFABS";
@@ -233,6 +236,7 @@ public static class EnemyCreator
         maxHealth   = 0;
         damage      = 0;
         speed       = 0;
+        xpYield     = 0;
     }
     #endregion
 }

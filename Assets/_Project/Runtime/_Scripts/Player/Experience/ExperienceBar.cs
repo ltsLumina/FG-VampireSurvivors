@@ -4,12 +4,12 @@ using UnityEngine;
 using UnityEngine.UI;
 #endregion
 
-public class ExperienceBar : MonoBehaviour
+public class ExperienceBar : MonoBehaviour, IPausable
 {
     [Header("Experience")]
-    [SerializeField] int xp; // current XP
-    [SerializeField] int level = 1;
-    [SerializeField] int totalXP;
+    [SerializeField, ReadOnly] int currentXP; // current XP
+    [SerializeField, ReadOnly] int level = 1;
+    [SerializeField, ReadOnly] int totalXP;
     [SerializeField, ReadOnly] int xpToLevelUp = 100;
 
     [Space(20)]
@@ -19,8 +19,8 @@ public class ExperienceBar : MonoBehaviour
     #region Properties
     public int XP
     {
-        get => xp;
-        set => xp = value;
+        get => currentXP;
+        set => currentXP = value;
     }
 
     public int Level
@@ -69,7 +69,7 @@ public class ExperienceBar : MonoBehaviour
     /// </summary>
     void UpdateXPBar()
     {
-        xp          = Experience.XP;
+        currentXP          = Experience.XP;
         level       = Experience.Level;
         totalXP     = Experience.TotalXP;
         xpToLevelUp = Experience.XPToLevelUp;
@@ -83,4 +83,10 @@ public class ExperienceBar : MonoBehaviour
     void Awake() => slider = GetComponentInChildren<Slider>();
 
     void Start() => Reset();
+
+    public void Pause()
+    {
+        enabled        = !enabled;
+        slider.enabled = !slider.enabled;
+    }
 }

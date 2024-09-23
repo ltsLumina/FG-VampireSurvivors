@@ -58,7 +58,10 @@ MonoBehaviour:
         - GlobalObjectId_V1-2-99c9720ab356a0642a771bea13969a05-1382748287-0
         - GlobalObjectId_V1-2-99c9720ab356a0642a771bea13969a05-1111569614-0
         - GlobalObjectId_V1-2-99c9720ab356a0642a771bea13969a05-794891615-0
-        - GlobalObjectId_V1-2-99c9720ab356a0642a771bea13969a05-176925464-0
+        - GlobalObjectId_V1-2-99c9720ab356a0642a771bea13969a05-1721801269-0
+        - GlobalObjectId_V1-2-99c9720ab356a0642a771bea13969a05-832575517-0
+        - GlobalObjectId_V1-2-99c9720ab356a0642a771bea13969a05-1537664462-0
+        - GlobalObjectId_V1-2-99c9720ab356a0642a771bea13969a05-410087039-0
         values:
         - iColor: 0
           icon: d_eyeDropper.sml
@@ -125,9 +128,15 @@ MonoBehaviour:
         - iColor: 0
           icon: Canvas Icon
         - iColor: 0
-          icon: 
+          icon: PreMatCube
+        - iColor: 0
+          icon: Material Icon
+        - iColor: 0
+          icon: DirectionalLight Icon
+        - iColor: 0
+          icon: DirectionalLight Icon
       goDatasByInstanceId:
-        keys: 7a7200005c7100006e73000054730000a87300007873000070710000b472000090730000c0710000b2730000287300004473000082720000d07200006473000062710000c8710000b0720000047100007671000092720000c0730000ac730000fef9ffff0a7100003472000086720000a2730000e67200009a720000287200002e710000
+        keys: 5a760000387500004e770000347700008e770000587700004c7500009476000070770000a075000098770000087700002477000062760000b0760000447700003e750000a875000090760000e87400005675000072760000a6770000927700001af6ffffee740000147600006676000088770000c67600007a760000087600005277000028760000147700006a750000
         values:
         - iColor: 0
           icon: d_eyeDropper.sml
@@ -194,7 +203,13 @@ MonoBehaviour:
         - iColor: 0
           icon: Canvas Icon
         - iColor: 0
-          icon: 
+          icon: PreMatCube
+        - iColor: 0
+          icon: Material Icon
+        - iColor: 0
+          icon: DirectionalLight Icon
+        - iColor: 0
+          icon: DirectionalLight Icon
     - goDatasByGlobalId:
         keys:
         - GlobalObjectId_V1-2-5bc5791ab5324d5419157ef8fef1e8d3-713233058-0

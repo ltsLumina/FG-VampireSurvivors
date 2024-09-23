@@ -1,4 +1,5 @@
 #region
+using System.Collections.Generic;
 using DG.Tweening;
 using UnityEngine;
 using UnityEngine.Events;
@@ -7,6 +8,7 @@ using UnityEngine.Events;
 public class LevelUpManager : MonoBehaviour
 {
     [SerializeField] RectTransform levelUpMenu;
+    [SerializeField] List<SelectItemButton> selectItemButtons;
 
     [Header("Events")]
     [SerializeField] UnityEvent onMenuShown;
@@ -19,8 +21,18 @@ public class LevelUpManager : MonoBehaviour
         if (Instance == null) Instance = this;
         else Destroy(gameObject);
         
-        onMenuShown.AddListener(GameManager.TogglePause);
-        onMenuHidden.AddListener(GameManager.TogglePause);
+        onMenuShown.AddListener(GameManager.Instance.TogglePause);
+        onMenuHidden.AddListener(GameManager.Instance.TogglePause);
+        
+        foreach (var button in selectItemButtons)
+        {
+            if (selectItemButtons.Count <= 0)
+            {
+                Logger.LogError("No select item buttons found in the level up menu.");
+                return;
+            }
+            button.onClick.AddListener(HideLevelUpMenu);
+        }
     }
 
     void Start()

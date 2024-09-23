@@ -9,13 +9,12 @@ public partial class Player
     Coroutine lightningRingCoroutine;
     Coroutine garlicCoroutine;
 
-    void Update()
+    void Start()
     {
         foreach (InventoryManager.Items inventoryItem in InventoryManager.Instance.Inventory) { inventoryItem.Item.Use(); }
     }
 
-    public void SelectAttack<T>()
-        where T : Item
+    public void SelectAttack<T>() where T : Item
     {
         //StartCoroutine($"{nameof(T)}Cooldown");
 

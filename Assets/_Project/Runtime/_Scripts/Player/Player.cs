@@ -1,8 +1,11 @@
 #region
+using System;
+using System.Reflection;
 using UnityEngine;
 using UnityEngine.Events;
 #endregion
 
+[SelectionBase]
 public sealed partial class Player : MonoBehaviour, IDamageable, IPausable
 {
     [Header("Levels")]
@@ -45,7 +48,11 @@ public sealed partial class Player : MonoBehaviour, IDamageable, IPausable
 
     void OnEnable()
     {
-        onDeath.AddListener(_ => Logger.LogWarning("Player has died." + "\nStopping all coroutines executing on this MonoBehaviour."));
+        onDeath.AddListener(_ =>
+        {
+            StopAllCoroutines();
+            Logger.LogWarning("Player has died." + "\nStopping all coroutines executing on this MonoBehaviour.");
+        });
         Experience.OnLevelUp += () => EffectPlayer.PlayEffect(levelUpAura);
     }
 
@@ -104,8 +111,29 @@ public sealed partial class Player : MonoBehaviour, IDamageable, IPausable
         Garlic        garlic        = InventoryManager.Instance.GetItem<Garlic>();
         LightningRing lightningRing = InventoryManager.Instance.GetItem<LightningRing>();
 
-        if (garlic        != null) GUI.Label(new (10, 100, 200, 20), "Garlic Colliders: "         + garlic.garlicColliders.Length, "box");
-        if (lightningRing != null) GUI.Label(new (10, 125, 200, 20), "Lightning Ring Colliders: " + lightningRing.lightningColliders.Length, "box");
+        if (garlic != null)
+        {
+            Type      garlicType           = typeof(Garlic);
+            FieldInfo garlicCollidersField = garlicType.GetField("garlicColliders", BindingFlags.NonPublic | BindingFlags.Instance);
+            
+            if (garlicCollidersField != null)
+            {
+                Collider[] garlicColliders = (Collider[]) garlicCollidersField.GetValue(garlic);
+                GUI.Label(new (10, 100, 200, 20), "Garlic Colliders: " + garlicColliders.Length, "box");
+            }
+        }
+
+        if (lightningRing != null)
+        {
+            Type      lightningRingType       = typeof(LightningRing);
+            FieldInfo lightningCollidersField = lightningRingType.GetField("lightningColliders", BindingFlags.NonPublic | BindingFlags.Instance);
+
+            if (lightningCollidersField != null)
+            {
+                Collider[] lightningColliders = (Collider[]) lightningCollidersField.GetValue(lightningRing);
+                GUI.Label(new (10, 125, 200, 20), "Lightning Ring Colliders: " + lightningColliders.Length, "box");
+            }
+        }
     }
 
     void OnDrawGizmos()
@@ -129,5 +157,8 @@ public sealed partial class Player : MonoBehaviour, IDamageable, IPausable
         }
     }
 
-    public void Pause() => enabled = !enabled;
+    public void Pause()
+    {
+        enabled = !enabled;
+    }
 }

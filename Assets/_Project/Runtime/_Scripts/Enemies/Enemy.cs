@@ -6,6 +6,7 @@ using VInspector;
 using Random = UnityEngine.Random;
 #endregion
 
+[SelectionBase]
 public abstract class Enemy : MonoBehaviour, IDamageable, IPausable
 {
     [Header("Info")]
@@ -16,6 +17,9 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IPausable
     [SerializeField] int maxHealth = 100;
     [SerializeField] float speed = 3;
 
+    [Header("Experience")]
+    [SerializeField] int xpYield;
+    
     [Header("Damage")]
     [SerializeField] int damage = 5;
     [SerializeField] int recoilDamage = 15;
@@ -63,6 +67,12 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IPausable
         get => speed;
         set => speed = value;
     }
+    
+    public int XPYield
+    {
+        get => xpYield;
+        set => xpYield = value;
+    }
 
     public int Damage
     {
@@ -101,11 +111,13 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IPausable
     }
     #endregion
 
+    // Note: Only use this to get the default values of the properties.
     void Reset()
     {
         Health         = 100;
         MaxHealth      = 100;
         Speed          = 5;
+        XPYield        = 1;
         Damage         = 5;
         DamageInterval = 0.1f;
         RecoilDamage   = 15;
@@ -128,8 +140,7 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IPausable
             onDeath.AddListener
             (_ =>
             {
-                if (!gameObject.activeSelf) return;
-                InstantiateXP();
+                ExperiencePickup.Create(XPYield, transform.position, Random.rotation);
             });
 
             Agent.speed = Speed;
@@ -152,7 +163,7 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IPausable
         const string dealDamage       = nameof(DealDamage);
         const string takeRecoilDamage = nameof(TakeRecoilDamage);
 
-        if (other.gameObject.CompareTag("Player") && Player.Instance)
+        if (other.gameObject.CompareTag("Player"))
         {
             if (!IsInvoking(dealDamage))
             {
@@ -172,8 +183,6 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IPausable
         }
     }
 
-    public void InstantiateXP() => ExperiencePickup.Create(transform.position, Random.rotation);
-
     void DealDamage()
     {
         Player.Instance.TryGetComponent(out IDamageable damageable);
@@ -182,8 +191,6 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IPausable
 
     public void TakeDamage(int damage, CausesOfDeath.Cause cause)
     {
-        if (Health <= 0) return;
-
         Health       -= damage;
         causeOfDeath =  CausesOfDeath.Cause.Player;
 
@@ -202,10 +209,15 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IPausable
 
     void Death()
     {
-        onDeath?.Invoke(causeOfDeath);
-
-        Reset();
+        MaxHealth = 100;
+        Health    = MaxHealth;
         gameObject.SetActive(false); // Return to pool.
+        
+        CancelInvoke(nameof(DealDamage));
+        CancelInvoke(nameof(TakeRecoilDamage));
+        StopAllCoroutines();
+        
+        onDeath?.Invoke(causeOfDeath);
     }
 
     public void Pause()

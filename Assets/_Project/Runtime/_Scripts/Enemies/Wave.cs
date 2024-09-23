@@ -15,17 +15,39 @@ public class Wave : ScriptableObject
     }
     
     public List<EnemyGroup> EnemyGroups => enemyGroup;
-    
+
     public void Spawn()
     {
+        // Assuming you have a reference to the player
+        GameObject player = GameObject.FindWithTag("Player");
+
+        if (player == null)
+        {
+            Debug.LogError("Player not found");
+            return;
+        }
+
+        Vector3 playerPosition = player.transform.position;
+        float   spawnDistance  = 50f; // Distance from the player to spawn enemies
+
         foreach (EnemyGroup group in enemyGroup)
         {
             for (int i = 0; i < group.amount; i++)
             {
-                // Spawn enemy
-                Vector3    spawnPosition = new Vector3(Random.insideUnitSphere.x * 10, y: 1, Random.insideUnitSphere.z * 10);
-                GameObject enemy         = EnemySpawner.Pools.Find(pool => pool.GetPooledObjectPrefab() == group.enemy.gameObject).GetPooledObject(true);
-                enemy.transform.position = spawnPosition;
+                // Find the correct pool for the current wave
+                var pool = EnemySpawner.Pools.Find(pool => pool.GetPooledObjectPrefab() == group.enemy.gameObject && pool.name.Contains(name));
+
+                if (pool != null)
+                {
+                    // Calculate a random direction and spawn position
+                    Vector2 randomDirection = Random.insideUnitCircle.normalized;
+                    Vector3 spawnPosition   = playerPosition + new Vector3(randomDirection.x, 0, randomDirection.y) * spawnDistance;
+
+                    // Spawn enemy
+                    GameObject enemy = pool.GetPooledObject(true);
+                    enemy.transform.position = spawnPosition;
+                }
+                else { Debug.LogError($"No pool found for enemy {group.enemy.name} in wave {name}"); }
             }
         }
     }

@@ -110,6 +110,7 @@ MonoBehaviour:
   health: 100
   maxHealth: 100
   speed: 8
+  xpYield: 50
   damage: 5
   recoilDamage: 15
   damageInterval: 0.1

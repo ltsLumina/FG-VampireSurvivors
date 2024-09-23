@@ -62,7 +62,7 @@ public static class Experience
 
         // -- Sets the XP required to level up to the next level
         // SO stands for Scriptable Object
-        var breakpointsSO = Resources.Load<XPBreakpoints>("Scriptable Objects/XP Breakpoints");
+        var breakpointsSO = Resources.Load<XPBreakpoints>("XP/XP Breakpoints");
 
         breakpointsSO.Breakpoints.ForEach
         (bp =>

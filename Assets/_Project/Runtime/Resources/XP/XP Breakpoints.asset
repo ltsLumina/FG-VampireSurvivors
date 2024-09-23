@@ -1,0 +1,164 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ef745094a6504b1e95bc431034902df9, type: 3}
+  m_Name: XP Breakpoints
+  m_EditorClassIdentifier: 
+  initialLevelCost: 100
+  f: 1.2
+  breakpoints:
+  - name: Level 1
+    level: 1
+    xp: 100
+  - name: Level 2
+    level: 2
+    xp: 120
+  - name: Level 3
+    level: 3
+    xp: 144
+  - name: Level 4
+    level: 4
+    xp: 172
+  - name: Level 5
+    level: 5
+    xp: 207
+  - name: Level 6
+    level: 6
+    xp: 248
+  - name: Level 7
+    level: 7
+    xp: 298
+  - name: Level 8
+    level: 8
+    xp: 358
+  - name: Level 9
+    level: 9
+    xp: 429
+  - name: Level 10
+    level: 10
+    xp: 515
+  - name: Level 11
+    level: 11
+    xp: 619
+  - name: Level 12
+    level: 12
+    xp: 743
+  - name: Level 13
+    level: 13
+    xp: 891
+  - name: Level 14
+    level: 14
+    xp: 1069
+  - name: Level 15
+    level: 15
+    xp: 1283
+  - name: Level 16
+    level: 16
+    xp: 1540
+  - name: Level 17
+    level: 17
+    xp: 1848
+  - name: Level 18
+    level: 18
+    xp: 2218
+  - name: Level 19
+    level: 19
+    xp: 2662
+  - name: Level 20
+    level: 20
+    xp: 3194
+  - name: Level 21
+    level: 21
+    xp: 3833
+  - name: Level 22
+    level: 22
+    xp: 4600
+  - name: Level 23
+    level: 23
+    xp: 5520
+  - name: Level 24
+    level: 24
+    xp: 6624
+  - name: Level 25
+    level: 25
+    xp: 7949
+  - name: Level 26
+    level: 26
+    xp: 9539
+  - name: Level 27
+    level: 27
+    xp: 10000
+  - name: Level 28
+    level: 28
+    xp: 10000
+  - name: Level 29
+    level: 29
+    xp: 10000
+  - name: Level 30
+    level: 30
+    xp: 10000
+  - name: Level 31
+    level: 31
+    xp: 10000
+  - name: Level 32
+    level: 32
+    xp: 10000
+  - name: Level 33
+    level: 33
+    xp: 10000
+  - name: Level 34
+    level: 34
+    xp: 10000
+  - name: Level 35
+    level: 35
+    xp: 10000
+  - name: Level 36
+    level: 36
+    xp: 10000
+  - name: Level 37
+    level: 37
+    xp: 10000
+  - name: Level 38
+    level: 38
+    xp: 10000
+  - name: Level 39
+    level: 39
+    xp: 10000
+  - name: Level 40
+    level: 40
+    xp: 10000
+  - name: Level 41
+    level: 41
+    xp: 10000
+  - name: Level 42
+    level: 42
+    xp: 10000
+  - name: Level 43
+    level: 43
+    xp: 10000
+  - name: Level 44
+    level: 44
+    xp: 10000
+  - name: Level 45
+    level: 45
+    xp: 10000
+  - name: Level 46
+    level: 46
+    xp: 10000
+  - name: Level 47
+    level: 47
+    xp: 10000
+  - name: Level 48
+    level: 48
+    xp: 10000
+  - name: Level 49
+    level: 49
+    xp: 10000

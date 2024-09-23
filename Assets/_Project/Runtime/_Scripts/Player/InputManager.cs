@@ -33,6 +33,8 @@ public class InputManager : MonoBehaviour
     /// <param name="context"></param>
     public void OnPause(InputAction.CallbackContext context)
     {
-        if (context.performed) GameManager.TogglePause();
+        //TODO: Clean this up. This is terrible.
+        if (LevelUpManager.Instance.transform.GetChild(0).gameObject.activeSelf) return; // Prevent pausing/un-pausing the game when the level up menu is active
+        if (context.performed) GameManager.Instance.TogglePause();
     }
 }

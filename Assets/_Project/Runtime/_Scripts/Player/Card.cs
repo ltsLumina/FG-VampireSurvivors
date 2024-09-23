@@ -42,7 +42,7 @@ public class Card : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHand
 
         if (CardDragHandler.Instance.IsWithinCenterArea(worldCenterPoint))
         {
-            Debug.Log("Card dropped within the center area.");
+            Debug.Log("Played a card with the item: " + item);
             item.Play();
 
             Destroy(gameObject);

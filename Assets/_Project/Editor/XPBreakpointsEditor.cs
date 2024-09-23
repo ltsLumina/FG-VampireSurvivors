@@ -1,5 +1,6 @@
 ﻿#region
 using UnityEditor;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 #endregion
 
@@ -11,8 +12,6 @@ public class XPBreakpointsEditor : Editor
 
     public override void OnInspectorGUI()
     {
-        var script = (XPBreakpoints) target;
-        if (GUILayout.Button("Default", GUILayout.Height(25))) script.Default();
         if (GUILayout.Button(showHideGraph + "Graph", GUILayout.Height(25))) showGraph = !showGraph;
 
         if (showGraph)
