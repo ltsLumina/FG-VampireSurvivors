@@ -19,8 +19,6 @@ public static class Experience
         {
             xp = value;
             if (xp >= XPToLevelUp) GainLevel();
-
-            OnGainedXP?.Invoke(value);
         }
     }
 

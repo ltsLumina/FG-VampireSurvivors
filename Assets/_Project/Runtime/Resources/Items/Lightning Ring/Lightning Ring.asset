@@ -15,6 +15,7 @@ MonoBehaviour:
   details:
     name: Lightning Ring
     description: Strikes down enemies with bolts of lightning
+    icon: {fileID: 21300000, guid: 6208e75404504114297288e0c6269259, type: 3}
   levelsList:
   - name: Level 1
     level: 1

@@ -5,5 +5,5 @@ public interface IDamageable
 {
     int Health { get; set; }
 
-    void TakeDamage(int damage, CausesOfDeath.Cause cause);
+    void TakeDamage(float damage, CausesOfDeath.Cause cause);
 }

@@ -1,8 +1,9 @@
 #region
-using Lumina.Essentials.Sequencer;
 using UnityEngine;
+using UnityEngine.UI;
 #endregion
 
+//TODO: redo entire main menu
 public class MainMenuManager : MonoBehaviour
 {
     public void StartGame()
@@ -11,10 +12,15 @@ public class MainMenuManager : MonoBehaviour
         SceneManagerExtended.LoadScene(1);
     }
 
+    public void Settings()
+    {
+        Debug.Log("Opening the settings menu...");
+        FindObjectOfType<HorizontalLayoutGroup>(true).transform.parent.gameObject.SetActive(true);
+    }
+
     public void QuitGame()
     {
         Debug.Log("Quitting the game...");
-        var sequence = new Sequence(this);
-        sequence.WaitThenExecute(1.5f, Application.Quit);
+        Application.Quit();
     }
 }

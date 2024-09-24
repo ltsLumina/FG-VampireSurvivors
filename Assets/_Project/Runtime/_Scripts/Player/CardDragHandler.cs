@@ -1,17 +1,19 @@
 #region
+using System.Collections.Generic;
 using UnityEngine;
 #endregion
 
 public class CardDragHandler : MonoBehaviour
 {
     [SerializeField] RectTransform defaultLayer, dragLayer, centerLayer;
+    [SerializeField] List<Card> cards;
 
     Rect boundingBox;
     Rect centerArea;
+    Card currentDraggedObject;
 
     public static CardDragHandler Instance { get; private set; }
 
-    Card currentDraggedObject;
     public Card CurrentDraggedObject => currentDraggedObject;
 
     void Awake()
@@ -31,12 +33,14 @@ public class CardDragHandler : MonoBehaviour
         currentDraggedObject = card;
         card.transform.SetParent(dragLayer);
 
+        card.transform.rotation = Quaternion.identity;
+
         Cursor.visible = false;
     }
 
-    public void UnregisterDraggedObject(Card drag)
+    public void UnregisterDraggedObject(Card card)
     {
-        drag.transform.SetParent(defaultLayer);
+        card.transform.SetParent(defaultLayer);
         currentDraggedObject = null;
 
         Cursor.visible = true;

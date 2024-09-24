@@ -15,6 +15,7 @@ MonoBehaviour:
   details:
     name: Garlic
     description: Damages and knocks enemies back
+    icon: {fileID: 21300000, guid: 2df039799e5bb5a40a15b3c247386a49, type: 3}
   levelsList:
   - name: Level 1
     level: 1

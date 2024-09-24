@@ -1,11 +1,14 @@
+#region
+using DG.Tweening;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using UnityEngine.UI;
+using Image = UnityEngine.UI.Image;
+#endregion
 
 //TODO: make abstract
-public class Card : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler, IPausable
+public class Card : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler, IPausable, IPointerEnterHandler, IPointerExitHandler
 {
-    [SerializeField] Item item;
+    [SerializeField] Item.ItemTypes item;
     [SerializeField] Image highlight;
 
     Vector2 originalPosition;
@@ -15,13 +18,16 @@ public class Card : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHand
 
     void Awake() => centerPoint = ((RectTransform) transform).rect.center;
 
-    void Start() { originalPosition = transform.position; }
+    void Start()
+    {
+        originalPosition = transform.position;
+        ResetScale();
+    }
 
     public void OnBeginDrag(PointerEventData eventData)
     {
-        originalPosition = transform.position;
         CardDragHandler.Instance.RegisterDraggedObject(this);
-
+        DOTween.Kill(transform);
         highlight.gameObject.SetActive(true);
     }
 
@@ -40,21 +46,56 @@ public class Card : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHand
     {
         CardDragHandler.Instance.UnregisterDraggedObject(this);
 
-        if (CardDragHandler.Instance.IsWithinCenterArea(worldCenterPoint))
-        {
-            Debug.Log("Played a card with the item: " + item);
-            item.Play();
+        DroppedWithinCenterArea();
 
-            Destroy(gameObject);
-        }
-        else
-        {
-            transform.position = originalPosition;
-            ScaleCard();
+        ResetScale();
 
-            highlight.gameObject.SetActive(false);
+        return;
+
+        void DroppedWithinCenterArea()
+        {
+            if (CardDragHandler.Instance.IsWithinCenterArea(worldCenterPoint))
+            {
+                Debug.Log("Played a card with the item: " + item);
+                Item inventoryItem;
+
+                switch (item)
+                {
+                    case Item.ItemTypes.Garlic:
+                        inventoryItem = InventoryManager.Instance.GetItem(Item.ItemTypes.Garlic);
+                        if (!inventoryItem) return;
+
+                        inventoryItem.Play();
+                        break;
+
+                    case Item.ItemTypes.LightningRing:
+                        inventoryItem = InventoryManager.Instance.GetItem(Item.ItemTypes.LightningRing);
+                        if (!inventoryItem) return;
+
+                        inventoryItem.Play();
+                        break;
+
+                    default:
+                        Logger.LogError("Item not found.");
+                        break;
+                }
+
+                Destroy(gameObject);
+            }
+            else
+            {
+                transform.DOMove(originalPosition, 0.5f).SetEase(Ease.OutCubic);
+
+                highlight.gameObject.SetActive(false);
+            }
         }
     }
+
+    // -- Pointer Methods --
+
+    public void OnPointerEnter(PointerEventData eventData) => transform.DOMoveY(originalPosition.y + 35, 0.5f).SetEase(Ease.OutBack);
+
+    public void OnPointerExit(PointerEventData eventData) => transform.DOMoveY(originalPosition.y, 0.5f).SetEase(Ease.OutBack);
 
     // -- Non-Dragging Methods --
 
@@ -67,8 +108,10 @@ public class Card : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHand
         float maxDistance = Mathf.Max(Screen.width, Screen.height) / 2f;
 
         float scale = Mathf.Lerp(maxScale, minScale, distanceToCenter / maxDistance);
-        transform.localScale = new Vector3(scale, scale, 1);
+        transform.localScale = new (scale, scale);
     }
+
+    void ResetScale() => transform.localScale = Vector3.one;
 
     public void Pause() => enabled = !enabled;
 }

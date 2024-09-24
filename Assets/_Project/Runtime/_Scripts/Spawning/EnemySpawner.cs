@@ -40,17 +40,16 @@ public class EnemySpawner : MonoBehaviour, IPausable
         int currentMinute = TimeManager.Instance.Time.Minutes;
         int nextMinute    = currentMinute + 1;
         TimeManager.Instance.AddTime(60);
-        Debug.Log(TimeManager.Instance.Time);
-    
+
         if (nextMinute < waves.Count)
         {
             // Cancel the current InvokeRepeating
             CancelInvoke(nameof(SpawnWaves));
-    
+
             // Spawn the next wave
             waves[nextMinute].Spawn();
             Debug.Log("Spawning wave " + waves[nextMinute].name);
-    
+
             // Re-invoke the SpawnWaves method to continue spawning waves every 60 seconds
             InvokeRepeating(nameof(SpawnWaves), 60f - TimeManager.Instance.Time.Seconds, 60f);
         }
@@ -94,8 +93,5 @@ public class EnemySpawner : MonoBehaviour, IPausable
         }
     }
 
-    public void Pause()
-    {
-        enabled = !enabled;
-    }
+    public void Pause() => enabled = !enabled;
 }

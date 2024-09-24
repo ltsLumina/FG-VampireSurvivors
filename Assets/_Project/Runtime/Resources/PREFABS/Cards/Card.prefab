@@ -218,7 +218,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3553425035201048745}
-  - component: {fileID: 3378561439604640143}
+  - component: {fileID: 7069461108347867400}
   m_Layer: 5
   m_Name: Card
   m_TagString: Card
@@ -248,7 +248,7 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 250, y: 450}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &3378561439604640143
+--- !u!114 &7069461108347867400
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -261,7 +261,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   item: {fileID: 0}
-  highlight: {fileID: 0}
+  highlight: {fileID: 6312328404670164562}
 --- !u!1 &7958455702862829744
 GameObject:
   m_ObjectHideFlags: 0

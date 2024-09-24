@@ -16,14 +16,26 @@ public class LevelUpManager : MonoBehaviour
 
     public static LevelUpManager Instance { get; private set; }
 
+    public UnityEvent OnMenuShown
+    {
+        get => onMenuShown;
+        set => onMenuShown = value;
+    }
+
+    public UnityEvent OnMenuHidden
+    {
+        get => onMenuHidden;
+        set => onMenuHidden = value;
+    }
+
     void Awake()
     {
         if (Instance == null) Instance = this;
         else Destroy(gameObject);
-        
+
         onMenuShown.AddListener(GameManager.Instance.TogglePause);
         onMenuHidden.AddListener(GameManager.Instance.TogglePause);
-        
+
         foreach (var button in selectItemButtons)
         {
             if (selectItemButtons.Count <= 0)
@@ -31,6 +43,7 @@ public class LevelUpManager : MonoBehaviour
                 Logger.LogError("No select item buttons found in the level up menu.");
                 return;
             }
+
             button.onClick.AddListener(HideLevelUpMenu);
         }
     }

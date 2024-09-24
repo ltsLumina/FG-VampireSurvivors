@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using JetBrains.Annotations;
 using UnityEngine;
+using UnityEngine.Events;
 #endregion
 
 public class InventoryManager : MonoBehaviour
@@ -33,16 +34,38 @@ public class InventoryManager : MonoBehaviour
         }
     }
 
+    [SerializeField] Character character;
+
+    [Space(10)]
     [SerializeField] List<Items> inventory = new ();
 
-    public IReadOnlyCollection<Items> Inventory => inventory;
+    [Space(10)]
+    [SerializeField] UnityEvent<Item> onItemAdded = new ();
 
     public static InventoryManager Instance { get; private set; }
+
+    public Character Character => character;
+    public IReadOnlyCollection<Items> Inventory => inventory;
+
+    public UnityEvent<Item> OnItemAdded
+    {
+        get => onItemAdded;
+        set => onItemAdded = value;
+    }
 
     void Awake()
     {
         if (Instance == null) Instance = this;
         else Destroy(gameObject);
+
+        inventory.Clear();
+    }
+
+    void Start()
+    {
+        Logger.LogWarning("Inventory cleared." + $"\nThe starting item will be added to the inventory. (Starting Item: {character.StartingItem})");
+
+        AddStartingItem(character.StartingItem);
     }
 
     #region Utility | OnValidate
@@ -52,13 +75,20 @@ public class InventoryManager : MonoBehaviour
         for (int i = 0; i < inventory.Count; i++)
         {
             Items itemEntry = inventory[i];
+
+            if (itemEntry.Item == null)
+            {
+                Logger.LogError("You are likely trying to add an item to the inventory manually. \nPlease use the Add Item button instead.");
+                continue;
+            }
+
             itemEntry.name = itemEntry.Item.Name;
             inventory[i]   = itemEntry;
         }
 
-        // enforce level limit to 1
-        if (inventory.Count <= 0) return;
+        if (inventory.Count == 0) return;
 
+        // enforce level limit to 8
         for (int i = 0; i < inventory.Count; i++)
         {
             Items itemEntry = inventory[i];
@@ -94,7 +124,7 @@ public class InventoryManager : MonoBehaviour
     {
         foreach (Item item in from itemEntry in inventory where itemEntry.Item.ItemType == itemType select itemEntry.Item) { return item; }
 
-        Debug.LogError("Item not found in inventory.");
+        Logger.LogError("Item not found in inventory.");
         return null;
     }
 
@@ -138,6 +168,20 @@ public class InventoryManager : MonoBehaviour
     }
     #endregion
 
+    public Item AddStartingItem(Item item)
+    {
+        inventory.Add
+        (new ()
+         { Item = item, Level = 1 });
+
+        onItemAdded.Invoke(item);
+
+        ValidateInspectorName();
+
+        Debug.Log("Starting item added to inventory. \nItem: " + item);
+        return item;
+    }
+
     public Item AddItem(Item item)
     {
         for (int i = 0; i < inventory.Count; i++)
@@ -147,7 +191,7 @@ public class InventoryManager : MonoBehaviour
             // If the item is already at max level, return
             if (inventory[i].Level >= 8)
             {
-                Debug.LogWarning("Item level is already at max level. + \nDuring normal gameplay, this warning should not appear.");
+                Debug.LogWarning("Item level is already at max level." + "\nThis warning should not appear during normal gameplay.");
                 return item;
             }
 
@@ -164,6 +208,8 @@ public class InventoryManager : MonoBehaviour
         inventory.Add
         (new ()
          { Item = item, Level = 1 });
+
+        onItemAdded.Invoke(item);
 
         ValidateInspectorName(); // Editor function to update the name of the item in the inspector (shows the name of the Item rather than "Element X")
 

@@ -1,6 +1,8 @@
-﻿using System.Collections;
+﻿#region
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+#endregion
 
 [CreateAssetMenu(fileName = "Lightning Ring", menuName = "Items/Lightning Ring")]
 public class LightningRing : Item
@@ -10,7 +12,7 @@ public class LightningRing : Item
 
     public override void Use()
     {
-        Debug.Log($"{nameof(LightningRing)} used." + "\nDealt " + GetBaseStat<int>(Levels.StatTypes.Damage) + " damage.");
+        Debug.Log($"{nameof(LightningRing)} used.");
         Player.Instance.SelectAttack<LightningRing>();
     }
 
@@ -23,21 +25,22 @@ public class LightningRing : Item
     /// </summary>
     /// <param name="damage"> Optional damage parameter. If not provided, the item's damage stat will be used. </param>
     /// <param name="area"> Optional area parameter. If not provided, the item's area stat will be used. </param>
-    void Attack(int? damage = null, float? area = null)
+    void Attack(float? damage = null, float? area = null)
     {
-        int   statDamage = damage ?? GetBaseStat<int>(Levels.StatTypes.Damage);
-        float statArea   = area   ?? GetBaseStat<float>(Levels.StatTypes.Area);
+        float statDamage = damage ?? GetBaseStat<float>(Levels.StatTypes.Damage) * Character.Stat.Strength;
+        float statArea   = area   ?? GetBaseStat<float>(Levels.StatTypes.Area)   * Character.Stat.Wisdom;
 
         List<Enemy> enemies = new ();
-        
+
         lightningColliders = Physics.OverlapSphere(Player.Instance.transform.position, statArea, LayerMask.GetMask("Enemy"));
+
         foreach (Collider collider in lightningColliders)
         {
             if (collider.TryGetComponent(out Enemy enemy)) enemies.Add(enemy);
         }
 
         // Strikes the amount of enemies equal to the item's lightning strikes stat
-        for (int i = 0; i < GetItemSpecificStat(GetItemLevel(), ItemSpecificStats.Stats.LightningStrikes); i++)
+        for (int i = 0; i < GetItemSpecificStat(ItemSpecificStats.Stats.LightningStrikes); i++)
         {
             if (enemies.Count == 0) break;
 
@@ -64,14 +67,13 @@ public class LightningRing : Item
     /// <returns></returns>
     IEnumerator CardEffect()
     {
-        int enemiesToHit = Random.Range(0, 25);
-        if (enemiesToHit == 0) Debug.LogWarning("You got unlucky HAHAHAHAHA" + "\nZero enemies hit by the card effect.");
+        int enemiesToHit = Random.Range(15, 25);
 
         // Strikes 25 enemies
         for (int i = 0; i < enemiesToHit; i++)
         {
             yield return new WaitForSeconds(0.1f);
-            Attack(damage: 999, area: 100);
+            Attack(999, 25);
         }
     }
 }

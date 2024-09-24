@@ -48,11 +48,13 @@ public sealed partial class Player : MonoBehaviour, IDamageable, IPausable
 
     void OnEnable()
     {
-        onDeath.AddListener(_ =>
+        onDeath.AddListener
+        (_ =>
         {
             StopAllCoroutines();
             Logger.LogWarning("Player has died." + "\nStopping all coroutines executing on this MonoBehaviour.");
         });
+
         Experience.OnLevelUp += () => EffectPlayer.PlayEffect(levelUpAura);
     }
 
@@ -87,13 +89,13 @@ public sealed partial class Player : MonoBehaviour, IDamageable, IPausable
     #endregion
 
     #region Health/Damage
-    public void TakeDamage(int damage, CausesOfDeath.Cause cause)
+    public void TakeDamage(float damage, CausesOfDeath.Cause cause)
     {
         if (Health <= 0) return;
-        Health -= damage;
+        Health -= (int) damage;
 
         causeOfDeath = cause; // Set the cause of death to the latest instance of damage. Works 95% of the time :)
-        onHit?.Invoke(damage);
+        onHit?.Invoke((int) damage);
     }
 
     void Death(CausesOfDeath.Cause cause)
@@ -115,7 +117,7 @@ public sealed partial class Player : MonoBehaviour, IDamageable, IPausable
         {
             Type      garlicType           = typeof(Garlic);
             FieldInfo garlicCollidersField = garlicType.GetField("garlicColliders", BindingFlags.NonPublic | BindingFlags.Instance);
-            
+
             if (garlicCollidersField != null)
             {
                 Collider[] garlicColliders = (Collider[]) garlicCollidersField.GetValue(garlic);
@@ -145,7 +147,7 @@ public sealed partial class Player : MonoBehaviour, IDamageable, IPausable
         if (garlic)
         {
             Gizmos.color = Color.red;
-            Gizmos.DrawWireSphere(transform.position, garlic.GetBaseStat<float>(Item.Levels.StatTypes.Area));
+            Gizmos.DrawWireSphere(transform.position, garlic.GetBaseStat<float>(Item.Levels.StatTypes.Area) * Character.Stat.Wisdom);
         }
 
         Item lightningRing = InventoryManager.Instance.GetItem<LightningRing>();
@@ -153,12 +155,9 @@ public sealed partial class Player : MonoBehaviour, IDamageable, IPausable
         if (lightningRing)
         {
             Gizmos.color = Color.blue;
-            Gizmos.DrawWireSphere(transform.position, lightningRing.GetBaseStat<float>(Item.Levels.StatTypes.Area));
+            Gizmos.DrawWireSphere(transform.position, lightningRing.GetBaseStat<float>(Item.Levels.StatTypes.Area) * Character.Stat.Wisdom);
         }
     }
 
-    public void Pause()
-    {
-        enabled = !enabled;
-    }
+    public void Pause() => enabled = !enabled;
 }

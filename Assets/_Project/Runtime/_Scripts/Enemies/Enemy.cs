@@ -19,7 +19,7 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IPausable
 
     [Header("Experience")]
     [SerializeField] int xpYield;
-    
+
     [Header("Damage")]
     [SerializeField] int damage = 5;
     [SerializeField] int recoilDamage = 15;
@@ -67,7 +67,7 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IPausable
         get => speed;
         set => speed = value;
     }
-    
+
     public int XPYield
     {
         get => xpYield;
@@ -137,11 +137,7 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IPausable
 
         void Init()
         {
-            onDeath.AddListener
-            (_ =>
-            {
-                ExperiencePickup.Create(XPYield, transform.position, Random.rotation);
-            });
+            onDeath.AddListener(_ => { ExperiencePickup.Create(XPYield, transform.position, Random.rotation); });
 
             Agent.speed = Speed;
             transform.LookAt(Player.Instance.transform);
@@ -189,12 +185,14 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IPausable
         damageable?.TakeDamage(damage, CausesOfDeath.Cause.Enemy);
     }
 
-    public void TakeDamage(int damage, CausesOfDeath.Cause cause)
+    public void TakeDamage(float damage, CausesOfDeath.Cause cause)
     {
-        Health       -= damage;
-        causeOfDeath =  CausesOfDeath.Cause.Player;
+        Health -= (int) damage;
 
-        onHit?.Invoke(damage);
+        //Debug.Log($"{name} took {(int)damage} damage.", this);
+
+        causeOfDeath = CausesOfDeath.Cause.Player;
+        onHit?.Invoke((int) damage);
     }
 
     void TakeRecoilDamage()
@@ -212,11 +210,11 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IPausable
         MaxHealth = 100;
         Health    = MaxHealth;
         gameObject.SetActive(false); // Return to pool.
-        
+
         CancelInvoke(nameof(DealDamage));
         CancelInvoke(nameof(TakeRecoilDamage));
         StopAllCoroutines();
-        
+
         onDeath?.Invoke(causeOfDeath);
     }
 

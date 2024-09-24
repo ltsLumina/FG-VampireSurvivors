@@ -21,6 +21,7 @@ public abstract class Item : ScriptableObject
         public string name;
         [Multiline]
         public string description;
+        public Sprite icon;
     }
 
     [Serializable]
@@ -43,7 +44,7 @@ public abstract class Item : ScriptableObject
         public BaseStats baseStats;
         public ItemSpecificStats itemSpecificStats;
 
-        public int Damage => baseStats.Damage;
+        public float Damage => baseStats.Damage;
         public float Speed => baseStats.Speed;
         public float Duration => baseStats.Duration;
         public float Area => baseStats.Area;
@@ -77,9 +78,16 @@ public abstract class Item : ScriptableObject
     [UsedImplicitly]
     public string Description => details.description;
 
+    [UsedImplicitly]
+    public Sprite Icon => details.icon;
+
     #region Utility | OnValidate
     void OnValidate()
     {
+        Debug.Assert(details.name        != string.Empty, "Name is empty. Please enter a name.");
+        Debug.Assert(details.description != string.Empty, "Description is empty. Please enter a description.");
+        Debug.Assert(details.icon        != null, "Icon is null. Please assign an icon.");
+
         Name = name;
 
         // Set the name of the structs' "name" variable to the index +1
@@ -156,7 +164,7 @@ public abstract class Item : ScriptableObject
     #endregion
 
     #region Utility | GetItemLevel method
-    public int GetItemLevel() => InventoryManager.Instance.GetItemLevel(GetType());
+    public int GetItemLevel() => InventoryManager.Instance.GetItemLevel(this);
     #endregion
 
     #region Utility | GetBaseStat methods
@@ -193,7 +201,7 @@ public abstract class Item : ScriptableObject
         switch (stat)
         {
             case Levels.StatTypes.Damage:
-                if (typeof(T) == typeof(int)) return (T) (object) baseStats.Damage;
+                if (typeof(T) == typeof(float)) return (T) (object) baseStats.Damage;
                 break;
 
             case Levels.StatTypes.Speed:
@@ -217,8 +225,10 @@ public abstract class Item : ScriptableObject
         return default;
     }
 
-    public float GetItemSpecificStat(int level, ItemSpecificStats.Stats stat)
+    public float GetItemSpecificStat(ItemSpecificStats.Stats stat)
     {
+        int level = GetItemLevel();
+
         if (level < 1 || level > levelsList.Count)
         {
             Debug.LogError("Level out of bounds. Please enter a valid level." + "\nLevel entered: " + level);
@@ -238,6 +248,10 @@ public abstract class Item : ScriptableObject
     #endregion
 
     #region Utility | Create method
+    /// <summary>
+    ///     "Creates" and returns a random item from the list of potential items.
+    /// </summary>
+    /// <returns></returns>
     public static Item Create()
     {
         var potentialItems = new List<Item>(Resources.LoadAll<Item>("Items"));

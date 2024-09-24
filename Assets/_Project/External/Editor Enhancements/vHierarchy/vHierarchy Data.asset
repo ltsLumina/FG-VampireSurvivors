@@ -14,10 +14,141 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   sceneDatasByGuid:
     keys:
-    - 
     - 99c9720ab356a0642a771bea13969a05
+    - 
     - 5bc5791ab5324d5419157ef8fef1e8d3
     values:
+    - goDatasByGlobalId:
+        keys:
+        - GlobalObjectId_V1-2-99c9720ab356a0642a771bea13969a05-377775628-0
+        - GlobalObjectId_V1-2-99c9720ab356a0642a771bea13969a05-1193072119-0
+        - GlobalObjectId_V1-2-99c9720ab356a0642a771bea13969a05-1654579301-0
+        - GlobalObjectId_V1-2-99c9720ab356a0642a771bea13969a05-1751904151-0
+        - GlobalObjectId_V1-2-99c9720ab356a0642a771bea13969a05-308459164-0
+        - GlobalObjectId_V1-2-99c9720ab356a0642a771bea13969a05-1957967889-0
+        - GlobalObjectId_V1-2-99c9720ab356a0642a771bea13969a05-1669737010-0
+        - GlobalObjectId_V1-2-99c9720ab356a0642a771bea13969a05-1712571640-0
+        - GlobalObjectId_V1-2-99c9720ab356a0642a771bea13969a05-262597486-0
+        - GlobalObjectId_V1-2-99c9720ab356a0642a771bea13969a05-794891615-0
+        - GlobalObjectId_V1-2-99c9720ab356a0642a771bea13969a05-275224872-0
+        - GlobalObjectId_V1-2-99c9720ab356a0642a771bea13969a05-1822789227-0
+        - GlobalObjectId_V1-2-99c9720ab356a0642a771bea13969a05-1517064247-0
+        - GlobalObjectId_V1-2-99c9720ab356a0642a771bea13969a05-522304668-0
+        - GlobalObjectId_V1-2-99c9720ab356a0642a771bea13969a05-105871617-0
+        - GlobalObjectId_V1-2-99c9720ab356a0642a771bea13969a05-2067874972-0
+        - GlobalObjectId_V1-2-99c9720ab356a0642a771bea13969a05-979912903-0
+        - GlobalObjectId_V1-2-99c9720ab356a0642a771bea13969a05-410087039-0
+        - GlobalObjectId_V1-2-99c9720ab356a0642a771bea13969a05-1537664462-0
+        - GlobalObjectId_V1-2-99c9720ab356a0642a771bea13969a05-832575517-0
+        - GlobalObjectId_V1-2-99c9720ab356a0642a771bea13969a05-1721801269-0
+        - GlobalObjectId_V1-2-99c9720ab356a0642a771bea13969a05-293734005-0
+        - GlobalObjectId_V1-2-99c9720ab356a0642a771bea13969a05-1699871905-0
+        - GlobalObjectId_V1-2-99c9720ab356a0642a771bea13969a05-312983659-0
+        - GlobalObjectId_V1-2-99c9720ab356a0642a771bea13969a05-923491310-0
+        values:
+        - iColor: 0
+          icon: d_eyeDropper.sml
+        - iColor: 0
+          icon: Camera Icon
+        - iColor: 0
+          icon: Camera Icon
+        - iColor: 0
+          icon: d_eyeDropper.sml
+        - iColor: 0
+          icon: d_eyeDropper.sml
+        - iColor: 0
+          icon: d_eyeDropper.sml
+        - iColor: 0
+          icon: d_eyeDropper.sml
+        - iColor: 0
+          icon: d_eyeDropper.sml
+        - iColor: 0
+          icon: d_eyeDropper.sml
+        - iColor: 0
+          icon: Canvas Icon
+        - iColor: 0
+          icon: Canvas Icon
+        - iColor: 0
+          icon: Canvas Icon
+        - iColor: 0
+          icon: Canvas Icon
+        - iColor: 0
+          icon: EventSystem Icon
+        - iColor: 0
+          icon: Settings Icon
+        - iColor: 0
+          icon: d_eyeDropper.sml
+        - iColor: 0
+          icon: d_eyeDropper.sml
+        - iColor: 0
+          icon: DirectionalLight Icon
+        - iColor: 0
+          icon: DirectionalLight Icon
+        - iColor: 0
+          icon: PreMatSphere
+        - iColor: 0
+          icon: PreMatCube
+        - iColor: 0
+          icon: PreMatQuad
+        - iColor: 0
+          icon: PreMatQuad
+        - iColor: 0
+          icon: PreMatQuad
+        - iColor: 0
+          icon: 
+      goDatasByInstanceId:
+        keys: d670000016720000ae720000e2720000cc7000001a730000be720000d8720000b87000008e710000be700000fc7200008a720000207100006670000024730000e0710000ea70000096720000ae710000dc720000c8700000ca720000d0700000ca710000
+        values:
+        - iColor: 0
+          icon: d_eyeDropper.sml
+        - iColor: 0
+          icon: Camera Icon
+        - iColor: 0
+          icon: Camera Icon
+        - iColor: 0
+          icon: d_eyeDropper.sml
+        - iColor: 0
+          icon: d_eyeDropper.sml
+        - iColor: 0
+          icon: d_eyeDropper.sml
+        - iColor: 0
+          icon: d_eyeDropper.sml
+        - iColor: 0
+          icon: d_eyeDropper.sml
+        - iColor: 0
+          icon: d_eyeDropper.sml
+        - iColor: 0
+          icon: Canvas Icon
+        - iColor: 0
+          icon: Canvas Icon
+        - iColor: 0
+          icon: Canvas Icon
+        - iColor: 0
+          icon: Canvas Icon
+        - iColor: 0
+          icon: EventSystem Icon
+        - iColor: 0
+          icon: Settings Icon
+        - iColor: 0
+          icon: d_eyeDropper.sml
+        - iColor: 0
+          icon: d_eyeDropper.sml
+        - iColor: 0
+          icon: DirectionalLight Icon
+        - iColor: 0
+          icon: DirectionalLight Icon
+        - iColor: 0
+          icon: PreMatSphere
+        - iColor: 0
+          icon: PreMatCube
+        - iColor: 0
+          icon: PreMatQuad
+        - iColor: 0
+          icon: PreMatQuad
+        - iColor: 0
+          icon: PreMatQuad
+        - iColor: 0
+          icon: 
     - goDatasByGlobalId:
         keys: []
         values: []
@@ -26,196 +157,12 @@ MonoBehaviour:
         values: []
     - goDatasByGlobalId:
         keys:
-        - GlobalObjectId_V1-2-99c9720ab356a0642a771bea13969a05-979912903-0
-        - GlobalObjectId_V1-2-99c9720ab356a0642a771bea13969a05-262597486-0
-        - GlobalObjectId_V1-2-99c9720ab356a0642a771bea13969a05-1712571640-0
-        - GlobalObjectId_V1-2-99c9720ab356a0642a771bea13969a05-1669737010-0
-        - GlobalObjectId_V1-2-99c9720ab356a0642a771bea13969a05-1957967889-0
-        - GlobalObjectId_V1-2-99c9720ab356a0642a771bea13969a05-1751904151-0
-        - GlobalObjectId_V1-2-99c9720ab356a0642a771bea13969a05-308459164-0
-        - GlobalObjectId_V1-2-99c9720ab356a0642a771bea13969a05-1193072119-0
-        - GlobalObjectId_V1-2-99c9720ab356a0642a771bea13969a05-1822789227-0
-        - GlobalObjectId_V1-2-99c9720ab356a0642a771bea13969a05-522304668-0
-        - GlobalObjectId_V1-2-99c9720ab356a0642a771bea13969a05-2067874972-0
-        - GlobalObjectId_V1-2-99c9720ab356a0642a771bea13969a05-1517064247-0
-        - GlobalObjectId_V1-2-99c9720ab356a0642a771bea13969a05-1654579301-0
-        - GlobalObjectId_V1-2-99c9720ab356a0642a771bea13969a05-987036862-0
-        - GlobalObjectId_V1-2-99c9720ab356a0642a771bea13969a05-1296566398-0
-        - GlobalObjectId_V1-2-99c9720ab356a0642a771bea13969a05-1708025321-0
-        - GlobalObjectId_V1-2-99c9720ab356a0642a771bea13969a05-275224872-0
-        - GlobalObjectId_V1-2-99c9720ab356a0642a771bea13969a05-528287053-0
-        - GlobalObjectId_V1-2-99c9720ab356a0642a771bea13969a05-1177387075-0
-        - GlobalObjectId_V1-2-99c9720ab356a0642a771bea13969a05-105871617-0
-        - GlobalObjectId_V1-2-99c9720ab356a0642a771bea13969a05-377775628-0
-        - GlobalObjectId_V1-2-99c9720ab356a0642a771bea13969a05-1091990732-0
-        - GlobalObjectId_V1-2-99c9720ab356a0642a771bea13969a05-2086564205-0
-        - GlobalObjectId_V1-2-99c9720ab356a0642a771bea13969a05-2061933226-0
-        - GlobalObjectId_V1-2-99c9720ab356a0642a771bea13969a05-6680087432799634209-1392127057200015359
-        - GlobalObjectId_V1-2-99c9720ab356a0642a771bea13969a05-109401730-0
-        - GlobalObjectId_V1-2-99c9720ab356a0642a771bea13969a05-794975437-0
-        - GlobalObjectId_V1-2-99c9720ab356a0642a771bea13969a05-1050076916-0
-        - GlobalObjectId_V1-2-99c9720ab356a0642a771bea13969a05-1877110110-0
-        - GlobalObjectId_V1-2-99c9720ab356a0642a771bea13969a05-1382748287-0
-        - GlobalObjectId_V1-2-99c9720ab356a0642a771bea13969a05-1111569614-0
-        - GlobalObjectId_V1-2-99c9720ab356a0642a771bea13969a05-794891615-0
-        - GlobalObjectId_V1-2-99c9720ab356a0642a771bea13969a05-1721801269-0
-        - GlobalObjectId_V1-2-99c9720ab356a0642a771bea13969a05-832575517-0
-        - GlobalObjectId_V1-2-99c9720ab356a0642a771bea13969a05-1537664462-0
-        - GlobalObjectId_V1-2-99c9720ab356a0642a771bea13969a05-410087039-0
+        - GlobalObjectId_V1-2-5bc5791ab5324d5419157ef8fef1e8d3-99620188-0
         values:
-        - iColor: 0
-          icon: d_eyeDropper.sml
-        - iColor: 0
-          icon: d_eyeDropper.sml
-        - iColor: 0
-          icon: d_eyeDropper.sml
-        - iColor: 0
-          icon: d_eyeDropper.sml
-        - iColor: 0
-          icon: d_eyeDropper.sml
-        - iColor: 0
-          icon: d_eyeDropper.sml
-        - iColor: 0
-          icon: d_eyeDropper.sml
-        - iColor: 0
-          icon: Camera Icon
-        - iColor: 0
-          icon: Canvas Icon
         - iColor: 0
           icon: EventSystem Icon
-        - iColor: 0
-          icon: d_eyeDropper.sml
-        - iColor: 0
-          icon: Canvas Icon
-        - iColor: 0
-          icon: Camera Icon
-        - iColor: 0
-          icon: d_eyeDropper.sml
-        - iColor: 0
-          icon: Folder Icon
-        - iColor: 0
-          icon: 
-        - iColor: 0
-          icon: Canvas Icon
-        - iColor: 0
-          icon: d_eyeDropper.sml
-        - iColor: 0
-          icon: d_eyeDropper.sml
-        - iColor: 0
-          icon: Settings Icon
-        - iColor: 0
-          icon: d_eyeDropper.sml
-        - iColor: 0
-          icon: d_eyeDropper.sml
-        - iColor: 0
-          icon: PreMatCube
-        - iColor: 0
-          icon: PreMatQuad
-        - iColor: 0
-          icon: AvatarMask On Icon
-        - iColor: 0
-          icon: d_eyeDropper.sml
-        - iColor: 0
-          icon: PreMatQuad
-        - iColor: 0
-          icon: 
-        - iColor: 0
-          icon: d_eyeDropper.sml
-        - iColor: 0
-          icon: d_eyeDropper.sml
-        - iColor: 0
-          icon: d_eyeDropper.sml
-        - iColor: 0
-          icon: Canvas Icon
-        - iColor: 0
-          icon: PreMatCube
-        - iColor: 0
-          icon: Material Icon
-        - iColor: 0
-          icon: DirectionalLight Icon
-        - iColor: 0
-          icon: DirectionalLight Icon
       goDatasByInstanceId:
-        keys: 5a760000387500004e770000347700008e770000587700004c7500009476000070770000a075000098770000087700002477000062760000b0760000447700003e750000a875000090760000e87400005675000072760000a6770000927700001af6ffffee740000147600006676000088770000c67600007a760000087600005277000028760000147700006a750000
+        keys: be970000
         values:
-        - iColor: 0
-          icon: d_eyeDropper.sml
-        - iColor: 0
-          icon: d_eyeDropper.sml
-        - iColor: 0
-          icon: d_eyeDropper.sml
-        - iColor: 0
-          icon: d_eyeDropper.sml
-        - iColor: 0
-          icon: d_eyeDropper.sml
-        - iColor: 0
-          icon: d_eyeDropper.sml
-        - iColor: 0
-          icon: d_eyeDropper.sml
-        - iColor: 0
-          icon: Camera Icon
-        - iColor: 0
-          icon: Canvas Icon
         - iColor: 0
           icon: EventSystem Icon
-        - iColor: 0
-          icon: d_eyeDropper.sml
-        - iColor: 0
-          icon: Canvas Icon
-        - iColor: 0
-          icon: Camera Icon
-        - iColor: 0
-          icon: d_eyeDropper.sml
-        - iColor: 0
-          icon: Folder Icon
-        - iColor: 0
-          icon: 
-        - iColor: 0
-          icon: Canvas Icon
-        - iColor: 0
-          icon: d_eyeDropper.sml
-        - iColor: 0
-          icon: d_eyeDropper.sml
-        - iColor: 0
-          icon: Settings Icon
-        - iColor: 0
-          icon: d_eyeDropper.sml
-        - iColor: 0
-          icon: d_eyeDropper.sml
-        - iColor: 0
-          icon: PreMatCube
-        - iColor: 0
-          icon: PreMatQuad
-        - iColor: 0
-          icon: AvatarMask On Icon
-        - iColor: 0
-          icon: d_eyeDropper.sml
-        - iColor: 0
-          icon: PreMatQuad
-        - iColor: 0
-          icon: 
-        - iColor: 0
-          icon: d_eyeDropper.sml
-        - iColor: 0
-          icon: d_eyeDropper.sml
-        - iColor: 0
-          icon: d_eyeDropper.sml
-        - iColor: 0
-          icon: Canvas Icon
-        - iColor: 0
-          icon: PreMatCube
-        - iColor: 0
-          icon: Material Icon
-        - iColor: 0
-          icon: DirectionalLight Icon
-        - iColor: 0
-          icon: DirectionalLight Icon
-    - goDatasByGlobalId:
-        keys:
-        - GlobalObjectId_V1-2-5bc5791ab5324d5419157ef8fef1e8d3-713233058-0
-        values:
-        - iColor: 0
-          icon: Settings Icon
-      goDatasByInstanceId:
-        keys: 
-        values: []

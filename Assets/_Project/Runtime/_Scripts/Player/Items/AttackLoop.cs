@@ -11,10 +11,15 @@ public partial class Player
 
     void Start()
     {
-        foreach (InventoryManager.Items inventoryItem in InventoryManager.Instance.Inventory) { inventoryItem.Item.Use(); }
+        InventoryManager.Instance.OnItemAdded.AddListener(UseItems);
+
+        return;
+
+        void UseItems(Item item) => item.Use();
     }
 
-    public void SelectAttack<T>() where T : Item
+    public void SelectAttack<T>()
+        where T : Item
     {
         //StartCoroutine($"{nameof(T)}Cooldown");
 

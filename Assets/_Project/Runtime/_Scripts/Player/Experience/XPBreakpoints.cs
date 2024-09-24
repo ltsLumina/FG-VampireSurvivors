@@ -2,7 +2,6 @@
 using System;
 using System.Collections.Generic;
 using JetBrains.Annotations;
-using UnityEditor;
 using UnityEngine;
 #endregion
 
@@ -12,10 +11,10 @@ using UnityEngine;
 ///     which was stolen directly from Vampire Survivors.
 ///     <para>https://vampire-survivors.fandom.com/wiki/Level_up</para>
 /// </summary>
-[CreateAssetMenu(fileName = "XP Breakpoints", menuName = "Scriptable Objects/Experience", order = 0), HelpURL("https://vampire-survivors.fandom.com/wiki/Level_up")]
+[HelpURL("https://vampire-survivors.fandom.com/wiki/Level_up")]
 public class XPBreakpoints : ScriptableObject
 {
-    [Serializable] 
+    [Serializable]
     public struct XP_Breakpoints
     {
         [HideInInspector, UsedImplicitly]
@@ -31,9 +30,8 @@ public class XPBreakpoints : ScriptableObject
             this.xp    = xp;
         }
     }
-    
+
     [Space(10)]
-    
     [SerializeField] int initialLevelCost = 100;
     [SerializeField] float f = 1.1f;
     [SerializeField] List<XP_Breakpoints> breakpoints;
@@ -47,7 +45,7 @@ public class XPBreakpoints : ScriptableObject
     void OnValidate()
     {
         DrawGraph();
-        
+
         // set the level of each breakpoint to its index + 1
         for (int i = 0; i < breakpoints.Count; i++) { breakpoints[i] = new (i + 1, breakpoints[i].xp); }
 
