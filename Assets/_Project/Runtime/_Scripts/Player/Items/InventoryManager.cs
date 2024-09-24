@@ -12,6 +12,7 @@ public class InventoryManager : MonoBehaviour
     [SerializeField] Character character;
 
     [Space(10)]
+    [NonReorderable]
     [SerializeField] List<Items> inventory = new ();
 
     [Space(10)]
@@ -175,38 +176,14 @@ public class InventoryManager : MonoBehaviour
         return null;
     }
 
-    public Item GetItem(Type item)
-    {
-        foreach (Item i in from itemEntry in inventory where itemEntry.Item.GetType() == item select itemEntry.Item) { return i; }
-
-        Debug.LogError("Item not found in inventory.");
-        return null;
-    }
-
-    public T GetItem<T>()
-        where T : Item =>
-
-        // compare names between the type and the itemTypes and return the item
-        (T) inventory.FirstOrDefault(itemEntry => itemEntry.Item.GetType().Name == typeof(T).Name).Item;
-
-    public int GetItemLevel(Item.ItemTypes itemType)
-    {
-        foreach (Items itemEntry in inventory.Where(itemEntry => itemEntry.Item.ItemType == itemType)) { return itemEntry.Level; }
-        return -1;
-    }
-
-    public int GetItemLevel(Type item)
-    {
-        foreach (Items itemEntry in inventory.Where(itemEntry => itemEntry.Item.GetType() == item)) { return itemEntry.Level; }
-        return -1;
-    }
-
-    public int GetItemLevel<T>()
-        where T : Item
-    {
-        foreach (Items itemEntry in inventory.Where(itemEntry => itemEntry.Item.GetType() == typeof(T))) { return itemEntry.Level; }
-        return -1;
-    }
+    /// <summary>
+    ///    Get the item from the inventory.
+    /// Does this by checking the type of the item.
+    /// </summary>
+    /// <typeparam name="T"> The type of item to get. </typeparam>
+    /// <returns> The item from the inventory. </returns>
+    public T GetItem<T>() where T : Item =>
+        (T) inventory.FirstOrDefault(itemEntry => itemEntry.Item.GetType() == typeof(T)).Item;
 
     public int GetItemLevel(Item item)
     {
@@ -214,13 +191,4 @@ public class InventoryManager : MonoBehaviour
         return -1;
     }
     #endregion
-}
-
-public static class InventoryManagerExtensions
-{
-    public static T GetItem<T>(this InventoryManager inventoryManager)
-        where T : Item => inventoryManager.GetItem<T>();
-
-    public static int GetItemLevel<T>(this InventoryManager inventoryManager)
-        where T : Item => inventoryManager.GetItemLevel<T>();
 }

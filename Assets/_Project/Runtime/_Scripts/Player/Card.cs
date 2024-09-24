@@ -10,9 +10,9 @@ public class Card : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHand
 {
     [SerializeField] Item.ItemTypes item;
     [SerializeField] Image highlight;
+    Vector2 centerPoint;
 
     Vector2 originalPosition;
-    Vector2 centerPoint;
     Vector2 worldCenterPoint => transform.TransformPoint(centerPoint);
     Vector2 screenCenterPoint => new (Mathf.RoundToInt(Screen.width / 2f), Mathf.RoundToInt(Screen.height / 2f));
 
@@ -61,7 +61,7 @@ public class Card : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHand
 
                 switch (item)
                 {
-                    case Item.ItemTypes.Garlic:
+                    case var _ when item == Item.ItemTypes.Garlic:
                         inventoryItem = InventoryManager.Instance.GetItem(Item.ItemTypes.Garlic);
                         if (!inventoryItem) return;
 
@@ -91,6 +91,8 @@ public class Card : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHand
         }
     }
 
+    public void Pause() => enabled = !enabled;
+
     // -- Pointer Methods --
 
     public void OnPointerEnter(PointerEventData eventData) => transform.DOMoveY(originalPosition.y + 35, 0.5f).SetEase(Ease.OutBack);
@@ -112,6 +114,4 @@ public class Card : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHand
     }
 
     void ResetScale() => transform.localScale = Vector3.one;
-
-    public void Pause() => enabled = !enabled;
 }

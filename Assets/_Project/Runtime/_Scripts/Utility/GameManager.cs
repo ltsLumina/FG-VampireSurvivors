@@ -1,5 +1,4 @@
 #region
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -7,14 +6,11 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-    public static bool IsPaused => Time.timeScale == 0;
-    public static void PauseGame() => Time.timeScale = 0;
-    public static void ResumeGame() => Time.timeScale = 1;
-
     IEnumerable<IPausable> pausables;
+    public static bool IsPaused => Time.timeScale == 0;
 
     public static GameManager Instance { get; private set; }
-    
+
     void Awake()
     {
         if (Instance == null) Instance = this;
@@ -25,6 +21,10 @@ public class GameManager : MonoBehaviour
         // Add all IPausable objects to the pausables array
         pausables = FindObjectsOfType<MonoBehaviour>(true).OfType<IPausable>();
 
+    public static void PauseGame() => Time.timeScale = 0;
+
+    public static void ResumeGame() => Time.timeScale = 1;
+
     public void TogglePause()
     {
         Time.timeScale = IsPaused ? 1 : 0;
@@ -34,7 +34,7 @@ public class GameManager : MonoBehaviour
         return;
         void ToggleUpdateLoops()
         {
-            pausables = FindObjectsOfType<MonoBehaviour>(true).OfType<IPausable>();
+            pausables = FindObjectsOfType<MonoBehaviour>().OfType<IPausable>();
 
             foreach (IPausable pausable in pausables)
             {

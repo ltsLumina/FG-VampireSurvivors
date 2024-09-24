@@ -3,12 +3,13 @@ using System.Collections.Generic;
 using DG.Tweening;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.UI;
 #endregion
 
 public class LevelUpManager : MonoBehaviour
 {
     [SerializeField] RectTransform levelUpMenu;
-    [SerializeField] List<SelectItemButton> selectItemButtons;
+    [SerializeField] List<LevelUpChoice> levelUpChoices;
 
     [Header("Events")]
     [SerializeField] UnityEvent onMenuShown;
@@ -33,15 +34,11 @@ public class LevelUpManager : MonoBehaviour
         onMenuShown.AddListener(GameManager.Instance.TogglePause);
         onMenuHidden.AddListener(GameManager.Instance.TogglePause);
 
-        foreach (var button in selectItemButtons)
+        Debug.Assert(levelUpChoices.Count == 3, $"No {nameof(LevelUpChoice)}-buttons have been assigned to the {nameof(LevelUpManager)}. \nPlease assign them in the inspector.");
+        
+        foreach (var choice in levelUpChoices)
         {
-            if (selectItemButtons.Count <= 0)
-            {
-                Logger.LogError("No select item buttons found in the level up menu.");
-                return;
-            }
-
-            button.onClick.AddListener(HideLevelUpMenu);
+            choice.GetComponent<Button>().onClick.AddListener(HideLevelUpMenu);
         }
     }
 

@@ -15,41 +15,6 @@ public abstract class Item : ScriptableObject
         LightningRing,
     }
 
-    [Serializable]
-    public struct Details
-    {
-        public string name;
-        [Multiline]
-        public string description;
-        public Sprite icon;
-    }
-
-    [Serializable]
-    public struct Levels
-    {
-        public enum StatTypes
-        {
-            Damage,
-            Speed,
-            Duration,
-            Area,
-        }
-
-        [Header("Item Stats")]
-        [SerializeField, HideInInspector, UsedImplicitly] // The name field is used to rename the "Element X" in the inspector to match the item level
-        public string name;
-
-        [HideInInspector]
-        public int level;
-        public BaseStats baseStats;
-        public ItemSpecificStats itemSpecificStats;
-
-        public float Damage => baseStats.Damage;
-        public float Speed => baseStats.Speed;
-        public float Duration => baseStats.Duration;
-        public float Area => baseStats.Area;
-    }
-
     /// <summary>
     ///     Contains the name and description of the item.
     /// </summary>
@@ -68,17 +33,16 @@ public abstract class Item : ScriptableObject
 
     public ItemTypes ItemType => (ItemTypes) Enum.Parse(typeof(ItemTypes), GetType().Name);
 
-    [UsedImplicitly]
     public string Name
     {
         get => details.name;
-        set => details.name = value;
+        private set => details.name = value;
     }
 
-    [UsedImplicitly]
+    public int Level => levels.level;
+
     public string Description => details.description;
 
-    [UsedImplicitly]
     public Sprite Icon => details.icon;
 
     #region Utility | OnValidate
@@ -164,8 +128,62 @@ public abstract class Item : ScriptableObject
     #endregion
 
     #region Utility | GetItemLevel method
+    /// <summary>
+    /// Gets the item from the inventory and returns the level of it as opposed to the item's level itself. (Which would likely always be zero)
+    /// </summary>
+    /// <returns> The level of the item. <para>Notice: If the item is not in the inventory, it will return -1.</para> </returns>
     public int GetItemLevel() => InventoryManager.Instance.GetItemLevel(this);
     #endregion
+
+    /// <summary>
+    /// Uses the item. (Basic attack loop)
+    /// </summary>
+    public abstract void Use();
+
+    /// <summary>
+    /// Plays the card and its associated effects.
+    /// </summary>
+    public abstract void Play();
+
+    public void Evolve()
+    {
+        // evolve item logic
+    }
+
+    [Serializable]
+    public struct Details
+    {
+        public string name;
+        [Multiline]
+        public string description;
+        public Sprite icon;
+    }
+
+    [Serializable]
+    public struct Levels
+    {
+        public enum StatTypes
+        {
+            Damage,
+            Speed,
+            Duration,
+            Area,
+        }
+
+        [Header("Item Stats")]
+        [SerializeField, HideInInspector, UsedImplicitly] // The name field is used to rename the "Element X" in the inspector to match the item level
+        public string name;
+
+        [HideInInspector]
+        public int level;
+        public BaseStats baseStats;
+        public ItemSpecificStats itemSpecificStats;
+
+        public float Damage => baseStats.Damage;
+        public float Speed => baseStats.Speed;
+        public float Duration => baseStats.Duration;
+        public float Area => baseStats.Area;
+    }
 
     #region Utility | GetBaseStat methods
     #region Old GetBaseStat
@@ -261,20 +279,18 @@ public abstract class Item : ScriptableObject
 
         return item;
     }
-    #endregion
 
-    /// <summary>
-    /// Uses the item. (Basic attack loop)
-    /// </summary>
-    public abstract void Use();
-
-    /// <summary>
-    /// Plays the card and its associated effects.
-    /// </summary>
-    public abstract void Play();
-
-    public void Evolve()
+    public static Item CreateUnique()
     {
-        // evolve item logic
+        var potentialItems = new List<Item>(Resources.LoadAll<Item>("Items"));
+
+        // return a random item from the list of potential items
+        Item item = potentialItems[Random.Range(0, potentialItems.Count)];
+
+        // if the item is already in the inventory, return a new item
+        //if (InventoryManager.Instance.Inventory.
+
+        return item;
     }
+    #endregion
 }
