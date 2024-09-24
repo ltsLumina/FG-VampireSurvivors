@@ -29,7 +29,6 @@ public class ExperiencePickup : MonoBehaviour, IPausable
     
     Colour colour;
     int expValue;
-    Rigidbody rb;
 
     void Start()
     {
@@ -44,7 +43,7 @@ public class ExperiencePickup : MonoBehaviour, IPausable
             const float force  = 5;
             const float torque = 3;
 
-            rb             = GetComponent<Rigidbody>();
+            var rb = GetComponent<Rigidbody>();
             rb.AddForce(Vector3.up   * force, ForceMode.Impulse);
             rb.AddTorque(Vector3.one * torque, ForceMode.Impulse);
         }
@@ -80,17 +79,21 @@ public class ExperiencePickup : MonoBehaviour, IPausable
         void Magnetize()
         {
             Vector3 direction = Player.Position - transform.position;
-            if (direction.magnitude > magnetizationRadius) return;
+            if (direction.magnitude > magnetizationRadius * Character.Stat.Magnet) return;
 
+            // Increase the magnetization strength based on the distance to the player.
+            float distance = direction.magnitude;
+            float strength = magnetizationStrength * (1 - distance / (magnetizationRadius * Character.Stat.Magnet));
+            
             // Move towards the player
-            transform.Translate(direction.normalized * (magnetizationStrength * Time.deltaTime), Space.World);
+            transform.Translate(direction.normalized * (strength * Time.deltaTime), Space.World);
         }
     }
 
     void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.yellow;
-        Gizmos.DrawWireSphere(transform.position, magnetizationRadius);
+        Gizmos.DrawWireSphere(transform.position, magnetizationRadius * Character.Stat.Magnet);
     }
 
     void OnTriggerEnter(Collider other)

@@ -1,6 +1,7 @@
 // EnemySpawner.cs
 #region
 using System.Collections.Generic;
+using System.Linq;
 using JetBrains.Annotations;
 using UnityEngine;
 using VInspector;
@@ -16,6 +17,9 @@ public class EnemySpawner : MonoBehaviour, IPausable
     [SerializeField] bool repeat; // If true, the spawner will spawn enemies repeatedly.
     [HideIf("repeat", false)]
     [SerializeField] bool rapidFire; // If true, the spawner will spawn enemies rapidly.
+    [EndIf]
+    [HideIf("rapidFire", false)]
+    [SerializeField] float rapidFireInterval = 1f; // The interval at which enemies will spawn when rapid fire is enabled.
     [EndIf]
     [EndFoldout]
     
@@ -76,16 +80,34 @@ public class EnemySpawner : MonoBehaviour, IPausable
                 CancelInvoke(nameof(RepeatSpawn));
                 
                 // spawn the first wave rapidly
-                InvokeRepeating(nameof(RepeatSpawn), 0f, 1f);
+                InvokeRepeating(nameof(RepeatSpawn), 0f, rapidFireInterval);
             }
         }
     }
 
-    void Update()
+#if UNITY_EDITOR
+    void OnGUI()
     {
-        // cap the amount of enemies on screen
-        Debug.Log(ObjectPoolManager.AllActivePooledObjects.Count);
+        int enemyCount = Pools.Sum(pool => pool.GetActivePooledObjects().Count);
+
+        switch (enemyCount)
+        {
+            case > 1000:
+                // gui label along the top of the screen
+                GUI.color = Color.red;
+                GUI.skin.label.fontSize = 35;
+                GUI.skin.label.fontStyle = FontStyle.Bold;
+                GUI.Label(new (0, 25, Screen.width, 40), $"WARNING: High enemy count ({enemyCount} enemies)." + "\nThe editor has been paused in an attempt to prevent a crash.", "box");
+                Debug.Break();
+                break;
+
+            case > 500:
+                GUI.color = Color.yellow;
+                GUI.Label(new (0, 25, Screen.width, 30), $"High enemy count ({enemyCount} enemies). Expect performance issues.", "box");
+                break;
+        }
     }
+#endif
 
     public void Pause() => enabled = !enabled;
 

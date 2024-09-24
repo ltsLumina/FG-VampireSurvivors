@@ -10,7 +10,7 @@ public sealed partial class Player : MonoBehaviour, IDamageable, IPausable
 {
     [Header("Levels")]
     [SerializeField] int health = 100;
-    [SerializeField] int speed = 5;
+    [SerializeField] int baseSpeed = 5;
 
     [Space(20)]
     [Header("Effects")]
@@ -26,12 +26,6 @@ public sealed partial class Player : MonoBehaviour, IDamageable, IPausable
     public static Player Instance { get; private set; }
 
     public static bool IsDead => Instance.Health <= 0;
-
-    public int Speed
-    {
-        get => speed;
-        set => speed = value;
-    }
 
     public static Vector3 Position => Instance.transform.position;
 
@@ -139,7 +133,7 @@ public sealed partial class Player : MonoBehaviour, IDamageable, IPausable
     void Movement(Vector3 dir)
     {
         var moveDir = new Vector3(dir.x, 0, dir.y);
-        transform.position += moveDir * (Speed * Time.deltaTime);
+        transform.position += moveDir * (baseSpeed * Time.deltaTime);
     }
     #endregion
 

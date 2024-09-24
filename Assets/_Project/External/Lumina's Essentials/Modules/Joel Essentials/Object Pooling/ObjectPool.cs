@@ -9,7 +9,7 @@ public class ObjectPool : MonoBehaviour
     [SerializeField] GameObject objectPrefab;
     [SerializeField] int startAmount;
 
-    internal readonly List<GameObject> pooledObjects = new ();
+    readonly List<GameObject> pooledObjects = new ();
 
     void Awake()
     {
@@ -74,6 +74,8 @@ public class ObjectPool : MonoBehaviour
 
         return objectToReturn;
     }
+
+    public List<GameObject> GetActivePooledObjects() => pooledObjects.Where(pooledObject => pooledObject.activeInHierarchy).ToList();
 
     /// <summary>
     ///     Returns the prefab of the object this pool contains.

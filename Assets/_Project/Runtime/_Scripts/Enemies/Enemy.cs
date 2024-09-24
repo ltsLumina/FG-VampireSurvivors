@@ -39,6 +39,117 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IPausable
     protected NavMeshAgent Agent => GetComponent<NavMeshAgent>();
     #endregion
 
+    // Note: Only use this to get the default values of the properties.
+    void Reset()
+    {
+        Health         = 100;
+        MaxHealth      = 100;
+        Speed          = 5;
+        XPYield        = 1;
+        Damage         = 5;
+        DamageInterval = 0.1f;
+        RecoilDamage   = 15;
+        RecoilInterval = 0.1f;
+    }
+
+    /// <summary>
+    /// Make sure to call the base method when overriding this method.
+    /// </summary>
+    protected virtual void Start()
+    {
+        Init();
+
+        return;
+
+        void Init()
+        {
+            onDeath.AddListener(_ => { ExperiencePickup.Create(XPYield, transform.position, Random.rotation); });
+
+            Agent.speed = Speed;
+            transform.LookAt(Player.Instance.transform);
+        }
+    }
+
+    protected virtual void Update()
+    {
+        if (Player.IsDead)
+        {
+            // Make the enemy move to a random position
+            Agent.destination = new (Random.Range(-50, 50), 1, Random.Range(-50, 50));
+        }
+    }
+
+    void OnTriggerExit(Collider other)
+    {
+        if (other.gameObject.CompareTag("Player"))
+        {
+            CancelInvoke(nameof(DealDamage));
+            CancelInvoke(nameof(TakeRecoilDamage));
+        }
+    }
+
+    void OnTriggerStay(Collider other)
+    {
+        #region Player Collision
+        const string dealDamage       = nameof(DealDamage);
+        const string takeRecoilDamage = nameof(TakeRecoilDamage);
+
+        if (other.gameObject.CompareTag("Player"))
+        {
+            if (!IsInvoking(dealDamage))
+            {
+                InvokeRepeating(dealDamage, 0f, damageInterval);       // hurt the player
+                InvokeRepeating(takeRecoilDamage, 0f, recoilInterval); // enemy takes recoil damage from colliding with player
+            }
+        }
+        #endregion
+    }
+
+    void OnValidate() => Agent.speed = Speed;
+
+    public void TakeDamage(float damage, CausesOfDeath.Cause cause)
+    {
+        Health -= (int) damage;
+
+        causeOfDeath = CausesOfDeath.Cause.Player;
+        onHit?.Invoke((int) damage);
+    }
+
+    public void Pause()
+    {
+        enabled       = !enabled;
+        Agent.enabled = !Agent.enabled;
+    }
+
+    void DealDamage()
+    {
+        Player.Instance.TryGetComponent(out IDamageable damageable);
+        damageable?.TakeDamage(damage, CausesOfDeath.Cause.Enemy);
+    }
+
+    void TakeRecoilDamage()
+    {
+        if (Player.Instance.Health <= 0) return;
+
+        Health       -= recoilDamage;
+        causeOfDeath =  CausesOfDeath.Cause.Player;
+
+        onHit?.Invoke(recoilDamage);
+    }
+
+    void Death()
+    {
+        MaxHealth = 100;
+        Health    = MaxHealth;
+        gameObject.SetActive(false); // Return to pool.
+
+        CancelInvoke(nameof(DealDamage));
+        CancelInvoke(nameof(TakeRecoilDamage));
+        StopAllCoroutines();
+
+        onDeath?.Invoke(causeOfDeath);
+    }
+
     #region Enemy Properties
     public string Description
     {
@@ -110,117 +221,4 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IPausable
         set => onDeath = value;
     }
     #endregion
-
-    // Note: Only use this to get the default values of the properties.
-    void Reset()
-    {
-        Health         = 100;
-        MaxHealth      = 100;
-        Speed          = 5;
-        XPYield        = 1;
-        Damage         = 5;
-        DamageInterval = 0.1f;
-        RecoilDamage   = 15;
-        RecoilInterval = 0.1f;
-    }
-
-    void OnValidate() => Agent.speed = Speed;
-
-    /// <summary>
-    /// Make sure to call the base method when overriding this method.
-    /// </summary>
-    protected virtual void Start()
-    {
-        Init();
-
-        return;
-
-        void Init()
-        {
-            onDeath.AddListener(_ => { ExperiencePickup.Create(XPYield, transform.position, Random.rotation); });
-
-            Agent.speed = Speed;
-            transform.LookAt(Player.Instance.transform);
-        }
-    }
-
-    protected virtual void Update()
-    {
-        if (Player.IsDead)
-        {
-            // Make the enemy move to a random position
-            Agent.destination = new (Random.Range(-50, 50), 1, Random.Range(-50, 50));
-        }
-    }
-
-    void OnTriggerStay(Collider other)
-    {
-        #region Player Collision
-        const string dealDamage       = nameof(DealDamage);
-        const string takeRecoilDamage = nameof(TakeRecoilDamage);
-
-        if (other.gameObject.CompareTag("Player"))
-        {
-            if (!IsInvoking(dealDamage))
-            {
-                InvokeRepeating(dealDamage, 0f, damageInterval);       // hurt the player
-                InvokeRepeating(takeRecoilDamage, 0f, recoilInterval); // enemy takes recoil damage from colliding with player
-            }
-        }
-        #endregion
-    }
-
-    void OnTriggerExit(Collider other)
-    {
-        if (other.gameObject.CompareTag("Player"))
-        {
-            CancelInvoke(nameof(DealDamage));
-            CancelInvoke(nameof(TakeRecoilDamage));
-        }
-    }
-
-    void DealDamage()
-    {
-        Player.Instance.TryGetComponent(out IDamageable damageable);
-        damageable?.TakeDamage(damage, CausesOfDeath.Cause.Enemy);
-    }
-
-    public void TakeDamage(float damage, CausesOfDeath.Cause cause)
-    {
-        Health -= (int) damage;
-
-        //Debug.Log($"{name} took {(int)damage} damage.", this);
-
-        causeOfDeath = CausesOfDeath.Cause.Player;
-        onHit?.Invoke((int) damage);
-    }
-
-    void TakeRecoilDamage()
-    {
-        if (Player.Instance.Health <= 0) return;
-
-        Health       -= recoilDamage;
-        causeOfDeath =  CausesOfDeath.Cause.Player;
-
-        onHit?.Invoke(recoilDamage);
-    }
-
-    void Death()
-    {
-        MaxHealth = 100;
-        Health    = MaxHealth;
-        gameObject.SetActive(false); // Return to pool.
-
-        CancelInvoke(nameof(DealDamage));
-        CancelInvoke(nameof(TakeRecoilDamage));
-        StopAllCoroutines();
-
-        onDeath?.Invoke(causeOfDeath);
-    }
-
-    public void Pause()
-    {
-        enabled       = !enabled;
-        Agent.enabled = !Agent.enabled;
-    }
 }
