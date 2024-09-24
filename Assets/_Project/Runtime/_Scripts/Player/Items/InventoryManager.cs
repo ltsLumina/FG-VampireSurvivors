@@ -9,6 +9,87 @@ using UnityEngine.Events;
 
 public class InventoryManager : MonoBehaviour
 {
+    [SerializeField] Character character;
+
+    [Space(10)]
+    [SerializeField] List<Items> inventory = new ();
+
+    [Space(10)]
+    [SerializeField] UnityEvent<Item> onItemAdded = new ();
+
+    public static InventoryManager Instance { get; private set; }
+
+    public Character Character => character;
+    public IReadOnlyCollection<Items> Inventory => inventory;
+
+    public UnityEvent<Item> OnItemAdded => onItemAdded;
+
+    void Awake()
+    {
+        if (Instance == null) Instance = this;
+        else Destroy(gameObject);
+    }
+
+    void Start()
+    {
+        inventory.Clear();
+        Logger.LogWarning("Inventory cleared." + $"\nThe starting item will be added to the inventory. (Starting Item: {character.StartingItem})");
+        
+        AddStartingItem(character.StartingItem);
+    }
+
+    public Item AddStartingItem(Item item)
+    {
+        inventory.Add(new () { Item = item, Level = 1 });
+
+        onItemAdded.Invoke(item);
+
+        ValidateInspectorName();
+
+        Debug.Log("Starting item added to inventory. \nItem: " + item);
+        return item;
+    }
+
+    public Item AddItem(Item item)
+    {
+        for (int i = 0; i < inventory.Count; i++)
+        {
+            if (inventory[i].Item != item) continue;
+
+            // If the item is already at max level, return
+            if (inventory[i].Level >= 8)
+            {
+                Debug.LogWarning("Item level is already at max level." + "\nThis warning should not appear during normal gameplay.");
+                return item;
+            }
+
+            // Increase the level of the item
+            Items itemEntry = inventory[i];
+            itemEntry.Level++;
+            inventory[i] = itemEntry;
+
+            Debug.Log($"Item level increased. \nItem: {itemEntry.Item} increased to level {itemEntry.Level}.");
+            return item;
+        }
+
+        // If the item is not found in the inventory, add it with level 1
+        inventory.Add
+        (new ()
+         { Item = item, Level = 1 });
+
+        onItemAdded.Invoke(item);
+
+        ValidateInspectorName(); // Editor function to update the name of the item in the inspector (shows the name of the Item rather than "Element X")
+
+        Debug.Log("Item added to inventory. \nItem: " + item);
+        return item;
+    }
+
+    public void EvolveItem(Item item)
+    {
+        // evolve item logic
+    }
+
     [Serializable]
     public struct Items
     {
@@ -32,40 +113,6 @@ public class InventoryManager : MonoBehaviour
             get => item;
             set => item = value;
         }
-    }
-
-    [SerializeField] Character character;
-
-    [Space(10)]
-    [SerializeField] List<Items> inventory = new ();
-
-    [Space(10)]
-    [SerializeField] UnityEvent<Item> onItemAdded = new ();
-
-    public static InventoryManager Instance { get; private set; }
-
-    public Character Character => character;
-    public IReadOnlyCollection<Items> Inventory => inventory;
-
-    public UnityEvent<Item> OnItemAdded
-    {
-        get => onItemAdded;
-        set => onItemAdded = value;
-    }
-
-    void Awake()
-    {
-        if (Instance == null) Instance = this;
-        else Destroy(gameObject);
-
-        inventory.Clear();
-    }
-
-    void Start()
-    {
-        Logger.LogWarning("Inventory cleared." + $"\nThe starting item will be added to the inventory. (Starting Item: {character.StartingItem})");
-
-        AddStartingItem(character.StartingItem);
     }
 
     #region Utility | OnValidate
@@ -167,60 +214,6 @@ public class InventoryManager : MonoBehaviour
         return -1;
     }
     #endregion
-
-    public Item AddStartingItem(Item item)
-    {
-        inventory.Add
-        (new ()
-         { Item = item, Level = 1 });
-
-        onItemAdded.Invoke(item);
-
-        ValidateInspectorName();
-
-        Debug.Log("Starting item added to inventory. \nItem: " + item);
-        return item;
-    }
-
-    public Item AddItem(Item item)
-    {
-        for (int i = 0; i < inventory.Count; i++)
-        {
-            if (inventory[i].Item != item) continue;
-
-            // If the item is already at max level, return
-            if (inventory[i].Level >= 8)
-            {
-                Debug.LogWarning("Item level is already at max level." + "\nThis warning should not appear during normal gameplay.");
-                return item;
-            }
-
-            // Increase the level of the item
-            Items itemEntry = inventory[i];
-            itemEntry.Level++;
-            inventory[i] = itemEntry;
-
-            Debug.Log($"Item level increased. \nItem: {itemEntry.Item} increased to level {itemEntry.Level}.");
-            return item;
-        }
-
-        // If the item is not found in the inventory, add it with level 1
-        inventory.Add
-        (new ()
-         { Item = item, Level = 1 });
-
-        onItemAdded.Invoke(item);
-
-        ValidateInspectorName(); // Editor function to update the name of the item in the inspector (shows the name of the Item rather than "Element X")
-
-        Debug.Log("Item added to inventory. \nItem: " + item);
-        return item;
-    }
-
-    public void EvolveItem(Item item)
-    {
-        // evolve item logic
-    }
 }
 
 public static class InventoryManagerExtensions

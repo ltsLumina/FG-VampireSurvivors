@@ -19,24 +19,13 @@ public sealed partial class Player : MonoBehaviour, IDamageable, IPausable
     [Header("Events")]
     [SerializeField] UnityEvent<int> onHit;
     [SerializeField] UnityEvent<CausesOfDeath.Cause> onDeath;
+    CausesOfDeath.Cause causeOfDeath;
 
     InputManager inputManager;
-    CausesOfDeath.Cause causeOfDeath;
 
     public static Player Instance { get; private set; }
 
     public static bool IsDead => Instance.Health <= 0;
-
-    public int Health
-    {
-        get => health;
-        set
-        {
-            health = value;
-
-            if (health <= 0) Death(causeOfDeath);
-        }
-    }
 
     public int Speed
     {
@@ -45,18 +34,6 @@ public sealed partial class Player : MonoBehaviour, IDamageable, IPausable
     }
 
     public static Vector3 Position => Instance.transform.position;
-
-    void OnEnable()
-    {
-        onDeath.AddListener
-        (_ =>
-        {
-            StopAllCoroutines();
-            Logger.LogWarning("Player has died." + "\nStopping all coroutines executing on this MonoBehaviour.");
-        });
-
-        Experience.OnLevelUp += () => EffectPlayer.PlayEffect(levelUpAura);
-    }
 
     void Awake()
     {
@@ -77,35 +54,21 @@ public sealed partial class Player : MonoBehaviour, IDamageable, IPausable
         }
     }
 
-    // Note: Using FixedUpdate() as AttackLoop.cs (partial of Player.cs) uses Update(), and I would rather keep the attack logic in one place.
-    void FixedUpdate() => Movement(inputManager.MoveInput);
+    void Update() => Movement(inputManager.MoveInput);
 
-    #region Movement
-    void Movement(Vector3 dir)
+    void OnEnable()
     {
-        var moveDir = new Vector3(dir.x, 0, dir.y);
-        transform.position += moveDir * (Speed * Time.deltaTime);
+        onDeath.AddListener
+        (_ =>
+        {
+            StopAllCoroutines();
+            Logger.LogWarning("Player has died." + "\nStopping all coroutines executing on this MonoBehaviour.");
+        });
+
+        Experience.OnLevelUp += () => EffectPlayer.PlayEffect(levelUpAura);
+
+        UseItems(); // AttackLoop.cs
     }
-    #endregion
-
-    #region Health/Damage
-    public void TakeDamage(float damage, CausesOfDeath.Cause cause)
-    {
-        if (Health <= 0) return;
-        Health -= (int) damage;
-
-        causeOfDeath = cause; // Set the cause of death to the latest instance of damage. Works 95% of the time :)
-        onHit?.Invoke((int) damage);
-    }
-
-    void Death(CausesOfDeath.Cause cause)
-    {
-        Debug.Log("Player has died of " + cause);
-        enabled = false;
-
-        onDeath?.Invoke(cause);
-    }
-    #endregion
 
     void OnGUI()
     {
@@ -159,5 +122,43 @@ public sealed partial class Player : MonoBehaviour, IDamageable, IPausable
         }
     }
 
+    public int Health
+    {
+        get => health;
+        set
+        {
+            health = value;
+
+            if (health <= 0) Death(causeOfDeath);
+        }
+    }
+
     public void Pause() => enabled = !enabled;
+
+    #region Movement
+    void Movement(Vector3 dir)
+    {
+        var moveDir = new Vector3(dir.x, 0, dir.y);
+        transform.position += moveDir * (Speed * Time.deltaTime);
+    }
+    #endregion
+
+    #region Health/Damage
+    public void TakeDamage(float damage, CausesOfDeath.Cause cause)
+    {
+        if (Health <= 0) return;
+        Health -= (int) damage;
+
+        causeOfDeath = cause; // Set the cause of death to the latest instance of damage. Works 95% of the time :)
+        onHit?.Invoke((int) damage);
+    }
+
+    void Death(CausesOfDeath.Cause cause)
+    {
+        Debug.Log("Player has died of " + cause);
+        enabled = false;
+
+        onDeath?.Invoke(cause);
+    }
+    #endregion
 }

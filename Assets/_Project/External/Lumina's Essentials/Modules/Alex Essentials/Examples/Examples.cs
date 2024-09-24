@@ -18,6 +18,24 @@ using UnityEngine;
 /// </summary>
 public sealed class Examples : MonoBehaviour
 {
+    #region Sequencer
+    // Sequencing Examples //
+    void Example()
+    {
+        // Example 1 -- This is the recommended way to use Sequencing.
+        Sequence sequenceOne = Sequencing.CreateSequence(this);
+        sequenceOne.Append(FirstExample).WaitForSeconds(2f).Append(SecondExample);
+
+        // Example 2 -- An example of how to create longer sequences.
+        Sequence sequenceTwo = Sequencing.CreateSequence(this);
+        sequenceTwo.WaitThenExecute(5f, ThirdExample).ContinueWith(() => Debug.Log("Finished!")).WaitForSeconds(2f).Append(FirstExample);
+
+        // Example 3 -- An example of how you can make a more readable sequence.
+        Sequencing.CreateSequence(this).Append(() => Debug.Log("Hello World!")).WaitForSeconds(3f).ContinueWith(() => Debug.Log("Goodbye World!"));
+    }
+
+    // End of Sequencing Examples //
+    #endregion
     #region Attributes
     ////////////////////////////
     //   ReadOnly Attribute   //
@@ -58,25 +76,6 @@ public sealed class Examples : MonoBehaviour
     #endregion
 
     // End of Attributes //
-    #endregion
-
-    #region Sequencer
-    // Sequencing Examples //
-    void Example()
-    {
-        // Example 1 -- This is the recommended way to use Sequencing.
-        Sequence sequenceOne = Sequencing.CreateSequence(this);
-        sequenceOne.Execute(FirstExample).WaitForSeconds(2f).Execute(SecondExample);
-
-        // Example 2 -- An example of how to create longer sequences.
-        Sequence sequenceTwo = Sequencing.CreateSequence(this);
-        sequenceTwo.WaitThenExecute(5f, ThirdExample).ContinueWith(() => Debug.Log("Finished!")).WaitForSeconds(2f).Execute(FirstExample);
-
-        // Example 3 -- An example of how you can make a more readable sequence.
-        Sequencing.CreateSequence(this).Execute(() => Debug.Log("Hello World!")).WaitForSeconds(3f).ContinueWith(() => Debug.Log("Goodbye World!"));
-    }
-
-    // End of Sequencing Examples //
     #endregion
 
     #region Helpers

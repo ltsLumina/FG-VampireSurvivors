@@ -1,91 +1,92 @@
 #region
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 #endregion
 
 public static class Experience
 {
+    public delegate void GainedXP(int amount);
+
+    public delegate void LevelUp();
     static int xp;
+    readonly static XPBreakpoints breakpointsSO;
 
     /// <summary>
     ///     Queue to store the levels that the player has gained in the event that the player gains multiple levels at once.
     /// </summary>
     public readonly static Queue<int> levelsQueued = new ();
 
+    static Experience()
+    {
+        breakpointsSO = Resources.Load<XPBreakpoints>("XP/XP Breakpoints");
+        UpdateXPToLevelUp();
+    }
+
     public static int XP
     {
         get => xp;
         private set
         {
-            xp = value;
-            if (xp >= XPToLevelUp) GainLevel();
+            while (value >= XPToLevelUp)
+            {
+                value -= XPToLevelUp;
+                GainLevel();
+            }
+
+            xp = Mathf.Clamp(value, 0, XPToLevelUp);
         }
     }
 
     public static int Level { get; private set; } = 1;
-    public static int TotalXP { get; private set; }
-    public static int XPToLevelUp { get; private set; } = 100;
 
-    public delegate void GainedXP(int amount);
-    public static event GainedXP OnGainedXP;
-
-    public delegate void LevelUp();
-    public static event LevelUp OnLevelUp;
+    public static int XPToLevelUp { get; private set; }
 
     public static void GainExp(int amount)
     {
-        XP      += amount;
-        TotalXP += amount;
-
+        XP += amount;
         OnGainedXP?.Invoke(amount);
-    }
-
-    public static void LoseExp(int amount)
-    {
-        if (XP - amount < 0)
-        {
-            ResetXP();
-            return;
-        }
-
-        XP      -= amount;
-        TotalXP -= amount;
     }
 
     public static void GainLevel()
     {
         Level++;
+        UpdateXPToLevelUp();
         levelsQueued.Enqueue(Level);
-        Debug.Log("Levels queued: " + levelsQueued.Count);
-
-        // -- Sets the XP required to level up to the next level
-        // SO stands for Scriptable Object
-        var breakpointsSO = Resources.Load<XPBreakpoints>("XP/XP Breakpoints");
-
-        breakpointsSO.Breakpoints.ForEach
-        (bp =>
-        {
-            if (bp.level == Level) XPToLevelUp = bp.xp;
-        });
-
+        Debug.Log($"Levels queued: {levelsQueued.Count}");
+        
         OnLevelUp?.Invoke();
+    }
+
+    static void UpdateXPToLevelUp()
+    {
+        foreach (XPBreakpoints.XP_Breakpoints breakpoint in breakpointsSO.Breakpoints.Where(bp => bp.level == Level))
+        {
+            XPToLevelUp = breakpoint.xp;
+            break;
+        }
     }
 
     public static void ResetXP() => XP = 0;
 
     public static void ResetLevel() => Level = 1;
 
-    public static void ResetTotalExp() => TotalXP = 0;
-
-    public static void ResetXPToLevelUp() => XPToLevelUp = 100;
+    public static void ResetXPToLevelUp() => UpdateXPToLevelUp();
 
     public static void ResetAll()
     {
         levelsQueued.Clear();
-
         ResetXP();
         ResetLevel();
-        ResetTotalExp();
         ResetXPToLevelUp();
     }
+    public static event GainedXP OnGainedXP;
+    public static event LevelUp OnLevelUp;
+
+#if UNITY_EDITOR
+    public static void EDITOR_GainLevel()
+    {
+        XP = XPToLevelUp;
+    }
+#endif
 }

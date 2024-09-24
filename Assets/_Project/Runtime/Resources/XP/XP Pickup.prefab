@@ -50,11 +50,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 34d49fc595d9398419346d4a3e178cdd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  magnetizationRadius: 3
-  magnetizationStrength: 5
-  blueExpValue: 30
-  greenExpValue: 50
-  redExpValue: 100
+  magnetizationRadius: 5
+  magnetizationStrength: 3
+  blueExpValue: 1
+  greenExpValue: 10
+  redExpValue: 50
   blue: {r: 0.21586865, g: 0.46661994, b: 0.9339623, a: 0}
   green: {r: 0.30199316, g: 0.7075472, b: 0.20358667, a: 0}
   red: {r: 1, g: 0.08018869, b: 0.08018869, a: 0}

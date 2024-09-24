@@ -1,5 +1,6 @@
 #region
 using System.Collections.Generic;
+using System.Linq;
 using Lumina.Essentials.Attributes;
 using UnityEngine;
 using UnityEngine.UI;
@@ -13,7 +14,7 @@ public class InventoryDisplay : MonoBehaviour
 {
     [SerializeField] [ReadOnly] List<Image> inventorySlots = new ();
 
-    void Start()
+    void Awake()
     {
         // get all inventory slots from the grid layout group
         var gridLayoutGroup = GetComponentInChildren<GridLayoutGroup>();
@@ -21,9 +22,9 @@ public class InventoryDisplay : MonoBehaviour
 
         // hide all inventory slots
         foreach (Image slot in inventorySlots) { slot.gameObject.SetActive(false); }
-
-        InventoryManager.Instance.OnItemAdded.AddListener(OnItemAdded);
     }
+
+    void OnEnable() => InventoryManager.Instance.OnItemAdded.AddListener(OnItemAdded);
 
     /// <summary>
     ///     Called when an item is added to the inventory.
@@ -33,14 +34,11 @@ public class InventoryDisplay : MonoBehaviour
     void OnItemAdded(Item item)
     {
         // set the sprite of the first inactive inventory slot to the icon of the item
-        foreach (Image slot in inventorySlots)
+        foreach (Image slot in inventorySlots.Where(slot => !slot.gameObject.activeSelf))
         {
-            if (!slot.gameObject.activeSelf)
-            {
-                slot.sprite = item.Icon;
-                slot.gameObject.SetActive(true);
-                break;
-            }
+            slot.sprite = item.Icon;
+            slot.gameObject.SetActive(true);
+            break;
         }
     }
 }

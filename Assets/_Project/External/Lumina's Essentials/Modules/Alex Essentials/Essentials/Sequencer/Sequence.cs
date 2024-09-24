@@ -13,14 +13,13 @@ namespace Lumina.Essentials.Sequencer
 /// </summary>
 public sealed class Sequence : ISequence
 {
+    /// <summary>The actions to be executed.</summary>
+    readonly Queue<IEnumerator> actions = new ();
     /// <summary>The <see cref="MonoBehaviour" /> on which the sequence is hosted.</summary>
     readonly MonoBehaviour host;
 
     /// <summary>The <see cref="RoutineHandler" /> used to execute the actions.</summary>
     readonly RoutineHandler routineHandler;
-
-    /// <summary>The actions to be executed.</summary>
-    readonly Queue<IEnumerator> actions = new ();
 
     /// <summary>
     ///     Initializes a new instance of the <see cref="Sequence" /> class.
@@ -34,26 +33,11 @@ public sealed class Sequence : ISequence
     }
 
     /// <summary>
-    ///     Starts processing the actions in the sequence.
-    /// </summary>
-    /// <returns>An enumerator that iterates through the sequence.</returns>
-    IEnumerator ProcessActions()
-    {
-        while (true)
-        {
-            if (host == null) yield break;
-
-            if (actions.Count > 0) yield return host.StartCoroutine(actions.Dequeue());
-            else yield return new WaitUntil(() => actions.Count > 0);
-        }
-    }
-
-    /// <summary>
     ///     Executes the specified action.
     /// </summary>
     /// <param name="action">The action to execute.</param>
     /// <returns>The current sequence instance.</returns>
-    public ISequence Execute(Action action)
+    public ISequence Append(Action action)
     {
         actions.Enqueue(routineHandler.ExecuteRoutine(action));
         return this;
@@ -164,7 +148,7 @@ public sealed class Sequence : ISequence
         actions.Enqueue(routineHandler.RepeatExecuteRoutine(times, action));
         return this;
     }
-    
+
     /// <summary>
     ///    Repeats specified action specified number of times with a delay between each repetition.
     /// </summary>
@@ -176,6 +160,21 @@ public sealed class Sequence : ISequence
     {
         actions.Enqueue(routineHandler.RepeatExecuteRoutine(times, delay, action));
         return this;
+    }
+
+    /// <summary>
+    ///     Starts processing the actions in the sequence.
+    /// </summary>
+    /// <returns>An enumerator that iterates through the sequence.</returns>
+    IEnumerator ProcessActions()
+    {
+        while (true)
+        {
+            if (host == null) yield break;
+
+            if (actions.Count > 0) yield return host.StartCoroutine(actions.Dequeue());
+            else yield return new WaitUntil(() => actions.Count > 0);
+        }
     }
 }
 }

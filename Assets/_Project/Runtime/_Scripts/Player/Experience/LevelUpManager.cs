@@ -16,23 +16,20 @@ public class LevelUpManager : MonoBehaviour
 
     public static LevelUpManager Instance { get; private set; }
 
-    public UnityEvent OnMenuShown
-    {
-        get => onMenuShown;
-        set => onMenuShown = value;
-    }
-
-    public UnityEvent OnMenuHidden
-    {
-        get => onMenuHidden;
-        set => onMenuHidden = value;
-    }
-
     void Awake()
     {
         if (Instance == null) Instance = this;
         else Destroy(gameObject);
+    }
 
+    void Start()
+    {
+        levelUpMenu.localScale = Vector3.zero;
+        levelUpMenu.gameObject.SetActive(false);
+    }
+
+    void OnEnable()
+    {
         onMenuShown.AddListener(GameManager.Instance.TogglePause);
         onMenuHidden.AddListener(GameManager.Instance.TogglePause);
 
@@ -46,12 +43,6 @@ public class LevelUpManager : MonoBehaviour
 
             button.onClick.AddListener(HideLevelUpMenu);
         }
-    }
-
-    void Start()
-    {
-        levelUpMenu.localScale = Vector3.zero;
-        levelUpMenu.gameObject.SetActive(false);
     }
 
     public void ShowLevelUpMenu()
@@ -91,8 +82,6 @@ public class LevelUpManager : MonoBehaviour
         Experience.levelsQueued.Dequeue();
         Debug.Assert(Experience.levelsQueued.Count == 0, "Levels queued should be 0 if the player has picked their item(s).");
 
-        Experience.ResetXP(); // LevelUpManager resets the xp here rather than at level up so that I can change the colour of the experience bar when the player levels up.
-
         const float scaleDuration = 0.5f;
 
         Sequence sequence = DOTween.Sequence();
@@ -105,4 +94,18 @@ public class LevelUpManager : MonoBehaviour
 
         onMenuHidden?.Invoke();
     }
+
+    #region Events
+    public UnityEvent OnMenuShown
+    {
+        get => onMenuShown;
+        set => onMenuShown = value;
+    }
+
+    public UnityEvent OnMenuHidden
+    {
+        get => onMenuHidden;
+        set => onMenuHidden = value;
+    }
+    #endregion
 }

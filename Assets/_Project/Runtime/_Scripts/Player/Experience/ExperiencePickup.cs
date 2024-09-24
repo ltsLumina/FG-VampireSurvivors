@@ -1,28 +1,15 @@
 #region
 using System;
-using System.Collections;
 using UnityEngine;
 using VInspector;
 #endregion
 
 public class ExperiencePickup : MonoBehaviour, IPausable
 {
-    /// <summary>
-    /// Determines how much experience the player will gain when they pick up this object.
-    /// </summary>
-    enum Colour
-    {
-        Blue,
-        Green,
-        Red,
-    }
-
     [Header("Settings")]
     [SerializeField] float magnetizationRadius = 2f;
     [SerializeField] float magnetizationStrength = 3f;
 
-    
-    
     [Foldout("Colour Settings")]
     [Tooltip("The threshold for the xp pickup to be blue.")]
     [SerializeField] int blueExpValue = 30;
@@ -30,7 +17,7 @@ public class ExperiencePickup : MonoBehaviour, IPausable
     [SerializeField] int greenExpValue = 50;
     [Tooltip("The threshold for the xp pickup to be red.")]
     [SerializeField] int redExpValue = 100;
-    
+
     [Header("Colours")]
     [ColorUsage(false)] 
     [SerializeField]Color blue;
@@ -100,6 +87,12 @@ public class ExperiencePickup : MonoBehaviour, IPausable
         }
     }
 
+    void OnDrawGizmosSelected()
+    {
+        Gizmos.color = Color.yellow;
+        Gizmos.DrawWireSphere(transform.position, magnetizationRadius);
+    }
+
     void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Player") && !Player.IsDead)
@@ -110,6 +103,8 @@ public class ExperiencePickup : MonoBehaviour, IPausable
         }
     }
 
+    public void Pause() => enabled = !enabled;
+
     public static ExperiencePickup Create(int xpYield, Vector3 position, Quaternion rotation)
     {
         var xp = Instantiate(Resources.Load<ExperiencePickup>("XP/XP Pickup"), position, rotation);
@@ -117,11 +112,13 @@ public class ExperiencePickup : MonoBehaviour, IPausable
         return xp;
     }
 
-    void OnDrawGizmosSelected()
+    /// <summary>
+    /// Determines how much experience the player will gain when they pick up this object.
+    /// </summary>
+    enum Colour
     {
-        Gizmos.color = Color.yellow;
-        Gizmos.DrawWireSphere(transform.position, magnetizationRadius);
+        Blue,
+        Green,
+        Red,
     }
-
-    public void Pause() => enabled = !enabled;
 }

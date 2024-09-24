@@ -11,7 +11,7 @@ namespace Lumina.Essentials.Sequencer
 /// </summary>
 public interface ISequence
 {
-    ISequence Execute(Action action);
+    ISequence Append(Action action);
 
     ISequence ExecuteCoroutine(IEnumerator routine);
 
@@ -30,7 +30,7 @@ public interface ISequence
     ISequence OnFail(Action<Exception> action);
 
     ISequence RepeatExecute(int times, Action action);
-    
+
     ISequence RepeatExecute(int times, float interval, Action action);
 }
 }

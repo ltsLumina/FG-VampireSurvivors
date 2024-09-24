@@ -6,16 +6,15 @@ using UnityEngine;
 // - Contains the logic for the player's attack loop
 public partial class Player
 {
-    Coroutine lightningRingCoroutine;
     Coroutine garlicCoroutine;
+    Coroutine lightningRingCoroutine;
 
-    void Start()
+    void UseItems()
     {
-        InventoryManager.Instance.OnItemAdded.AddListener(UseItems);
+        InventoryManager.Instance.OnItemAdded.AddListener(Use);
 
         return;
-
-        void UseItems(Item item) => item.Use();
+        void Use(Item item) => item.Use();
     }
 
     public void SelectAttack<T>()

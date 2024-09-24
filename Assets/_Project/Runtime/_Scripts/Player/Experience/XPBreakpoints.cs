@@ -14,26 +14,6 @@ using UnityEngine;
 [HelpURL("https://vampire-survivors.fandom.com/wiki/Level_up")]
 public class XPBreakpoints : ScriptableObject
 {
-    [Serializable]
-    public struct XP_Breakpoints
-    {
-        [HideInInspector, UsedImplicitly]
-        public string name;
-        [HideInInspector]
-        public int level;
-        public int xp;
-
-        public XP_Breakpoints(int level, int xp, string name = default)
-        {
-            this.name  = name;
-            this.level = level;
-            this.xp    = xp;
-        }
-    }
-
-    [Space(10)]
-    [SerializeField] int initialLevelCost = 100;
-    [SerializeField] float f = 1.1f;
     [SerializeField] List<XP_Breakpoints> breakpoints;
 
     public List<XP_Breakpoints> Breakpoints
@@ -71,11 +51,8 @@ public class XPBreakpoints : ScriptableObject
             // Set the level of each breakpoint to its index + 1
             int level = i + 1;
 
-            // Set the xp value of each breakpoint to follow an exponential curve
-            int xp = (int) (initialLevelCost * Mathf.Pow(f: f, level - 1));
-
-            // Clamp the xp value between 100 and 10,000
-            xp = Mathf.Clamp(xp, 100, 10_000);
+            // Apply the Vampire Survivors formula
+            int xp = 5 + 10 * (level - 1) + 13 * Mathf.Max(0, level - 20) + 16 * Mathf.Max(0, level - 40);
 
             // Update the name of the breakpoints
             string name = $"Level {level}";
@@ -88,6 +65,23 @@ public class XPBreakpoints : ScriptableObject
         {
             int lastIndex = breakpoints.Count - 1;
             breakpoints[lastIndex] = new (breakpoints[lastIndex].level, 10_000, $"Level {breakpoints[lastIndex].level}");
+        }
+    }
+
+    [Serializable]
+    public struct XP_Breakpoints
+    {
+        [HideInInspector, UsedImplicitly]
+        public string name;
+        [HideInInspector]
+        public int level;
+        public int xp;
+
+        public XP_Breakpoints(int level, int xp, string name = default)
+        {
+            this.name  = name;
+            this.level = level;
+            this.xp    = xp;
         }
     }
 }

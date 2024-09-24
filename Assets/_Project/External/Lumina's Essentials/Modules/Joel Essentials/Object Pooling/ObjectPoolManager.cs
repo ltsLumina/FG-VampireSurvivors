@@ -5,9 +5,12 @@ using UnityEngine;
 
 public static class ObjectPoolManager
 {
-    static List<ObjectPool> objectPools = new ();
+    readonly static List<ObjectPool> objectPools = new ();
 
     static Transform objectPoolParent;
+
+    // Dictionary to cache the object pools by prefab for faster lookup.
+    public readonly static Dictionary<GameObject, ObjectPool> ObjectPoolLookup = new ();
     public static Transform ObjectPoolParent
     {
         get
@@ -19,6 +22,27 @@ public static class ObjectPoolManager
             }
 
             return objectPoolParent;
+        }
+    }
+
+    // List of all objects in every pool.
+    public static List<GameObject> AllPooledObjects
+    {
+        get
+        {
+            List<GameObject> allPooledObjects = new ();
+            foreach (ObjectPool objectPool in objectPools) { allPooledObjects.AddRange(objectPool.pooledObjects); }
+            return allPooledObjects;
+        }
+    }
+
+    public static List<GameObject> AllActivePooledObjects
+    {
+        get
+        {
+            List<GameObject> allActivePooledObjects = new ();
+            foreach (ObjectPool objectPool in objectPools) { allActivePooledObjects.AddRange(objectPool.pooledObjects.FindAll(pooledObject => pooledObject.activeInHierarchy)); }
+            return allActivePooledObjects;
         }
     }
 
@@ -58,9 +82,6 @@ public static class ObjectPoolManager
 
         return newObjectPool;
     }
-
-    // Dictionary to cache the object pools by prefab for faster lookup.
-    public readonly static Dictionary<GameObject, ObjectPool> ObjectPoolLookup = new ();
 
     /// <summary>
     ///     Returns the pool containing the specified object prefab.

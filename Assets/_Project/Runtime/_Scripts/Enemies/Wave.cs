@@ -8,12 +8,6 @@ public class Wave : ScriptableObject
 {
     [SerializeField] List<EnemyGroup> enemyGroup;
 
-    [Serializable] public struct EnemyGroup
-    {
-        public Enemy enemy;
-        public int amount;
-    }
-    
     public List<EnemyGroup> EnemyGroups => enemyGroup;
 
     public void Spawn()
@@ -28,7 +22,7 @@ public class Wave : ScriptableObject
         }
 
         Vector3 playerPosition = player.transform.position;
-        float   spawnDistance  = 50f; // Distance from the player to spawn enemies
+        float   spawnDistance  = 25f; // Distance from the player to spawn enemies
 
         foreach (EnemyGroup group in enemyGroup)
         {
@@ -50,5 +44,11 @@ public class Wave : ScriptableObject
                 else { Debug.LogError($"No pool found for enemy {group.enemy.name} in wave {name}"); }
             }
         }
+    }
+
+    [Serializable] public struct EnemyGroup
+    {
+        public Enemy enemy;
+        public int amount;
     }
 }

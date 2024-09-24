@@ -17,12 +17,13 @@ public class SelectItemButton : Button
     {
         interactable = false;
         InventoryManager.Instance.AddItem(Item.Create());
-        StartCoroutine(Wait());
-    }
+        StartCoroutine(DelayButtonInteractable());
 
-    IEnumerator Wait()
-    {
-        yield return new WaitForSecondsRealtime(0.5f);
-        interactable = true;
+        return;
+        IEnumerator DelayButtonInteractable()
+        {
+            yield return new WaitForSecondsRealtime(0.5f);
+            interactable = true;
+        }
     }
 }
