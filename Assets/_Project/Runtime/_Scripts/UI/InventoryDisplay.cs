@@ -24,14 +24,12 @@ public class InventoryDisplay : MonoBehaviour
         foreach (Image slot in inventorySlots) { slot.gameObject.SetActive(false); }
     }
 
-    void Start() => InventoryManager.Instance.OnItemAdded.AddListener(OnItemAdded);
-
     /// <summary>
     ///     Called when an item is added to the inventory.
     ///     <para> Sets the sprite of the first inactive inventory slot to the icon of the item.</para>
     /// </summary>
     /// <param name="item">The item that was added to the inventory.</param>
-    void OnItemAdded(Item item)
+    public void OnItemAdded(Item item)
     {
         // set the sprite of the first inactive inventory slot to the icon of the item
         foreach (Image slot in inventorySlots.Where(slot => !slot.gameObject.activeSelf))

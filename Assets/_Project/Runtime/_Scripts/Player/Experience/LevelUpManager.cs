@@ -42,19 +42,9 @@ public class LevelUpManager : MonoBehaviour
 
     void OnEnable()
     {
-        RegisterMenuEvents();
+        foreach (var choice in levelUpChoices) { choice.GetComponent<Button>().onClick.AddListener(HideLevelUpMenu); }
+        
         Debug.Assert(levelUpChoices.Count == 3, $"No {nameof(LevelUpChoice)}-buttons have been assigned to the {nameof(LevelUpManager)}. \nPlease assign them in the inspector.");
-    }
-
-    void RegisterMenuEvents()
-    {
-        onMenuShown.AddListener(GameManager.Instance.TogglePause);
-        onMenuHidden.AddListener(GameManager.Instance.TogglePause);
-
-        foreach (var choice in levelUpChoices)
-        {
-            choice.GetComponent<Button>().onClick.AddListener(HideLevelUpMenu);
-        }
     }
 
     public void ShowLevelUpMenu()

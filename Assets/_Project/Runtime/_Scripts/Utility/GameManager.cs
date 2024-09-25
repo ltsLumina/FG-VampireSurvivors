@@ -21,9 +21,9 @@ public class GameManager : MonoBehaviour
         // Add all IPausable objects to the pausables array
         pausables = FindObjectsOfType<MonoBehaviour>(true).OfType<IPausable>();
 
-    public static void PauseGame() => Time.timeScale = 0;
+    public void PauseGame() => Time.timeScale = 0;
 
-    public static void ResumeGame() => Time.timeScale = 1;
+    public void ResumeGame() => Time.timeScale = 1;
 
     public void TogglePause()
     {
@@ -39,7 +39,6 @@ public class GameManager : MonoBehaviour
             foreach (IPausable pausable in pausables)
             {
                 pausable.Pause();
-
                 //Debug.Log($"Toggled: {pausable}", pausable as Object);
             }
         }
