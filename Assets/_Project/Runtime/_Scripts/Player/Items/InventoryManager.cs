@@ -51,7 +51,7 @@ public class InventoryManager : MonoBehaviour
         return item;
     }
 
-    public Item AddItem(Item item)
+    public void AddItem(Item item)
     {
         for (int i = 0; i < inventory.Count; i++)
         {
@@ -61,34 +61,25 @@ public class InventoryManager : MonoBehaviour
             if (inventory[i].Level >= 8)
             {
                 Debug.LogWarning("Item level is already at max level." + "\nThis warning should not appear during normal gameplay.");
-                return item;
+                return;
             }
 
-            // Increase the level of the item
+            // Increase the level of the item if it is found in the inventory
             Items itemEntry = inventory[i];
             itemEntry.Level++;
             inventory[i] = itemEntry;
 
             Debug.Log($"Item level increased. \nItem: {itemEntry.Item} increased to level {itemEntry.Level}.");
-            return item;
+            return;
         }
 
-        // If the item is not found in the inventory, add it with level 1
-        inventory.Add
-        (new ()
-         { Item = item, Level = 1 });
-
-        onItemAdded.Invoke(item);
-
+        // If the item is not found in the inventory, add it at level 1
+        inventory.Add(new () { Item = item, Level = 1 });
+        
         ValidateInspectorName(); // Editor function to update the name of the item in the inspector (shows the name of the Item rather than "Element X")
 
         Debug.Log("Item added to inventory. \nItem: " + item);
-        return item;
-    }
-
-    public void EvolveItem(Item item)
-    {
-        // evolve item logic
+        onItemAdded.Invoke(item);
     }
 
     [Serializable]
@@ -126,6 +117,7 @@ public class InventoryManager : MonoBehaviour
 
             if (itemEntry.Item == null)
             {
+                inventory.RemoveAt(i);
                 Logger.LogError("You are likely trying to add an item to the inventory manually. \nPlease use the Add Item button instead.");
                 continue;
             }
@@ -168,6 +160,12 @@ public class InventoryManager : MonoBehaviour
     #endregion
 
     #region Utility GetItem methods
+    /// <summary>
+    ///    Get the item from the inventory.
+    /// Does this by checking the itemType enum of the item.
+    /// </summary>
+    /// <param name="itemType"> The type of item to get by enum </param>
+    /// <returns> The item from the inventory. </returns>
     public Item GetItem(Item.ItemTypes itemType)
     {
         foreach (Item item in from itemEntry in inventory where itemEntry.Item.ItemType == itemType select itemEntry.Item) { return item; }
@@ -182,8 +180,8 @@ public class InventoryManager : MonoBehaviour
     /// </summary>
     /// <typeparam name="T"> The type of item to get. </typeparam>
     /// <returns> The item from the inventory. </returns>
-    public T GetItem<T>() where T : Item =>
-        (T) inventory.FirstOrDefault(itemEntry => itemEntry.Item.GetType() == typeof(T)).Item;
+    public T GetItem<T>() where T : Item 
+        => (T) inventory.FirstOrDefault(itemEntry => itemEntry.Item.GetType() == typeof(T)).Item;
 
     public int GetItemLevel(Item item)
     {
@@ -191,4 +189,23 @@ public class InventoryManager : MonoBehaviour
         return -1;
     }
     #endregion
+}
+
+/// <summary>
+/// Provides easier lookup to the inventory and its contents.
+/// </summary>
+public static class Inventory
+{
+    // Cache the instance of the InventoryManager
+    static InventoryManager instance => InventoryManager.Instance;
+
+    public static List<Item> Items => instance.Inventory.Select(itemEntry => itemEntry.Item).ToList();
+
+    public static T GetItem<T>() where T : Item => instance.GetItem<T>();
+
+    public static Item GetItem(Item.ItemTypes itemType) => instance.GetItem(itemType);
+
+    public static int GetItemLevel(Item item) => instance.GetItemLevel(item);
+
+    public static void AddItem(Item item) => instance.AddItem(item);
 }

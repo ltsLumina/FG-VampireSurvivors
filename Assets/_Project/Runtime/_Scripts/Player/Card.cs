@@ -59,24 +59,24 @@ public class Card : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHand
                 Debug.Log("Played a card with the item: " + item);
                 Item inventoryItem;
 
-                switch (item)
+                switch (item) // Have to use the item type to get the item from the inventory because using a generic in a switch statement is not allowed.
                 {
-                    case var _ when item == Item.ItemTypes.Garlic:
-                        inventoryItem = InventoryManager.Instance.GetItem(Item.ItemTypes.Garlic);
+                    case Item.ItemTypes.Garlic:
+                        inventoryItem = Inventory.GetItem(Item.ItemTypes.Garlic);
                         if (!inventoryItem) return;
 
                         inventoryItem.Play();
                         break;
 
                     case Item.ItemTypes.LightningRing:
-                        inventoryItem = InventoryManager.Instance.GetItem(Item.ItemTypes.LightningRing);
+                        inventoryItem = Inventory.GetItem(Item.ItemTypes.LightningRing);
                         if (!inventoryItem) return;
 
                         inventoryItem.Play();
                         break;
                     
                     case Item.ItemTypes.Knife:
-                        inventoryItem = InventoryManager.Instance.GetItem(Item.ItemTypes.Knife);
+                        inventoryItem = Inventory.GetItem(Item.ItemTypes.Knife);
                         if (!inventoryItem) return;
 
                         inventoryItem.Play();

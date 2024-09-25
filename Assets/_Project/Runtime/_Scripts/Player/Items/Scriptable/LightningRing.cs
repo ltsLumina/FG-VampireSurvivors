@@ -24,15 +24,14 @@ public class LightningRing : Item
     ///    Strikes enemies within a certain area around the player.
     /// </summary>
     /// <param name="damage"> Optional damage parameter. If not provided, the item's damage stat will be used. </param>
-    /// <param name="area"> Optional area parameter. If not provided, the item's area stat will be used. </param>
-    void Attack(float? damage = null, float? area = null)
+    /// <param name="zone"> Optional area parameter. If not provided, the item's area stat will be used. </param>
+    void Attack(float? damage = null)
     {
-        float statDamage = damage ?? GetBaseStat<float>(Levels.StatTypes.Damage) * Character.Stat.Strength;
-        float statArea   = area   ?? GetBaseStat<float>(Levels.StatTypes.Area)   * Character.Stat.Wisdom;
+        float statDamage = damage ?? Damage;
 
         List<Enemy> enemies = new ();
 
-        lightningColliders = Physics.OverlapSphere(Player.Instance.transform.position, statArea, LayerMask.GetMask("Enemy"));
+        lightningColliders = Physics.OverlapSphere(Player.Instance.transform.position, Zone, LayerMask.GetMask("Enemy"));
 
         foreach (Collider collider in lightningColliders)
         {
@@ -40,7 +39,7 @@ public class LightningRing : Item
         }
 
         // Strikes the amount of enemies equal to the item's lightning strikes stat
-        for (int i = 0; i < GetItemSpecificStat<float>(ItemSpecificStats.Stats.LightningStrikes); i++)
+        for (int i = 0; i < GetItemSpecificStat(ItemSpecificStats.Stats.LightningStrikes) + Character.Stat.Amount; i++)
         {
             if (enemies.Count == 0) break;
 
@@ -55,9 +54,8 @@ public class LightningRing : Item
     {
         while (true)
         {
-            float cooldown = GetBaseStat<float>(Levels.StatTypes.Speed);
             Attack();
-            yield return new WaitForSeconds(cooldown);
+            yield return new WaitForSeconds(Cooldown);
         }
     }
 
@@ -73,7 +71,7 @@ public class LightningRing : Item
         for (int i = 0; i < enemiesToHit; i++)
         {
             yield return new WaitForSeconds(0.1f);
-            Attack(999, 25);
+            Attack(damage: 999);
         }
     }
 }

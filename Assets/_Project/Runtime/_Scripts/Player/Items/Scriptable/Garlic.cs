@@ -23,16 +23,15 @@ public class Garlic : Item
     ///   Damages and knocks-back enemies within a certain area around the player.
     /// </summary>
     /// <param name="damage"> Optional damage parameter. If not provided, the item's damage stat will be used. </param>
-    /// <param name="area"> Optional area parameter. If not provided, the item's area stat will be used. </param>
+    /// <param name="zone"> Optional area parameter. If not provided, the item's area stat will be used. </param>
     /// <param name="knockback"> Optional knockback parameter. If not provided, the item's knockback stat will be used. </param>
     /// <remarks> The nullable parameters are used for the card effect. <para> If the parameters are not provided (null), the item's stats will be used. </para> </remarks>
-    void Attack(float? damage = null, float? area = null, float? knockback = null)
+    void Attack(float? damage = null, float? knockback = null)
     {
-        float statDamage    = damage    ?? GetBaseStat<float>(Levels.StatTypes.Damage)                   * Character.Stat.Strength;
-        float statArea      = area      ?? GetBaseStat<float>(Levels.StatTypes.Area)                     * Character.Stat.Wisdom;
-        float statKnockback = knockback ?? GetItemSpecificStat<float>(ItemSpecificStats.Stats.Knockback) * Character.Stat.Wisdom;
+        float statDamage    = damage    ?? Damage;
+        float statKnockback = knockback ?? GetItemSpecificStat(ItemSpecificStats.Stats.Knockback);
 
-        garlicColliders = Physics.OverlapSphere(Player.Instance.transform.position, statArea, LayerMask.GetMask("Enemy"));
+        garlicColliders = Physics.OverlapSphere(Player.Instance.transform.position, Zone, LayerMask.GetMask("Enemy"));
 
         //Debug.Log("Total Garlic colliders: " + garlicColliders.Length);
 
@@ -52,13 +51,10 @@ public class Garlic : Item
 
     public IEnumerator GarlicCooldown()
     {
-        CharacterStats characterStats = InventoryManager.Instance.Character.Stats;
-        float          cooldown       = GetBaseStat<float>(Levels.StatTypes.Speed) * characterStats.Dexterity;
-
         while (true)
         {
             Attack();
-            yield return new WaitForSeconds(cooldown);
+            yield return new WaitForSeconds(Cooldown);
         }
 
         // ReSharper disable once IteratorNeverReturns
@@ -66,12 +62,12 @@ public class Garlic : Item
 
     void CardEffect()
     {
-        if (!InventoryManager.Instance.GetItem<Garlic>())
+        if (!Inventory.GetItem<Garlic>())
         {
             Logger.LogError("Tried playing a card without having the corresponding item in Inventory. This should only occur during debugging." + "\nItem: " + nameof(Garlic));
             return;
         }
 
-        Attack(damage: null, area: null, knockback: 35);
+        Attack(damage: null, knockback: 35);
     }
 }

@@ -10,7 +10,7 @@ public sealed partial class Player : MonoBehaviour, IDamageable, IPausable
 {
     [Header("Levels")]
     [SerializeField] int health = 100;
-    [SerializeField] int baseSpeed = 5;
+    [SerializeField] float baseSpeed = 5;
 
     [Space(20)]
     [Header("Effects")]
@@ -67,8 +67,8 @@ public sealed partial class Player : MonoBehaviour, IDamageable, IPausable
     void OnGUI()
     {
         // draw amount of garlic and lightning ring colliders
-        Garlic        garlic        = InventoryManager.Instance.GetItem<Garlic>();
-        LightningRing lightningRing = InventoryManager.Instance.GetItem<LightningRing>();
+        Garlic        garlic        = Inventory.GetItem<Garlic>();
+        LightningRing lightningRing = Inventory.GetItem<LightningRing>();
 
         if (garlic != null)
         {
@@ -99,20 +99,20 @@ public sealed partial class Player : MonoBehaviour, IDamageable, IPausable
     {
         if (!InventoryManager.Instance) return;
 
-        Item garlic = InventoryManager.Instance.GetItem<Garlic>();
+        Item garlic = Inventory.GetItem<Garlic>();
 
         if (garlic)
         {
             Gizmos.color = Color.red;
-            Gizmos.DrawWireSphere(transform.position, garlic.GetBaseStat<float>(Item.Levels.StatTypes.Area) * Character.Stat.Wisdom);
+            Gizmos.DrawWireSphere(transform.position, garlic.Zone);
         }
 
-        Item lightningRing = InventoryManager.Instance.GetItem<LightningRing>();
+        Item lightningRing = Inventory.GetItem<LightningRing>();
 
         if (lightningRing)
         {
             Gizmos.color = Color.blue;
-            Gizmos.DrawWireSphere(transform.position, lightningRing.GetBaseStat<float>(Item.Levels.StatTypes.Area) * Character.Stat.Wisdom);
+            Gizmos.DrawWireSphere(transform.position, lightningRing.Zone);
         }
     }
 

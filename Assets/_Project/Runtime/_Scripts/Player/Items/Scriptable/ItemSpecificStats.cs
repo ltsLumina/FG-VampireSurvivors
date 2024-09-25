@@ -19,6 +19,6 @@ public class ItemSpecificStats : ScriptableObject
     public virtual float GetItemSpecificStat(Stats stat)
     {
         Debug.LogError("Stat type not found.");
-        return 0;
+        return -1;
     }
 }

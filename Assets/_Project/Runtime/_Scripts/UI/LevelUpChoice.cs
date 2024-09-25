@@ -68,7 +68,7 @@ public class LevelUpChoice : MonoBehaviour
     {
         button.interactable = false;
         
-        InventoryManager.Instance.AddItem(item);
+        Inventory.AddItem(item);
         
         StartCoroutine(DelayButtonInteractable());
 

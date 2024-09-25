@@ -8,14 +8,12 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "Items/Data/BaseStats", fileName = "Item BaseStats", order = 0)]
 public class BaseStats : ScriptableObject
 {
-    [Header("Base Stats")] //TODO: update this to use the character stats values n' stuff
+    [Header("Base Stats")] 
     [SerializeField] float damage;
-    [SerializeField] float speed;    // reload speed
-    [SerializeField] float duration; // how long lingering effects last
-    [SerializeField] float area;     // area of effect
+    [SerializeField] float cooldown;
+    [SerializeField] float zone;
 
     public float Damage => damage;
-    public float Speed => speed;
-    public float Duration => duration;
-    public float Area => area;
+    public float Cooldown => cooldown;
+    public float Zone => zone;
 }

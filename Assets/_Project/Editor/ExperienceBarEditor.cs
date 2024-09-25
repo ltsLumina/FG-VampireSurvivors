@@ -24,8 +24,9 @@ public class ExperienceBarEditor : Editor
             using (new GUILayout.HorizontalScope())
             {
                 amount = EditorGUILayout.IntField(amount, GUILayout.Height(30), GUILayout.Width(50));
-                
-                if (GUILayout.Button($"Add {amount} XP", GUILayout.Height(30), GUILayout.ExpandWidth(true))) 
+
+                const string whitespace = "                "; // Centers the button text lol 
+                if (GUILayout.Button($"Add {amount} XP {whitespace}", GUILayout.Height(30), GUILayout.ExpandWidth(true))) 
                     Experience.GainExp(amount);
             }
 
