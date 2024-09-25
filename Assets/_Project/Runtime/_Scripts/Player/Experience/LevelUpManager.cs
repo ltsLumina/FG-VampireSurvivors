@@ -67,7 +67,7 @@ public class LevelUpManager : MonoBehaviour
         onMenuShown?.Invoke();
     }
 
-    public void HideLevelUpMenu()
+    void HideLevelUpMenu()
     {
         var selectedItems = new List<Item>();
 
@@ -132,6 +132,9 @@ public class LevelUpManager : MonoBehaviour
 
         menu.gameObject.SetActive(activate);
         sequence.Append(menu.DOScale(targetScale, scaleDuration));
-        if (rotateDuration > 0) { sequence.Join(menu.DORotate(new Vector3(0, 0, 360), rotateDuration, RotateMode.FastBeyond360)); }
+        if (rotateDuration > 0) { sequence.Join(menu.DORotate(new (0, 0, 360), rotateDuration, RotateMode.FastBeyond360)); }
+        
+        // Ensure the buttons are always interactable after the menu has been shown.
+        sequence.OnComplete(()=> levelUpChoices.ForEach(choice => choice.GetComponent<Button>().interactable = true));
     }
 }

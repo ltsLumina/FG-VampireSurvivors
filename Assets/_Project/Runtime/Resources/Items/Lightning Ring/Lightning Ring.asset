@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 83f1cfb21b993d5419bec5d03d1edc00, type: 3}
   m_Name: Lightning Ring
   m_EditorClassIdentifier: 
+  itemTypes: 0
   details:
     name: Lightning Ring
     description: Strikes down enemies with bolts of lightning

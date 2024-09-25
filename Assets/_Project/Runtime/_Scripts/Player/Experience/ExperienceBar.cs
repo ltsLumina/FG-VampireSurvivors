@@ -53,7 +53,7 @@ public class ExperienceBar : MonoBehaviour
     {
         // Wait a bit before showing the level up menu to give the XP a chance to fill multiple times. (multiple levels at once)
         var sequence = new Sequence(this);
-        sequence.WaitThenExecute(0.35f, () =>
+        sequence.WaitThenExecuteRealtime(0.35f, () =>
         {
             vanitySlider.gameObject.SetActive(true);
             rainbowShift = StartCoroutine(RainbowShift());

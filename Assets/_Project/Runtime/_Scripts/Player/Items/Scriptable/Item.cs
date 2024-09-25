@@ -17,7 +17,7 @@ public abstract class Item : ScriptableObject
     }
 
     /// <summary>
-    ///     Contains the name and description of the item.
+    ///     Contains the name, description and icon of the item.
     /// </summary>
     [Header("Item Details")]
     [SerializeField] Details details;
@@ -27,10 +27,7 @@ public abstract class Item : ScriptableObject
     /// </summary>
     [SerializeField] List<Levels> levelsList;
 
-    /// <summary>
-    ///     idk what this does but it is important
-    /// </summary>
-    Levels levels;
+    Levels levelEntries;
 
     public ItemTypes ItemType => (ItemTypes) Enum.Parse(typeof(ItemTypes), GetType().Name);
 
@@ -40,11 +37,23 @@ public abstract class Item : ScriptableObject
         private set => details.name = value;
     }
 
-    public int Level => levels.level;
-
     public string Description => details.description;
 
     public Sprite Icon => details.icon;
+
+    /// <summary>
+    /// Shorthand for GetBaseStat(Levels.StatTypes.Damage)
+    /// NOTICE: The damage value is floored to the nearest integer.
+    /// </summary>
+    public float Damage => GetBaseStat(Levels.StatTypes.Damage);
+    /// <summary>
+    /// Shorthand for GetBaseStat(Levels.StatTypes.Cooldown)
+    /// </summary>
+    public float Cooldown => GetBaseStat(Levels.StatTypes.Cooldown);
+    /// <summary>
+    /// Shorthand for GetBaseStat(Levels.StatTypes.Zone)
+    /// </summary>
+    public float Zone => GetBaseStat(Levels.StatTypes.Zone);
 
     #region Utility | OnValidate
     void OnValidate()
@@ -89,9 +98,9 @@ public abstract class Item : ScriptableObject
         {
             // bug: The list is empty for 1 frame when recompiling so I just don't throw an error if the list is empty
             // bug: and because of unity now its throwing an error saying that the item is level 0, which it isn't...
-            if (levelsList.Count == 0 || levels.level == 0) return;
+            if (levelsList.Count == 0 || levelEntries.level == 0) return;
 
-            if (levels.level < 1 || levels.level > levelsList.Count) Debug.LogError("Level out of bounds. Please enter a valid level." + "\nLevel entered: " + levels.level);
+            if (levelEntries.level < 1 || levelEntries.level > levelsList.Count) Debug.LogError("Level out of bounds. Please enter a valid level." + "\nLevel entered: " + levelEntries.level);
         }
 
         void NotInOrder()
@@ -133,7 +142,7 @@ public abstract class Item : ScriptableObject
     /// Gets the item from the inventory and returns the level of it as opposed to the item's level itself. (Which would likely always be zero)
     /// </summary>
     /// <returns> The level of the item. <para>Notice: If the item is not in the inventory, it will return -1.</para> </returns>
-    public int GetItemLevel() => InventoryManager.Instance.GetItemLevel(this);
+    public int GetItemLevel() => Inventory.GetItemLevel(this);
     #endregion
 
     /// <summary>
@@ -146,10 +155,8 @@ public abstract class Item : ScriptableObject
     /// </summary>
     public abstract void Play();
 
-    public void Evolve()
-    {
-        // evolve item logic
-    }
+    // TODO: Implement this method
+    //public abstract void Evolve();
 
     #region Utility | Create method
     /// <summary>
@@ -167,6 +174,72 @@ public abstract class Item : ScriptableObject
     }
     #endregion
 
+    protected float GetBaseStat(Levels.StatTypes stat)
+    {
+        if (LevelInvalid(out int level)) return -1;
+        Levels    levelData = levelsList[level - 1];
+        
+        if (BaseStatInvalid()) return -1;
+        BaseStats baseStats = levelData.baseStats;
+
+        switch (stat)
+        {
+            case Levels.StatTypes.Damage:
+                float damage = Mathf.FloorToInt(baseStats.Damage * Character.Stat.Strength);
+                return damage;
+
+            case Levels.StatTypes.Cooldown:
+                float speed = baseStats.Cooldown * Character.Stat.Cooldown;
+                return speed;
+
+            case Levels.StatTypes.Zone:
+                float area = baseStats.Zone; // Zone is determined per item and is supposed to cover the entire screen.
+                return area;
+
+            default:
+                Debug.LogError("Stat type not found.");
+                return default;
+        }
+    }
+
+    protected float GetItemSpecificStat(ItemSpecificStats.Stats stat)
+    {
+        if (LevelInvalid(out int level)) return -1;
+
+        Levels            levelData         = levelsList[level - 1];
+        ItemSpecificStats itemSpecificStats = levelData.itemSpecificStats;
+
+        if (itemSpecificStats) return itemSpecificStats.GetItemSpecificStat(stat);
+
+        Debug.LogError("Type mismatch for stat type." + "\nRequested stat type: " + stat);
+        return default;
+    }
+
+    bool LevelInvalid(out int level)
+    {
+        level = GetItemLevel();
+        if (level == -1) return true;
+
+        if (level < 1 || level > levelsList.Count)
+        {
+            Debug.LogError("Level out of bounds. Please enter a valid level." + "\nLevel entered: " + level);
+            return true;
+        }
+
+        return false;
+    }
+
+    bool BaseStatInvalid()
+    {
+        if (levelsList.Any(levelEntry => !levelEntry.baseStats))
+        {
+            Logger.LogError("Base stats not found. Please assign base stats to the item in the inspector.");
+            return true;
+        }
+
+        return false;
+    }
+
     [Serializable]
     public struct Details
     {
@@ -182,9 +255,8 @@ public abstract class Item : ScriptableObject
         public enum StatTypes
         {
             Damage,
-            Speed,
-            Duration,
-            Area,
+            Cooldown,
+            Zone,
         }
 
         [Header("Item Stats")]
@@ -195,88 +267,5 @@ public abstract class Item : ScriptableObject
         public int level;
         public BaseStats baseStats;
         public ItemSpecificStats itemSpecificStats;
-
-        public float Damage => baseStats.Damage;
-        public float Speed => baseStats.Speed;
-        public float Duration => baseStats.Duration;
-        public float Area => baseStats.Area;
     }
-
-    #region Utility | GetBaseStat methods
-    #region Old GetBaseStat
-    // object GetBaseStat(int level, Levels.StatTypes stat)
-    // {
-    //     // if the level is out of bounds, return a string
-    //     if (level < 1 || level > levelsList.Count)
-    //     {
-    //         Debug.LogError("Level out of bounds. Please enter a valid level." + "\nLevel entered: " + level);
-    //         return -1;
-    //     }
-    //
-    //     // return the value of the stat at the given level
-    //     //TODO: GetType() and GetField() are slow, consider caching the results (slow due to reflection)
-    //     return levelsList[level - 1].GetType().GetField(stat.ToString().ToLower()).GetValue(levelsList[level - 1]);
-    // }
-    #endregion
-
-    public T GetBaseStat<T>(Levels.StatTypes stat)
-        where T : struct, IComparable // ints & floats both implement IComparable
-    {
-        int level = GetItemLevel();
-
-        if (level < 1 || level > levelsList.Count)
-        {
-            Debug.LogError("Level out of bounds. Please enter a valid level." + "\nLevel entered: " + level);
-            return default;
-        }
-
-        Levels    levelData = levelsList[level - 1];
-        BaseStats baseStats = levelData.baseStats;
-
-        switch (stat)
-        {
-            case Levels.StatTypes.Damage:
-                if (typeof(T) == typeof(float)) return (T) (object) baseStats.Damage;
-                break;
-
-            case Levels.StatTypes.Speed:
-                if (typeof(T) == typeof(float)) return (T) (object) baseStats.Speed;
-                break;
-
-            case Levels.StatTypes.Duration:
-                if (typeof(T) == typeof(float)) return (T) (object) baseStats.Duration;
-                break;
-
-            case Levels.StatTypes.Area:
-                if (typeof(T) == typeof(float)) return (T) (object) baseStats.Area;
-                break;
-
-            default:
-                Debug.LogError("Stat type not found.");
-                return default;
-        }
-
-        Debug.LogError("Type mismatch for stat type.");
-        return default;
-    }
-
-    public T GetItemSpecificStat<T>(ItemSpecificStats.Stats stat) where T : struct, IComparable // ints & floats both implement IComparable
-    {
-        int level = GetItemLevel();
-
-        if (level < 1 || level > levelsList.Count)
-        {
-            Debug.LogError("Level out of bounds. Please enter a valid level." + "\nLevel entered: " + level);
-            return default;
-        }
-
-        Levels    levelData = levelsList[level - 1];
-        ItemSpecificStats itemSpecificStats = levelData.itemSpecificStats;
-        
-        if (typeof(T) == typeof(float)) return (T) (object) itemSpecificStats.GetItemSpecificStat(stat);
-
-        Debug.LogError("Type mismatch for stat type.");
-        return default;
-    }
-    #endregion
 }

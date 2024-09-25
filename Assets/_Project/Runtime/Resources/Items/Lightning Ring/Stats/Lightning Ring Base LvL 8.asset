@@ -13,6 +13,5 @@ MonoBehaviour:
   m_Name: Lightning Ring Base LvL 8
   m_EditorClassIdentifier: 
   damage: 500
-  speed: 0.5
-  duration: 0
-  area: 20
+  cooldown: 1
+  zone: 20

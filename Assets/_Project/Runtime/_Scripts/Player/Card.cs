@@ -51,48 +51,30 @@ public class Card : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHand
         ResetScale();
 
         return;
-
         void DroppedWithinCenterArea()
         {
             if (CardDragHandler.Instance.IsWithinCenterArea(worldCenterPoint))
             {
                 Debug.Log("Played a card with the item: " + item);
-                Item inventoryItem;
 
-                switch (item)
+                Item inventoryItem = item switch
+                { Item.ItemTypes.Garlic        => Inventory.GetItem<Garlic>(),
+                  Item.ItemTypes.LightningRing => Inventory.GetItem<LightningRing>(),
+                  Item.ItemTypes.Knife         => Inventory.GetItem<Knife>(),
+                  _                            => null };
+
+                if (inventoryItem == null)
                 {
-                    case var _ when item == Item.ItemTypes.Garlic:
-                        inventoryItem = InventoryManager.Instance.GetItem(Item.ItemTypes.Garlic);
-                        if (!inventoryItem) return;
-
-                        inventoryItem.Play();
-                        break;
-
-                    case Item.ItemTypes.LightningRing:
-                        inventoryItem = InventoryManager.Instance.GetItem(Item.ItemTypes.LightningRing);
-                        if (!inventoryItem) return;
-
-                        inventoryItem.Play();
-                        break;
-                    
-                    case Item.ItemTypes.Knife:
-                        inventoryItem = InventoryManager.Instance.GetItem(Item.ItemTypes.Knife);
-                        if (!inventoryItem) return;
-
-                        inventoryItem.Play();
-                        break;                                                         
-
-                    default:
-                        Logger.LogError("Item not found.");
-                        break;
+                    Logger.LogError("Item not found.");
+                    return;
                 }
 
+                inventoryItem.Play();
                 Destroy(gameObject);
             }
             else
             {
                 transform.DOMove(originalPosition, 0.5f).SetEase(Ease.OutCubic);
-
                 highlight.gameObject.SetActive(false);
             }
         }

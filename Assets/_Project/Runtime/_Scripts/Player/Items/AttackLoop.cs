@@ -25,15 +25,15 @@ public partial class Player
         switch (typeof(T))
         {
             case not null when typeof(T) == typeof(Garlic):
-                garlicCoroutine ??= StartCoroutine(InventoryManager.Instance.GetItem<Garlic>().GarlicCooldown());
+                garlicCoroutine ??= StartCoroutine(Inventory.GetItem<Garlic>().GarlicCooldown());
                 break;
     
             case not null when typeof(T) == typeof(LightningRing):
-                lightningRingCoroutine ??= StartCoroutine(InventoryManager.Instance.GetItem<LightningRing>().LightningRingCooldown());
+                lightningRingCoroutine ??= StartCoroutine(Inventory.GetItem<LightningRing>().LightningRingCooldown());
                 break;
             
             case not null when typeof(T) == typeof(Knife):
-                knifeCoroutine ??= StartCoroutine(InventoryManager.Instance.GetItem<Knife>().KnifeCooldown());
+                knifeCoroutine ??= StartCoroutine(Inventory.GetItem<Knife>().KnifeCooldown());
                 break;
         }
     }

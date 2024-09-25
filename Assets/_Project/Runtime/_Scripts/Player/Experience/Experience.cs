@@ -80,6 +80,7 @@ public static class Experience
         ResetLevel();
         ResetXPToLevelUp();
     }
+
     public static event GainedXP OnGainedXP;
     public static event LevelUp OnLevelUp;
 

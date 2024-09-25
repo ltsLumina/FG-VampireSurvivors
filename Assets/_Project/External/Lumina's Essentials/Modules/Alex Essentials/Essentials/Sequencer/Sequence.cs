@@ -162,6 +162,12 @@ public sealed class Sequence : ISequence
         return this;
     }
 
+    public ISequence WaitThenExecuteRealtime(float duration, Action action)
+    {
+        actions.Enqueue(routineHandler.WaitThenExecuteRealtimeRoutine(duration, action));
+        return this;
+    }
+
     /// <summary>
     ///     Starts processing the actions in the sequence.
     /// </summary>

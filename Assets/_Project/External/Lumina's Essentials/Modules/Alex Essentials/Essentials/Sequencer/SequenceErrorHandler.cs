@@ -7,7 +7,7 @@ using UnityEngine;
 namespace Lumina.Essentials.Sequencer
 {
 public static class SequenceErrorHandler
-{
+{ // ReSharper disable Unity.PerformanceAnalysis
     /// <summary>
     ///     Tries to execute the specified action.
     /// </summary>

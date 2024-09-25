@@ -29,17 +29,15 @@ public class Knife : Item
         knife.transform.rotation = Quaternion.LookRotation(shootDir);
         knife.GetComponent<Rigidbody>().AddForce(shootDir * 10, ForceMode.Impulse);
         
-        Destroy(knife, 3f);
+        Destroy(knife, 3f * Character.Stat.Intelligence);
     }
 
     public IEnumerator KnifeCooldown()
     {
-        var cooldown = GetBaseStat<float>(Levels.StatTypes.Speed) * Character.Stat.Dexterity;
-        
         while (true)
         {
             Attack();
-            yield return new WaitForSeconds(cooldown);
+            yield return new WaitForSeconds(Cooldown);
         }
     }
 

@@ -13,6 +13,5 @@ MonoBehaviour:
   m_Name: Lightning Ring Base LvL 6
   m_EditorClassIdentifier: 
   damage: 200
-  speed: 1.5
-  duration: 0
-  area: 15
+  cooldown: 1
+  zone: 20

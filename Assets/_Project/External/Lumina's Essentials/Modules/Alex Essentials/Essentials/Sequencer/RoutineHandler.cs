@@ -14,14 +14,14 @@ public sealed class RoutineHandler
 {
     readonly MonoBehaviour host;
 
-    /// <summary>Gets or sets the Exception if occurred while executing routine.</summary>
-    public Exception Exception { get; set; }
-
     /// <summary>
     ///     Initializes a new instance of the <see cref="RoutineHandler" />.
     /// </summary>
     /// <param name="host">The host of this routine.</param>
     public RoutineHandler(MonoBehaviour host) { this.host = host; }
+
+    /// <summary>Gets or sets the Exception if occurred while executing routine.</summary>
+    public Exception Exception { get; set; }
 
     /// <summary>
     ///     Executes the specified action and handles exceptions if occur.
@@ -143,6 +143,12 @@ public sealed class RoutineHandler
         {
             yield return host.StartCoroutine(WaitThenExecuteRoutine(delay, action));
         }
+    }
+
+    public IEnumerator WaitThenExecuteRealtimeRoutine(float duration, Action action)
+    {
+        yield return new WaitForSecondsRealtime(duration);
+        yield return host.StartCoroutine(ExecuteRoutine(action));
     }
 }
 }
