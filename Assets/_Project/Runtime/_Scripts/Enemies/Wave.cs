@@ -26,7 +26,7 @@ public class Wave : ScriptableObject
 
         foreach (EnemyGroup group in enemyGroup)
         {
-            for (int i = 0; i < group.amount; i++)
+            for (int i = 0; i < group.amount * Character.Stat.Curse; i++)
             {
                 // Find the correct pool for the current wave
                 var pool = EnemySpawner.Pools.Find(pool => pool.GetPooledObjectPrefab() == group.enemy.gameObject && pool.name.Contains(name));

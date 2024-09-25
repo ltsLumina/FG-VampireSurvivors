@@ -79,11 +79,12 @@ public class ExperiencePickup : MonoBehaviour, IPausable
         void Magnetize()
         {
             Vector3 direction = Player.Position - transform.position;
-            if (direction.magnitude > magnetizationRadius * Character.Stat.Magnet) return;
+            float   radius    = magnetizationRadius * Character.Stat.Magnet;
+            if (direction.magnitude > radius) return;
 
             // Increase the magnetization strength based on the distance to the player.
-            float distance = direction.magnitude;
-            float strength = magnetizationStrength * (1 - distance / (magnetizationRadius * Character.Stat.Magnet));
+            float distance   = direction.magnitude;
+            float strength   = magnetizationStrength * (1 - distance / radius);
 
             // Move towards the player
             transform.Translate(direction.normalized * (strength * Time.deltaTime), Space.World);

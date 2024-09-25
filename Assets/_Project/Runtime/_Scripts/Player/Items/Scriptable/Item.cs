@@ -193,7 +193,7 @@ public abstract class Item : ScriptableObject
                 return Mathf.Abs(speed);
 
             case Levels.StatTypes.Zone:
-                float area = baseStats.Zone; // Zone is determined per item and is supposed to cover the entire screen.
+                float area = baseStats.Zone; // Zone is determined per item and is (often) supposed to cover the entire screen.
                 return Mathf.Abs(area);
 
             default:

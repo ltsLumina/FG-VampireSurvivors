@@ -26,19 +26,21 @@ public class Garlic : Item
     /// <param name="zone"> Optional area parameter. If not provided, the item's area stat will be used. </param>
     /// <param name="knockback"> Optional knockback parameter. If not provided, the item's knockback stat will be used. </param>
     /// <remarks> The nullable parameters are used for the card effect. <para> If the parameters are not provided (null), the item's stats will be used. </para> </remarks>
-    void Attack(float? damage = null, float? knockback = null)
+    void Attack(float? damage = null, float? zone = null, float? knockback = null)
     {
         float statDamage    = damage    ?? Damage;
+        float statZone      = (zone ?? Zone) * Character.Stat.Wisdom;
         float statKnockback = knockback ?? GetItemSpecificStat(ItemSpecificStats.Stats.Knockback);
 
-        garlicColliders = Physics.OverlapSphere(Player.Instance.transform.position, Zone, LayerMask.GetMask("Enemy"));
+        garlicColliders = Physics.OverlapSphere(Player.Instance.transform.position, statZone, LayerMask.GetMask("Enemy"));
 
         //Debug.Log("Total Garlic colliders: " + garlicColliders.Length);
 
         foreach (Collider obj in garlicColliders)
         {
             // Deal damage
-            if (obj.TryGetComponent(out IDamageable damageable) && damageable is Enemy) { damageable.TakeDamage(statDamage, CausesOfDeath.Cause.Garlic); }
+            if (obj.TryGetComponent(out IDamageable damageable) && damageable is Enemy) 
+                damageable.TakeDamage(statDamage);
 
             // Knockback
             if (obj.TryGetComponent(out Rigidbody rb))

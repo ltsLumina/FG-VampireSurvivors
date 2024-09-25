@@ -1,4 +1,7 @@
-﻿public static class CausesOfDeath
+﻿using System;
+
+[Obsolete]
+public static class CausesOfDeath
 {
     public enum Cause
     {

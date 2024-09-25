@@ -1,15 +1,18 @@
 #region
 using System;
+using System.Collections;
 using System.Reflection;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.UI;
 #endregion
 
 [SelectionBase]
 public sealed partial class Player : MonoBehaviour, IDamageable, IPausable
 {
     [Header("Levels")]
-    [SerializeField] int health = 100;
+    [SerializeField] float currentHealth = 100;
+    [SerializeField] float healthRegenDelay = 3;
     [SerializeField] float baseSpeed = 5;
 
     [Space(20)]
@@ -18,14 +21,15 @@ public sealed partial class Player : MonoBehaviour, IDamageable, IPausable
 
     [Header("Events")]
     [SerializeField] UnityEvent<int> onHit;
-    [SerializeField] UnityEvent<CausesOfDeath.Cause> onDeath;
-    CausesOfDeath.Cause causeOfDeath;
+    [SerializeField] UnityEvent onDeath;
+    Healthbar healthbar;
 
     InputManager inputManager;
+    Coroutine regeneratingHealthCoroutine;
 
     public static Player Instance { get; private set; }
 
-    public static bool IsDead => Instance.Health <= 0;
+    public static bool IsDead => Instance.CurrentHealth <= 0;
 
     public static Vector3 Position => Instance.transform.position;
 
@@ -34,17 +38,21 @@ public sealed partial class Player : MonoBehaviour, IDamageable, IPausable
         Init();
 
         return;
-
         void Init()
         {
+            if (Instance == null) Instance = this;
+            else Destroy(gameObject);
+            
             inputManager = GetComponentInChildren<InputManager>();
             if (!inputManager) Logger.LogError("InputManager component not found on Player!");
+            
+            healthbar = GetComponentInChildren<Healthbar>();
+            healthbar.GetComponent<Slider>().maxValue = Character.Stat.MaxHealth;
 
             lightningRingCoroutine = null;
             garlicCoroutine        = null;
 
-            if (Instance == null) Instance = this;
-            else Destroy(gameObject);
+            currentHealth = Character.Stat.MaxHealth;
         }
     }
 
@@ -53,13 +61,20 @@ public sealed partial class Player : MonoBehaviour, IDamageable, IPausable
     void OnEnable()
     {
         onDeath.AddListener
-        (_ =>
+        (() =>
         {
-            StopAllCoroutines();
+            StopAllCoroutines(); // TODO: This will cause issues with revival in the future.
             Logger.LogWarning("Player has died." + "\nStopping all coroutines executing on this MonoBehaviour.");
         });
 
-        Experience.OnLevelUp += () => EffectPlayer.PlayEffect(levelUpAura);
+        Experience.OnLevelUp += () =>
+        {
+            EffectPlayer.PlayEffect(levelUpAura);
+            
+            // Increase player's health by 10% of their max health on level up
+            float heal = Character.Stat.MaxHealth * 0.10f;
+            CurrentHealth += heal;
+        };
 
         UseItems(); // AttackLoop.cs
     }
@@ -116,14 +131,24 @@ public sealed partial class Player : MonoBehaviour, IDamageable, IPausable
         }
     }
 
-    public int Health
+    public float CurrentHealth
     {
-        get => health;
+        get => currentHealth;
         set
         {
-            health = value;
+            currentHealth = Mathf.Clamp(value, 0, Character.Stat.MaxHealth);
 
-            if (health <= 0) Death(causeOfDeath);
+            if (currentHealth <= 0)
+            {
+                if (Character.Stat.Revival > 0)
+                {
+                    currentHealth = Character.Stat.MaxHealth;
+                    Logger.LogWarning("Player has been revived.");
+                    return;
+                }
+
+                Death();
+            }
         }
     }
 
@@ -133,26 +158,45 @@ public sealed partial class Player : MonoBehaviour, IDamageable, IPausable
     void Movement(Vector3 dir)
     {
         var moveDir = new Vector3(dir.x, 0, dir.y);
-        transform.position += moveDir * (baseSpeed * Time.deltaTime);
+        transform.position += moveDir * (baseSpeed * Character.Stat.MoveSpeed * Time.deltaTime);
     }
     #endregion
 
     #region Health/Damage
-    public void TakeDamage(float damage, CausesOfDeath.Cause cause)
+    public void TakeDamage(float damage)
     {
-        if (Health <= 0) return;
-        Health -= (int) damage;
+        if (CurrentHealth <= 0) return;
 
-        causeOfDeath = cause; // Set the cause of death to the latest instance of damage. Works 95% of the time :)
+        CurrentHealth -= (int) damage - Character.Stat.Armor;
         onHit?.Invoke((int) damage);
+
+        // Stop any existing health regeneration coroutine
+        if (regeneratingHealthCoroutine != null) StopCoroutine(regeneratingHealthCoroutine);
+
+        // Start a new health regeneration coroutine
+        regeneratingHealthCoroutine = StartCoroutine(RegenerateHealth());
     }
 
-    void Death(CausesOfDeath.Cause cause)
+    IEnumerator RegenerateHealth()
     {
-        Debug.Log("Player has died of " + cause);
+        if (CurrentHealth >= Character.Stat.MaxHealth) yield break;
+
+        yield return new WaitForSeconds(healthRegenDelay);
+
+        while (CurrentHealth < Character.Stat.MaxHealth)
+        {
+            float heal = Character.Stat.Recovery * Time.deltaTime;
+            CurrentHealth += heal;
+            yield return null;
+        }
+    }
+
+    void Death()
+    {
+        Debug.Log("Player has died.");
         enabled = false;
 
-        onDeath?.Invoke(cause);
+        onDeath?.Invoke();
     }
     #endregion
 }

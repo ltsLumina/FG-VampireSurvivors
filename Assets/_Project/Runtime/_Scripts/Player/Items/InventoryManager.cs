@@ -5,6 +5,7 @@ using System.Linq;
 using JetBrains.Annotations;
 using UnityEngine;
 using UnityEngine.Events;
+using ReadOnlyList = System.Collections.Generic.IReadOnlyCollection<InventoryManager.Items>;
 #endregion
 
 public class InventoryManager : MonoBehaviour
@@ -21,7 +22,7 @@ public class InventoryManager : MonoBehaviour
     public static InventoryManager Instance { get; private set; }
 
     public Character Character => character;
-    public IReadOnlyCollection<Items> Inventory => inventory;
+    public ReadOnlyList Inventory => inventory;
 
     public UnityEvent<Item> OnItemAdded => onItemAdded;
 

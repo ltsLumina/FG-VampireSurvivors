@@ -8,7 +8,7 @@ public class KnifeLogic : MonoBehaviour
         
         if (other.TryGetComponent(out IDamageable damageable) && damageable is Enemy)
         {
-            damageable.TakeDamage(statDamage, CausesOfDeath.Cause.Knife);
+            damageable.TakeDamage(statDamage);
         }
 
     }

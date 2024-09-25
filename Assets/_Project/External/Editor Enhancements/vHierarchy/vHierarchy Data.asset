@@ -103,7 +103,7 @@ MonoBehaviour:
         - iColor: 0
           icon: d_eyeDropper.sml
       goDatasByInstanceId:
-        keys: 588600008887000014880000488800004e8600008c880000248800003e8800003a86000008870000408600006e880000f6870000aa860000e28500009e8800005a870000748600000288000028870000428800004a86000030880000528600004487000072870000628700002c8efaff
+        keys: 6e8600009e8700002a8800005e88000064860000a28800003a88000054880000508600001e87000056860000848800000c880000c0860000f8850000b4880000708700008a860000188800003e870000588800006086000046880000688600005a8700008887000078870000
         values:
         - iColor: 0
           icon: d_eyeDropper.sml
@@ -159,8 +159,6 @@ MonoBehaviour:
           icon: d_eyeDropper.sml
         - iColor: 0
           icon: d_eyeDropper.sml
-        - iColor: 0
-          icon: d_eyeDropper.sml
     - goDatasByGlobalId:
         keys: []
         values: []
@@ -170,9 +168,16 @@ MonoBehaviour:
     - goDatasByGlobalId:
         keys:
         - GlobalObjectId_V1-2-5bc5791ab5324d5419157ef8fef1e8d3-99620188-0
+        - GlobalObjectId_V1-2-5bc5791ab5324d5419157ef8fef1e8d3-885240811-0
         values:
         - iColor: 0
           icon: EventSystem Icon
+        - iColor: 0
+          icon: Canvas Icon
       goDatasByInstanceId:
-        keys: 
-        values: []
+        keys: 20b900005a75ffff
+        values:
+        - iColor: 0
+          icon: EventSystem Icon
+        - iColor: 0
+          icon: Canvas Icon

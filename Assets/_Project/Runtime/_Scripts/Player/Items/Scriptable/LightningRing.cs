@@ -45,7 +45,7 @@ public class LightningRing : Item
 
             int randomIndex = Random.Range(0, enemies.Count);
             Instantiate(lightningEffect, enemies[randomIndex].transform.position, Quaternion.identity);
-            enemies[randomIndex].TakeDamage(statDamage, CausesOfDeath.Cause.LightningRing);
+            enemies[randomIndex].TakeDamage(statDamage);
             enemies.RemoveAt(randomIndex);
         }
     }

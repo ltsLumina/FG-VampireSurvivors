@@ -575,12 +575,12 @@ PrefabInstance:
     - target: {fileID: 2017665658324139196, guid: 15b1794d446b6b64cb1b5a3803a71973,
         type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5210179278632098843, guid: 15b1794d446b6b64cb1b5a3803a71973,
         type: 3}
       propertyPath: health
-      value: 2147483647
+      value: 2.1474836e+9
       objectReference: {fileID: 0}
     - target: {fileID: 7504856167651767333, guid: 15b1794d446b6b64cb1b5a3803a71973,
         type: 3}
@@ -3914,7 +3914,7 @@ Canvas:
   m_Enabled: 1
   serializedVersion: 3
   m_RenderMode: 0
-  m_Camera: {fileID: 0}
+  m_Camera: {fileID: 1193072122}
   m_PlaneDistance: 100
   m_PixelPerfect: 0
   m_ReceivesEvents: 1
@@ -3925,7 +3925,7 @@ Canvas:
   m_AdditionalShaderChannelsFlag: 25
   m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
-  m_SortingOrder: 2
+  m_SortingOrder: 0
   m_TargetDisplay: 0
 --- !u!224 &794891619
 RectTransform:
@@ -7582,7 +7582,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1721801270
 Transform:
   m_ObjectHideFlags: 0
@@ -8275,7 +8275,7 @@ Canvas:
   m_GameObject: {fileID: 1822789227}
   m_Enabled: 1
   serializedVersion: 3
-  m_RenderMode: 0
+  m_RenderMode: 1
   m_Camera: {fileID: 1193072122}
   m_PlaneDistance: 100
   m_PixelPerfect: 0
@@ -9417,6 +9417,16 @@ PrefabInstance:
       propertyPath: m_Camera
       value: 
       objectReference: {fileID: 1193072122}
+    - target: {fileID: 3002206488278963679, guid: 35543b64ff04bda4d8e0ed7f1cc190a4,
+        type: 3}
+      propertyPath: m_RenderMode
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3002206488278963679, guid: 35543b64ff04bda4d8e0ed7f1cc190a4,
+        type: 3}
+      propertyPath: m_SortingOrder
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 3212860715267097180, guid: 35543b64ff04bda4d8e0ed7f1cc190a4,
         type: 3}
       propertyPath: m_UIInputModule
@@ -9871,6 +9881,16 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8015983717074285493, guid: 35543b64ff04bda4d8e0ed7f1cc190a4,
         type: 3}
+      propertyPath: currentHealth
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 8015983717074285493, guid: 35543b64ff04bda4d8e0ed7f1cc190a4,
+        type: 3}
+      propertyPath: healthRegenDelay
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 8015983717074285493, guid: 35543b64ff04bda4d8e0ed7f1cc190a4,
+        type: 3}
       propertyPath: onHit.m_PersistentCalls.m_Calls.Array.size
       value: 0
       objectReference: {fileID: 0}
@@ -10225,8 +10245,8 @@ SceneRoots:
   - {fileID: 1712571641}
   - {fileID: 2067874973}
   - {fileID: 262597487}
-  - {fileID: 1822789231}
   - {fileID: 794891619}
+  - {fileID: 1822789231}
   - {fileID: 1517064251}
   - {fileID: 275224876}
   - {fileID: 377775629}

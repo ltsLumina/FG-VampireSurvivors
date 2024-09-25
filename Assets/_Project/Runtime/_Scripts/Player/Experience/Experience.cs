@@ -7,9 +7,9 @@ using UnityEngine;
 public static class Experience
 {
     public delegate void GainedXP(int amount);
-
     public delegate void LevelUp();
     static int xp;
+
     readonly static XPBreakpoints breakpointsSO;
 
     /// <summary>
@@ -44,7 +44,7 @@ public static class Experience
 
     public static void GainExp(int amount)
     {
-        XP += amount;
+        XP += Mathf.CeilToInt(amount * Character.Stat.Growth);
         OnGainedXP?.Invoke(amount);
     }
 
@@ -60,7 +60,7 @@ public static class Experience
 
     static void UpdateXPToLevelUp()
     {
-        foreach (XPBreakpoints.XP_Breakpoints breakpoint in breakpointsSO.Breakpoints.Where(bp => bp.level == Level))
+        foreach (XPBreakpoints.XP_Breakpoints breakpoint in breakpointsSO.Breakpoints.Where(bp => bp.level == Level + 1))
         {
             XPToLevelUp = breakpoint.xp;
             break;
@@ -87,7 +87,7 @@ public static class Experience
 #if UNITY_EDITOR
     public static void EDITOR_GainLevel()
     {
-        XP = XPToLevelUp;
+        GainExp(XPToLevelUp);
     }
 #endif
 }

@@ -12,153 +12,304 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ef745094a6504b1e95bc431034902df9, type: 3}
   m_Name: XP Breakpoints
   m_EditorClassIdentifier: 
-  initialLevelCost: 100
-  f: 1.2
   breakpoints:
   - name: Level 1
     level: 1
-    xp: 100
+    xp: 0
   - name: Level 2
     level: 2
-    xp: 120
+    xp: 5
   - name: Level 3
     level: 3
-    xp: 144
+    xp: 15
   - name: Level 4
     level: 4
-    xp: 172
+    xp: 25
   - name: Level 5
     level: 5
-    xp: 207
+    xp: 35
   - name: Level 6
     level: 6
-    xp: 248
+    xp: 45
   - name: Level 7
     level: 7
-    xp: 298
+    xp: 55
   - name: Level 8
     level: 8
-    xp: 358
+    xp: 65
   - name: Level 9
     level: 9
-    xp: 429
+    xp: 75
   - name: Level 10
     level: 10
-    xp: 515
+    xp: 85
   - name: Level 11
     level: 11
-    xp: 619
+    xp: 95
   - name: Level 12
     level: 12
-    xp: 743
+    xp: 105
   - name: Level 13
     level: 13
-    xp: 891
+    xp: 115
   - name: Level 14
     level: 14
-    xp: 1069
+    xp: 125
   - name: Level 15
     level: 15
-    xp: 1283
+    xp: 135
   - name: Level 16
     level: 16
-    xp: 1540
+    xp: 145
   - name: Level 17
     level: 17
-    xp: 1848
+    xp: 155
   - name: Level 18
     level: 18
-    xp: 2218
+    xp: 165
   - name: Level 19
     level: 19
-    xp: 2662
+    xp: 175
   - name: Level 20
     level: 20
-    xp: 3194
+    xp: 785
   - name: Level 21
     level: 21
-    xp: 3833
+    xp: 185
   - name: Level 22
     level: 22
-    xp: 4600
+    xp: 198
   - name: Level 23
     level: 23
-    xp: 5520
+    xp: 211
   - name: Level 24
     level: 24
-    xp: 6624
+    xp: 224
   - name: Level 25
     level: 25
-    xp: 7949
+    xp: 237
   - name: Level 26
     level: 26
-    xp: 9539
+    xp: 250
   - name: Level 27
     level: 27
-    xp: 10000
+    xp: 263
   - name: Level 28
     level: 28
-    xp: 10000
+    xp: 276
   - name: Level 29
     level: 29
-    xp: 10000
+    xp: 289
   - name: Level 30
     level: 30
-    xp: 10000
+    xp: 302
   - name: Level 31
     level: 31
-    xp: 10000
+    xp: 315
   - name: Level 32
     level: 32
-    xp: 10000
+    xp: 328
   - name: Level 33
     level: 33
-    xp: 10000
+    xp: 341
   - name: Level 34
     level: 34
-    xp: 10000
+    xp: 354
   - name: Level 35
     level: 35
-    xp: 10000
+    xp: 367
   - name: Level 36
     level: 36
-    xp: 10000
+    xp: 380
   - name: Level 37
     level: 37
-    xp: 10000
+    xp: 393
   - name: Level 38
     level: 38
-    xp: 10000
+    xp: 406
   - name: Level 39
     level: 39
-    xp: 10000
+    xp: 419
   - name: Level 40
     level: 40
-    xp: 10000
+    xp: 2832
   - name: Level 41
     level: 41
-    xp: 10000
+    xp: 445
   - name: Level 42
     level: 42
-    xp: 10000
+    xp: 461
   - name: Level 43
     level: 43
-    xp: 10000
+    xp: 477
   - name: Level 44
     level: 44
-    xp: 10000
+    xp: 493
   - name: Level 45
     level: 45
-    xp: 10000
+    xp: 509
   - name: Level 46
     level: 46
-    xp: 10000
+    xp: 525
   - name: Level 47
     level: 47
-    xp: 10000
+    xp: 541
   - name: Level 48
     level: 48
-    xp: 10000
+    xp: 557
   - name: Level 49
     level: 49
-    xp: 10000
+    xp: 573
+  - name: Level 50
+    level: 50
+    xp: 589
+  - name: Level 51
+    level: 51
+    xp: 605
+  - name: Level 52
+    level: 52
+    xp: 621
+  - name: Level 53
+    level: 53
+    xp: 637
+  - name: Level 54
+    level: 54
+    xp: 653
+  - name: Level 55
+    level: 55
+    xp: 669
+  - name: Level 56
+    level: 56
+    xp: 685
+  - name: Level 57
+    level: 57
+    xp: 701
+  - name: Level 58
+    level: 58
+    xp: 717
+  - name: Level 59
+    level: 59
+    xp: 733
+  - name: Level 60
+    level: 60
+    xp: 749
+  - name: Level 61
+    level: 61
+    xp: 765
+  - name: Level 62
+    level: 62
+    xp: 781
+  - name: Level 63
+    level: 63
+    xp: 797
+  - name: Level 64
+    level: 64
+    xp: 813
+  - name: Level 65
+    level: 65
+    xp: 829
+  - name: Level 66
+    level: 66
+    xp: 845
+  - name: Level 67
+    level: 67
+    xp: 861
+  - name: Level 68
+    level: 68
+    xp: 877
+  - name: Level 69
+    level: 69
+    xp: 893
+  - name: Level 70
+    level: 70
+    xp: 909
+  - name: Level 71
+    level: 71
+    xp: 925
+  - name: Level 72
+    level: 72
+    xp: 941
+  - name: Level 73
+    level: 73
+    xp: 957
+  - name: Level 74
+    level: 74
+    xp: 973
+  - name: Level 75
+    level: 75
+    xp: 989
+  - name: Level 76
+    level: 76
+    xp: 1005
+  - name: Level 77
+    level: 77
+    xp: 1021
+  - name: Level 78
+    level: 78
+    xp: 1037
+  - name: Level 79
+    level: 79
+    xp: 1053
+  - name: Level 80
+    level: 80
+    xp: 1069
+  - name: Level 81
+    level: 81
+    xp: 1085
+  - name: Level 82
+    level: 82
+    xp: 1101
+  - name: Level 83
+    level: 83
+    xp: 1117
+  - name: Level 84
+    level: 84
+    xp: 1133
+  - name: Level 85
+    level: 85
+    xp: 1149
+  - name: Level 86
+    level: 86
+    xp: 1165
+  - name: Level 87
+    level: 87
+    xp: 1181
+  - name: Level 88
+    level: 88
+    xp: 1197
+  - name: Level 89
+    level: 89
+    xp: 1213
+  - name: Level 90
+    level: 90
+    xp: 1229
+  - name: Level 91
+    level: 91
+    xp: 1245
+  - name: Level 92
+    level: 92
+    xp: 1261
+  - name: Level 93
+    level: 93
+    xp: 1277
+  - name: Level 94
+    level: 94
+    xp: 1293
+  - name: Level 95
+    level: 95
+    xp: 1309
+  - name: Level 96
+    level: 96
+    xp: 1325
+  - name: Level 97
+    level: 97
+    xp: 1341
+  - name: Level 98
+    level: 98
+    xp: 1357
+  - name: Level 99
+    level: 99
+    xp: 1373
+  - name: Level 100
+    level: 100
+    xp: 1389

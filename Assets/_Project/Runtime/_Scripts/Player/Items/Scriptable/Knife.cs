@@ -27,7 +27,7 @@ public class Knife : Item
 
         GameObject knife = Instantiate(knifePrefab, Player.Instance.transform.position + offset, Quaternion.identity);
         knife.transform.rotation = Quaternion.LookRotation(shootDir);
-        knife.GetComponent<Rigidbody>().AddForce(shootDir * 10, ForceMode.Impulse);
+        knife.GetComponent<Rigidbody>().AddForce(shootDir * Character.Stat.Dexterity, ForceMode.Impulse);
         
         Destroy(knife, 3f * Character.Stat.Intelligence);
     }

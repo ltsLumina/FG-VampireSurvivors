@@ -35,13 +35,6 @@ public class XPBreakpoints : ScriptableObject
             xp_breakpoints.name = $"Level {xp_breakpoints.level}";
             breakpoints[i]      = xp_breakpoints; // Reassign the modified struct back to the list
         }
-
-        // cap the breakpoints at 48
-        if (breakpoints.Count > 49)
-        {
-            breakpoints.RemoveRange(49, breakpoints.Count                - 49);
-            Logger.LogWarning("XP Breakpoints capped at 48 (+1) levels." + "\nThe 49th level and beyond will use a fixed XP value.");
-        }
     }
 
     void DrawGraph()
@@ -51,20 +44,18 @@ public class XPBreakpoints : ScriptableObject
             // Set the level of each breakpoint to its index + 1
             int level = i + 1;
 
-            // Apply the Vampire Survivors formula
-            int xp = 5 + 10 * (level - 1) + 13 * Mathf.Max(0, level - 20) + 16 * Mathf.Max(0, level - 40);
+            int xp = level switch
+            { >= 2 and <= 19  => 5 + 10 * (level - 2),
+              20              => 5 + 10 * (20    - 2) + 600,
+              >= 21 and <= 39 => 5 + 10 * 18          + 13 * (level - 21),
+              40              => 5 + 10 * 18          + 13 * (40    - 21) + 2400,
+              _               => 5 + 10 * 18          + 13 * 20           + 16 * (level - 41) };
+            if (level == 1) xp = 0;
 
             // Update the name of the breakpoints
             string name = $"Level {level}";
 
             breakpoints[i] = new (level, xp, name);
-        }
-
-        // Set the last level to 10,000 xp
-        if (breakpoints.Count > 0)
-        {
-            int lastIndex = breakpoints.Count - 1;
-            breakpoints[lastIndex] = new (breakpoints[lastIndex].level, 10_000, $"Level {breakpoints[lastIndex].level}");
         }
     }
 

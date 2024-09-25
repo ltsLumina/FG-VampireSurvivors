@@ -193,7 +193,7 @@ public static class EnemyCreator
         var enemyComponent = enemyObject.GetComponent<Enemy>();
         enemyComponent.name        = name;
         enemyComponent.Description = description;
-        enemyComponent.Health      = maxHealth;
+        enemyComponent.CurrentHealth = maxHealth;
         enemyComponent.MaxHealth   = maxHealth;
         enemyComponent.Damage      = damage;
         enemyComponent.Speed       = speed;

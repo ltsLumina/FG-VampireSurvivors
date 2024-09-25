@@ -13,7 +13,7 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IPausable
     [SerializeField] [Multiline] string description;
 
     [Header("Stats")]
-    [SerializeField] int health = 100;
+    [SerializeField] float health = 100;
     [SerializeField] int maxHealth = 100;
     [SerializeField] float speed = 3;
 
@@ -31,9 +31,7 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IPausable
     [Space(10)]
     [Header("Events")]
     [SerializeField] UnityEvent<int> onHit;
-    [SerializeField] UnityEvent<CausesOfDeath.Cause> onDeath;
-
-    CausesOfDeath.Cause causeOfDeath;
+    [SerializeField] UnityEvent onDeath;
 
     #region NavMesh
     protected NavMeshAgent Agent => GetComponent<NavMeshAgent>();
@@ -42,7 +40,7 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IPausable
     // Note: Only use this to get the default values of the properties.
     void Reset()
     {
-        Health         = 100;
+        CurrentHealth  = 100;
         MaxHealth      = 100;
         Speed          = 5;
         XPYield        = 1;
@@ -63,7 +61,7 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IPausable
 
         void Init()
         {
-            onDeath.AddListener(_ => { ExperiencePickup.Create(XPYield, transform.position, Random.rotation); });
+            onDeath.AddListener(() => { ExperiencePickup.Create(XPYield, transform.position, Random.rotation); });
 
             Agent.speed = Speed;
             transform.LookAt(Player.Instance.transform);
@@ -107,12 +105,10 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IPausable
 
     void OnValidate() => Agent.speed = Speed;
 
-    public void TakeDamage(float damage, CausesOfDeath.Cause cause)
+    public void TakeDamage(float incomingDamage)
     {
-        Health -= (int) damage;
-
-        causeOfDeath = CausesOfDeath.Cause.Player;
-        onHit?.Invoke((int) damage);
+        CurrentHealth -= (int) incomingDamage;
+        onHit?.Invoke((int) incomingDamage);
     }
 
     public void Pause()
@@ -124,30 +120,28 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IPausable
     void DealDamage()
     {
         Player.Instance.TryGetComponent(out IDamageable damageable);
-        damageable?.TakeDamage(damage, CausesOfDeath.Cause.Enemy);
+        damageable?.TakeDamage(damage);
     }
 
     void TakeRecoilDamage()
     {
-        if (Player.Instance.Health <= 0) return;
+        if (Player.Instance.CurrentHealth <= 0) return;
 
-        Health       -= recoilDamage;
-        causeOfDeath =  CausesOfDeath.Cause.Player;
-
+        CurrentHealth -= recoilDamage;
         onHit?.Invoke(recoilDamage);
     }
 
     void Death()
     {
         MaxHealth = 100;
-        Health    = MaxHealth;
+        CurrentHealth    = MaxHealth;
         gameObject.SetActive(false); // Return to pool.
 
         CancelInvoke(nameof(DealDamage));
         CancelInvoke(nameof(TakeRecoilDamage));
         StopAllCoroutines();
 
-        onDeath?.Invoke(causeOfDeath);
+        onDeath?.Invoke();
     }
 
     #region Enemy Properties
@@ -157,7 +151,7 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IPausable
         set => description = value;
     }
 
-    public int Health
+    public float CurrentHealth
     {
         get => health;
         set
@@ -215,7 +209,7 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IPausable
         set => onHit = value;
     }
 
-    public UnityEvent<CausesOfDeath.Cause> OnDeath
+    public UnityEvent OnDeath
     {
         get => onDeath;
         set => onDeath = value;

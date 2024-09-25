@@ -10,9 +10,47 @@ using UnityEditor;
 public class CharacterStats : ScriptableObject
 {
 #if UNITY_EDITOR
-    [Tooltip("Reverts the changes made to the stats when exiting play mode.")]
+    [Tooltip("Reverts the changes made to the stats when exiting play mode. \nMust be enabled before entering play mode.")]
     [SerializeField] bool revert;
 #endif
+
+    [Header("Player Stats")]
+    [SerializeField] int maxHealth = 100;
+    [SerializeField] float recovery = 0.3f; // 0.3 health per second
+    [SerializeField] int armor = 1;
+    [SerializeField] float moveSpeed = 1.10f; // 10%
+
+    [Space(15)]
+    [Header("Attack Stats")]
+    [Tooltip("Equivalent to might.")]
+    [SerializeField] float strength = 1.25f; // might
+    [Tooltip("Equivalent to speed.")]
+    [SerializeField] float dexterity = 1.20f; // speed
+    [Tooltip("Equivalent to duration")]
+    [SerializeField] float intelligence = 1.30f; // duration
+    [Tooltip("Equivalent to area")]
+    [SerializeField] float wisdom = 1.10f; // area
+
+    [Space(15)]
+    [Header("Utility Stats")]
+    [SerializeField] float cooldown = 0.95f; // 5% faster ("-5% cooldown")
+    [SerializeField] int amount = 1;         // +1 item effect (e.g. 1 more lightning strike)
+    [SerializeField] int revival;
+    [SerializeField] float magnet = 1.50f; // 50% radius // probably gonna re-do this one
+
+    [Space(15)]
+    [Header("Misc Stats")]
+    [SerializeField] float luck = 1.30f;   // 30% luck
+    [SerializeField] float growth = 1.15f; // 15% growth
+
+    //[SerializeField] float greed; // no clue
+    [SerializeField] float curse = 0f; // increases difficulty. (currently only increases amount of enemies)
+
+    [Space(15)]
+    [Header("Item-Adjusted Stats")]
+    [SerializeField] int reroll; // Will be increased by the store/upgrades
+    [SerializeField] int skip;   // Will be increased by the store/upgrades
+    [SerializeField] int banish; // Will be increased by the store/upgrades
 
     void Reset()
     {
@@ -50,45 +88,161 @@ public class CharacterStats : ScriptableObject
 #endif
     }
 
-    [Header("Player Stats")]
-#pragma warning disable CS0414 // Field is assigned but its value is never used
-    [SerializeField] int maxHealth = 120;
-    [SerializeField] float recovery = 0.3f; // 0.3 health per second
-    [SerializeField] int armor = 1;
-    [SerializeField] float moveSpeed = 1.10f; // 10%
+    public void IncreaseStat(string statName, float value)
+    {
+        switch (statName)
+        {
+            case "MaxHealth":
+                maxHealth += (int) value;
+                break;
 
-    [Space(15)]
-    [Header("Attack Stats")]
-    [Tooltip("Equivalent to might.")]
-    [SerializeField] float strength = 1.25f; // might
-    [Tooltip("Equivalent to speed.")]
-    [SerializeField] float dexterity = 1.20f; // speed
-    [Tooltip("Equivalent to duration")]
-    [SerializeField] float intelligence = 1.30f; // duration
-    [Tooltip("Equivalent to area")]
-    [SerializeField] float wisdom = 1.10f; // area
+            case "Recovery":
+                recovery += value;
+                break;
 
-    [Space(15)]
-    [Header("Utility Stats")]
-    [SerializeField] float cooldown = 0.95f; // 5% faster ("-5% cooldown")
-    [SerializeField] int amount = 1;         // +1 item effect (e.g. 1 more lightning strike)
-    [SerializeField] int revival;
-    [SerializeField] float magnet = 1.50f; // 50% radius // probably gonna re-do this one
+            case "Armor":
+                armor += (int) value;
+                break;
 
-    [Space(15)]
-    [Header("Misc Stats")]
-    [SerializeField] float luck = 1.30f;   // 30% luck
-    [SerializeField] float growth = 1.15f; // 15% growth
+            case "MoveSpeed":
+                moveSpeed += value;
+                break;
 
-    //[SerializeField] float greed; // no clue
-    [SerializeField] float curse; // increases difficulty.
+            case "Strength":
+                strength += value;
+                break;
 
-    [Space(15)]
-    [Header("Item-Adjusted Stats")]
-    [SerializeField] int reroll; // Will be increased by the store/upgrades
-    [SerializeField] int skip;   // Will be increased by the store/upgrades
-    [SerializeField] int banish; // Will be increased by the store/upgrades
-#pragma warning restore CS0414   // Field is assigned but its value is never used
+            case "Dexterity":
+                dexterity += value;
+                break;
+
+            case "Intelligence":
+                intelligence += value;
+                break;
+
+            case "Wisdom":
+                wisdom += value;
+                break;
+
+            case "Cooldown":
+                cooldown += value;
+                break;
+
+            case "Amount":
+                amount += (int) value;
+                break;
+
+            case "Revival":
+                revival += (int) value;
+                break;
+
+            case "Magnet":
+                magnet += value;
+                break;
+
+            case "Luck":
+                luck += value;
+                break;
+
+            case "Growth":
+                growth += value;
+                break;
+
+            case "Curse":
+                curse += value;
+                break;
+
+            case "Reroll":
+                reroll += (int) value;
+                break;
+
+            case "Skip":
+                skip += (int) value;
+                break;
+
+            case "Banish":
+                banish += (int) value;
+                break;
+        }
+    }
+
+    public void DecreaseStat(string statName, float value)
+    {
+        switch (statName)
+        {
+            case "MaxHealth":
+                maxHealth -= (int) value;
+                break;
+
+            case "Recovery":
+                recovery -= value;
+                break;
+
+            case "Armor":
+                armor -= (int) value;
+                break;
+
+            case "MoveSpeed":
+                moveSpeed -= value;
+                break;
+
+            case "Strength":
+                strength -= value;
+                break;
+
+            case "Dexterity":
+                dexterity -= value;
+                break;
+
+            case "Intelligence":
+                intelligence -= value;
+                break;
+
+            case "Wisdom":
+                wisdom -= value;
+                break;
+
+            case "Cooldown":
+                cooldown -= value;
+                break;
+
+            case "Amount":
+                amount -= (int) value;
+                break;
+
+            case "Revival":
+                revival -= (int) value;
+                break;
+
+            case "Magnet":
+                magnet -= value;
+                break;
+
+            case "Luck":
+                luck -= value;
+                break;
+
+            case "Growth":
+                growth -= value;
+                break;
+
+            case "Curse":
+                curse -= value;
+                break;
+
+            case "Reroll":
+                reroll -= (int) value;
+                break;
+
+            case "Skip":
+                skip -= (int) value;
+                break;
+
+            case "Banish":
+                banish -= (int) value;
+                break;
+        }
+    }
 
     #region Properties
     [Value]
@@ -130,9 +284,38 @@ public class CharacterStats : ScriptableObject
     [Multiplier]
     public float Luck => luck;
     [Multiplier]
-    public float Growth => growth;
+    public float Growth
+    {
+        get
+        {
+            float modifiedGrowth = growth;
+
+            switch (Experience.Level)
+            {
+                case 19:
+                case 39:
+                    modifiedGrowth *= 2;
+                    break;
+
+                case 20:
+                case 40:
+                    modifiedGrowth /= 2;
+                    break;
+            }
+            
+            return modifiedGrowth;
+        }
+    }
+
     [Multiplier]
-    public float Curse => curse;
+    public float Curse
+    {
+        get
+        {
+            if (curse == 0) return 1;
+            return curse;
+        }
+    }
     [Value]
     public int Reroll => reroll;
     [Value]

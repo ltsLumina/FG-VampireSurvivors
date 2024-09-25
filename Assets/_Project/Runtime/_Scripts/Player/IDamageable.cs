@@ -3,7 +3,7 @@
 /// </summary>
 public interface IDamageable
 {
-    int Health { get; set; }
+    float CurrentHealth { get; set; }
 
-    void TakeDamage(float damage, CausesOfDeath.Cause cause);
+    void TakeDamage(float incomingDamage);
 }
