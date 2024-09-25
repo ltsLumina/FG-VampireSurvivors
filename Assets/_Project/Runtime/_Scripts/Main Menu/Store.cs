@@ -14,11 +14,11 @@ public class Store : MonoBehaviour
     void Start()
     {
         // Initialize shop items
-        shopItems = new List<ShopItem>
-        { new ShopItem("Increase Strength", 100, 
+        shopItems = new ()
+        { new ("Increase Strength", 100, 
                        stats => stats.IncreaseStat("Strength", 0.1f), 
                        stats => stats.DecreaseStat("Strength", 0.1f)),
-          new ShopItem("Increase Dexterity", 100, 
+          new ("Increase Dexterity", 100, 
                        stats => stats.IncreaseStat("Dexterity", 0.1f), 
                        stats => stats.DecreaseStat("Dexterity", 0.1f)),
 

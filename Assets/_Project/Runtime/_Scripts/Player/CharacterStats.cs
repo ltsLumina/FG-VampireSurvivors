@@ -15,40 +15,48 @@ public class CharacterStats : ScriptableObject
 #endif
 
     [Header("Player Stats")]
-    [SerializeField] int maxHealth = 100;
-    [SerializeField] float recovery = 0.3f; // 0.3 health per second
-    [SerializeField] int armor = 1;
-    [SerializeField] float moveSpeed = 1.10f; // 10%
+    [SerializeField]
+    public int maxHealth = 120;
+    [SerializeField] public float recovery = 0.3f; // 0.3 health per second
+    [SerializeField] public int armor = 1;
+    [SerializeField] public float moveSpeed = 1.10f; // 10%
 
     [Space(15)]
     [Header("Attack Stats")]
     [Tooltip("Equivalent to might.")]
-    [SerializeField] float strength = 1.25f; // might
+    [SerializeField]
+    public float strength = 1.25f; // might
     [Tooltip("Equivalent to speed.")]
-    [SerializeField] float dexterity = 1.20f; // speed
+    [SerializeField]
+    public float dexterity = 1.20f; // speed
     [Tooltip("Equivalent to duration")]
-    [SerializeField] float intelligence = 1.30f; // duration
+    [SerializeField]
+    public float intelligence = 1.30f; // duration
     [Tooltip("Equivalent to area")]
-    [SerializeField] float wisdom = 1.10f; // area
+    [SerializeField]
+    public float wisdom = 1.10f; // area
 
     [Space(15)]
     [Header("Utility Stats")]
-    [SerializeField] float cooldown = 0.95f; // 5% faster ("-5% cooldown")
-    [SerializeField] int amount = 1;         // +1 item effect (e.g. 1 more lightning strike)
-    [SerializeField] int revival;
-    [SerializeField] float magnet = 1.50f; // 50% radius // probably gonna re-do this one
+    [SerializeField]
+    public float cooldown = 0.95f;          // 5% faster ("-5% cooldown")
+    [SerializeField] public int amount = 1; // +1 item effect (e.g. 1 more lightning strike)
+    [SerializeField] public int revival;
+    [SerializeField] public float magnet = 1.50f; // 50% radius // probably gonna re-do this one
 
     [Space(15)]
     [Header("Misc Stats")]
-    [SerializeField] float luck = 1.30f;   // 30% luck
-    [SerializeField] float growth = 1.15f; // 15% growth
+    [SerializeField]
+    public float luck = 1.30f;                    // 30% luck
+    [SerializeField] public float growth = 1.15f; // 15% growth
 
     //[SerializeField] float greed; // no clue
-    [SerializeField] float curse = 0f; // increases difficulty. (currently only increases amount of enemies)
+    [SerializeField] public float curse = 0f; // increases difficulty. (currently only increases amount of enemies)
 
     [Space(15)]
     [Header("Item-Adjusted Stats")]
-    [SerializeField] int reroll; // Will be increased by the store/upgrades
+    [SerializeField]
+    public int reroll;           // Will be increased by the store/upgrades
     [SerializeField] int skip;   // Will be increased by the store/upgrades
     [SerializeField] int banish; // Will be increased by the store/upgrades
 
