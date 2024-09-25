@@ -13,6 +13,7 @@ public abstract class Item : ScriptableObject
     {
         Garlic,
         LightningRing,
+        Knife,
     }
 
     /// <summary>
@@ -150,6 +151,22 @@ public abstract class Item : ScriptableObject
         // evolve item logic
     }
 
+    #region Utility | Create method
+    /// <summary>
+    ///     "Creates" and returns a random item from the list of potential items.
+    /// </summary>
+    /// <returns></returns>
+    public static Item Create()
+    {
+        var potentialItems = new List<Item>(Resources.LoadAll<Item>("Items"));
+
+        // return a random item from the list of potential items
+        Item item = potentialItems[Random.Range(0, potentialItems.Count)];
+
+        return item;
+    }
+    #endregion
+
     [Serializable]
     public struct Details
     {
@@ -243,54 +260,23 @@ public abstract class Item : ScriptableObject
         return default;
     }
 
-    public float GetItemSpecificStat(ItemSpecificStats.Stats stat)
+    public T GetItemSpecificStat<T>(ItemSpecificStats.Stats stat) where T : struct, IComparable // ints & floats both implement IComparable
     {
         int level = GetItemLevel();
 
         if (level < 1 || level > levelsList.Count)
         {
             Debug.LogError("Level out of bounds. Please enter a valid level." + "\nLevel entered: " + level);
-            return -1;
+            return default;
         }
 
-        ItemSpecificStats itemSpecificStats = levelsList[level - 1].itemSpecificStats;
+        Levels    levelData = levelsList[level - 1];
+        ItemSpecificStats itemSpecificStats = levelData.itemSpecificStats;
+        
+        if (typeof(T) == typeof(float)) return (T) (object) itemSpecificStats.GetItemSpecificStat(stat);
 
-        if (!itemSpecificStats)
-        {
-            Logger.LogError("Item Specific Stats not found. \nMake sure the Item Specific Stats Scriptable Object is assigned to each level.");
-            return -1;
-        }
-
-        return itemSpecificStats.GetItemSpecificStat(stat);
-    }
-    #endregion
-
-    #region Utility | Create method
-    /// <summary>
-    ///     "Creates" and returns a random item from the list of potential items.
-    /// </summary>
-    /// <returns></returns>
-    public static Item Create()
-    {
-        var potentialItems = new List<Item>(Resources.LoadAll<Item>("Items"));
-
-        // return a random item from the list of potential items
-        Item item = potentialItems[Random.Range(0, potentialItems.Count)];
-
-        return item;
-    }
-
-    public static Item CreateUnique()
-    {
-        var potentialItems = new List<Item>(Resources.LoadAll<Item>("Items"));
-
-        // return a random item from the list of potential items
-        Item item = potentialItems[Random.Range(0, potentialItems.Count)];
-
-        // if the item is already in the inventory, return a new item
-        //if (InventoryManager.Instance.Inventory.
-
-        return item;
+        Debug.LogError("Type mismatch for stat type.");
+        return default;
     }
     #endregion
 }

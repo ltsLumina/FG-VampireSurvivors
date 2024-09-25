@@ -24,7 +24,7 @@ public class InventoryDisplay : MonoBehaviour
         foreach (Image slot in inventorySlots) { slot.gameObject.SetActive(false); }
     }
 
-    void OnEnable() => InventoryManager.Instance.OnItemAdded.AddListener(OnItemAdded);
+    void Start() => InventoryManager.Instance.OnItemAdded.AddListener(OnItemAdded);
 
     /// <summary>
     ///     Called when an item is added to the inventory.

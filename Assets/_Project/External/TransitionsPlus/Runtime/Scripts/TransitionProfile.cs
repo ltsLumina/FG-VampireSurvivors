@@ -1,7 +1,9 @@
 using System;
+using UnityEngine;
+#if UNITY_EDITOR
 using UnityEditor;
 using UnityEditorInternal;
-using UnityEngine;
+#endif
 
 namespace TransitionsPlus {
 

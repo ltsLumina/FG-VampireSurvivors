@@ -1,8 +1,8 @@
 {
-    "name": "Editor",
+    "name": "Lumen_Stylized_FX.Editor",
     "rootNamespace": "",
     "references": [
-        "GUID:0273bdf21962b1b4faf9e242c222b8bb"
+        "GUID:1eeb1d7752002004abab64c03fc2bfb4"
     ],
     "includePlatforms": [
         "Editor"

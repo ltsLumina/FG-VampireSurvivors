@@ -14,6 +14,10 @@ using UnityEngine;
 [CustomPropertyDrawer(typeof(ScriptableObject), true)]
 public class ExtendedScriptableObjectDrawer : PropertyDrawer
 {
+    const int buttonWidth = 66;
+
+    readonly static List<string> ignoreClassFullNames = new ()
+    { "TMPro.TMP_FontAsset" };
     public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
     {
         float totalHeight = EditorGUIUtility.singleLineHeight;
@@ -43,11 +47,6 @@ public class ExtendedScriptableObjectDrawer : PropertyDrawer
 
         return totalHeight;
     }
-
-    const int buttonWidth = 66;
-
-    readonly static List<string> ignoreClassFullNames = new ()
-    { "TMPro.TMP_FontAsset" };
 
     public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
     {
@@ -143,8 +142,15 @@ public class ExtendedScriptableObjectDrawer : PropertyDrawer
                 property.objectReferenceValue = CreateAssetWithSavePrompt(type, selectedAssetPath);
             }
         }
-
-        property.serializedObject.ApplyModifiedProperties();
+        
+        try
+        {
+            property.serializedObject.ApplyModifiedProperties();
+        }
+        catch (InvalidOperationException)
+        {
+            // ignored
+        }
         EditorGUI.EndProperty();
     }
 

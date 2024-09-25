@@ -1,5 +1,7 @@
 #region
 using System.Collections;
+using System.Collections.Generic;
+using Lumina.Essentials.Attributes;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -8,13 +10,16 @@ using UnityEngine.UI;
 [RequireComponent(typeof(Button)), SelectionBase, DisallowMultipleComponent]
 public class LevelUpChoice : MonoBehaviour
 {
+    [SerializeField, ReadOnly] Item item;
+    [Space(10)]
     [SerializeField] Image itemIcon;
     [SerializeField] TMP_Text itemName;
     [SerializeField] TMP_Text itemLevel;
     [SerializeField] TMP_Text itemDescription;
 
     Button button;
-    Item item;
+
+    public Item Item => item;
 
     void Awake()
     {
@@ -22,12 +27,14 @@ public class LevelUpChoice : MonoBehaviour
         button.onClick.AddListener(SelectItem);
     }
 
-    void OnEnable()
+    public void GetItem(List<Item> selectedItems)
     {
         // Create a new item for this button to give.
-        item = Item.Create();
-        
-        //TODO: When items are created, ensure they are unique, and if an item is selected, that the other items are updated to stay unique.
+        do { item = Item.Create(); }
+        while (selectedItems.Contains(item));
+
+        // Add the new item to the list of selected items
+        selectedItems.Add(item);
 
         SetItemInfo(item);
     }
@@ -77,9 +84,9 @@ public class LevelUpChoice : MonoBehaviour
                 yield break;
             }
             
-            yield return new WaitForSecondsRealtime(0.1f);
-            item = Item.Create(); // When an item is selected, create a new item for the button to give in the event there are multiple levels queued.
-            SetItemInfo(item);
+            // yield return new WaitForSecondsRealtime(0.1f);
+            // item = Item.Create(); // When an item is selected, create a new item for the button to give in the event there are multiple levels queued.
+            // SetItemInfo(item);
             
             yield return new WaitForSecondsRealtime(0.4f);
             button.interactable = true;

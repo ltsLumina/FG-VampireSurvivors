@@ -59,6 +59,7 @@ public class ExperienceBar : MonoBehaviour
             rainbowShift = StartCoroutine(RainbowShift());
             LevelUpManager.Instance.ShowLevelUpMenu();
         });
+        
         LevelUpManager.Instance.OnMenuHidden.AddListener(() =>
         {
             vanitySlider.StopCoroutine(rainbowShift);

@@ -10,5 +10,6 @@
         // Weapon types
         Garlic,
         LightningRing,
+        Knife,
     }
 }

@@ -10,6 +10,8 @@ public class LightningRing : Item
     [Header("Other")]
     [SerializeField] GameObject lightningEffect;
 
+    Collider[] lightningColliders;
+
     public override void Use()
     {
         Debug.Log($"{nameof(LightningRing)} used.");
@@ -17,8 +19,6 @@ public class LightningRing : Item
     }
 
     public override void Play() => Player.Instance.StartCoroutine(CardEffect());
-
-    Collider[] lightningColliders;
 
     /// <summary>
     ///    Strikes enemies within a certain area around the player.
@@ -40,7 +40,7 @@ public class LightningRing : Item
         }
 
         // Strikes the amount of enemies equal to the item's lightning strikes stat
-        for (int i = 0; i < GetItemSpecificStat(ItemSpecificStats.Stats.LightningStrikes); i++)
+        for (int i = 0; i < GetItemSpecificStat<float>(ItemSpecificStats.Stats.LightningStrikes); i++)
         {
             if (enemies.Count == 0) break;
 

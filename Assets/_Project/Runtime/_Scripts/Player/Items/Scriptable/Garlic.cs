@@ -9,13 +9,13 @@ public class Garlic : Item
     [Header("Effects")]
     [SerializeField] GameObject garlicEffect;
 
+    Collider[] garlicColliders;
+
     public override void Use()
     {
         Debug.Log($"{nameof(Garlic)} used.");
         Player.Instance.SelectAttack<Garlic>();
     }
-
-    Collider[] garlicColliders;
 
     public override void Play() => CardEffect();
 
@@ -28,9 +28,9 @@ public class Garlic : Item
     /// <remarks> The nullable parameters are used for the card effect. <para> If the parameters are not provided (null), the item's stats will be used. </para> </remarks>
     void Attack(float? damage = null, float? area = null, float? knockback = null)
     {
-        float statDamage    = damage    ?? GetBaseStat<float>(Levels.StatTypes.Damage)            * Character.Stat.Strength;
-        float statArea      = area      ?? GetBaseStat<float>(Levels.StatTypes.Area)              * Character.Stat.Wisdom;
-        float statKnockback = knockback ?? GetItemSpecificStat(ItemSpecificStats.Stats.Knockback) * Character.Stat.Wisdom;
+        float statDamage    = damage    ?? GetBaseStat<float>(Levels.StatTypes.Damage)                   * Character.Stat.Strength;
+        float statArea      = area      ?? GetBaseStat<float>(Levels.StatTypes.Area)                     * Character.Stat.Wisdom;
+        float statKnockback = knockback ?? GetItemSpecificStat<float>(ItemSpecificStats.Stats.Knockback) * Character.Stat.Wisdom;
 
         garlicColliders = Physics.OverlapSphere(Player.Instance.transform.position, statArea, LayerMask.GetMask("Enemy"));
 

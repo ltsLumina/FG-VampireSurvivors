@@ -74,6 +74,13 @@ public class Card : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHand
 
                         inventoryItem.Play();
                         break;
+                    
+                    case Item.ItemTypes.Knife:
+                        inventoryItem = InventoryManager.Instance.GetItem(Item.ItemTypes.Knife);
+                        if (!inventoryItem) return;
+
+                        inventoryItem.Play();
+                        break;                                                         
 
                     default:
                         Logger.LogError("Item not found.");

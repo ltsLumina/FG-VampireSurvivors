@@ -5,7 +5,7 @@ using UnityEngine;
 /// <summary>
 ///     Base stat object (not to be confused with the BaseStats class) that stores the item-specific stats such as knockback for the Garlic item.
 /// </summary>
-public abstract class ItemSpecificStats : ScriptableObject
+public class ItemSpecificStats : ScriptableObject
 {
     public enum Stats
     {
@@ -16,5 +16,9 @@ public abstract class ItemSpecificStats : ScriptableObject
         LightningStrikes,
     }
 
-    public abstract float GetItemSpecificStat(Stats stat);
+    public virtual float GetItemSpecificStat(Stats stat)
+    {
+        Debug.LogError("Stat type not found.");
+        return 0;
+    }
 }
