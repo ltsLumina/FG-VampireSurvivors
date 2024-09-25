@@ -9,9 +9,6 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 252849f90a7d4143a6f8e9b8c6b8ee01, type: 3}
-  m_Name: Knife Base LvL 1
+  m_Script: {fileID: 11500000, guid: 07b948ef54104b088c8e25b8e3fd6c6a, type: 3}
+  m_Name: Knife Specific LvL 4
   m_EditorClassIdentifier: 
-  damage: 100
-  cooldown: 0.65
-  zone: 0

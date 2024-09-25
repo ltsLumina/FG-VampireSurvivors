@@ -7,24 +7,24 @@ using VInspector;
 public class ExperiencePickup : MonoBehaviour, IPausable
 {
     [Header("Settings")]
-    [SerializeField] float magnetizationRadius = 2f;
-    [SerializeField] float magnetizationStrength = 3f;
+    [SerializeField] float magnetizationRadius = 3f;
+    [SerializeField] float magnetizationStrength = 10f;
 
     [Foldout("Colour Settings")]
     [Tooltip("The threshold for the xp pickup to be blue.")]
-    [SerializeField] int blueExpValue = 30;
+    [SerializeField] int blueExpValue = 1;
     [Tooltip("The threshold for the xp pickup to be green.")]
-    [SerializeField] int greenExpValue = 50;
+    [SerializeField] int greenExpValue = 10;
     [Tooltip("The threshold for the xp pickup to be red.")]
-    [SerializeField] int redExpValue = 100;
+    [SerializeField] int redExpValue = 50;
 
     [Header("Colours")]
     [ColorUsage(false)] 
-    [SerializeField]Color blue;
+    [SerializeField] Color blue = Color.blue;
     [ColorUsage(false)]
-    [SerializeField] Color green;
+    [SerializeField] Color green = Color.green;
     [ColorUsage(false)]
-    [SerializeField] Color red;
+    [SerializeField] Color red = Color.red;
     [EndFoldout]
     
     Colour colour;
@@ -65,7 +65,7 @@ public class ExperiencePickup : MonoBehaviour, IPausable
             { Colour.Blue  => blue,
               Colour.Green => green,
               Colour.Red   => red,
-              _            => XPColor };
+              _      => XPColor };
 
             material.color = XPColor;
         }
@@ -84,12 +84,11 @@ public class ExperiencePickup : MonoBehaviour, IPausable
             // Increase the magnetization strength based on the distance to the player.
             float distance = direction.magnitude;
             float strength = magnetizationStrength * (1 - distance / (magnetizationRadius * Character.Stat.Magnet));
-            
+
             // Move towards the player
             transform.Translate(direction.normalized * (strength * Time.deltaTime), Space.World);
         }
     }
-
     void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.yellow;
@@ -102,7 +101,7 @@ public class ExperiencePickup : MonoBehaviour, IPausable
         {
             Experience.GainExp(expValue);
             
-            Destroy(gameObject);
+            gameObject.SetActive(false); // Return the XP pickup to the pool.
         }
     }
 
@@ -110,7 +109,12 @@ public class ExperiencePickup : MonoBehaviour, IPausable
 
     public static ExperiencePickup Create(int xpYield, Vector3 position, Quaternion rotation)
     {
-        var xp = Instantiate(Resources.Load<ExperiencePickup>("XP/XP Pickup"), position, rotation);
+        var xp         = Resources.Load<ExperiencePickup>("XP/XP Pickup");
+        var objectPool = ObjectPoolManager.FindObjectPool(xp.gameObject, 100);
+        xp = objectPool.GetPooledObject(true).GetComponent<ExperiencePickup>();
+        xp.transform.position = position;
+        xp.transform.rotation = rotation;
+        
         xp.expValue = xpYield;
         return xp;
     }

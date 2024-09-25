@@ -59,8 +59,6 @@ public class EnemySpawner : MonoBehaviour, IPausable
                 pool.name += $" | ({wave.name})";
             });
         }
-
-        ObjectPoolManager.ObjectPoolParent.parent = transform;
     }
 
     void Start()

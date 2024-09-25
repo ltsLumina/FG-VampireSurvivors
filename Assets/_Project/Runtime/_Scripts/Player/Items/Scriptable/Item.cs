@@ -185,16 +185,16 @@ public abstract class Item : ScriptableObject
         switch (stat)
         {
             case Levels.StatTypes.Damage:
-                float damage = Mathf.FloorToInt(baseStats.Damage * Character.Stat.Strength);
-                return damage;
+                float damage = baseStats.Damage * Character.Stat.Strength;
+                return Mathf.Abs(Mathf.FloorToInt(damage));
 
             case Levels.StatTypes.Cooldown:
                 float speed = baseStats.Cooldown * Character.Stat.Cooldown;
-                return speed;
+                return Mathf.Abs(speed);
 
             case Levels.StatTypes.Zone:
                 float area = baseStats.Zone; // Zone is determined per item and is supposed to cover the entire screen.
-                return area;
+                return Mathf.Abs(area);
 
             default:
                 Debug.LogError("Stat type not found.");
@@ -233,7 +233,7 @@ public abstract class Item : ScriptableObject
     {
         if (levelsList.Any(levelEntry => !levelEntry.baseStats))
         {
-            Logger.LogError("Base stats not found. Please assign base stats to the item in the inspector.");
+            Logger.LogError("Base stats are missing. \nPlease enter base stats for all levels.");
             return true;
         }
 

@@ -30,8 +30,7 @@ public class Wave : ScriptableObject
             {
                 // Find the correct pool for the current wave
                 var pool = EnemySpawner.Pools.Find(pool => pool.GetPooledObjectPrefab() == group.enemy.gameObject && pool.name.Contains(name));
-
-                if (pool != null)
+                if (pool)
                 {
                     // Calculate a random direction and spawn position
                     Vector2 randomDirection = Random.insideUnitCircle.normalized;

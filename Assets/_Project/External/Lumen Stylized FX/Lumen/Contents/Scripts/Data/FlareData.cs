@@ -7,7 +7,7 @@ using UnityEditor;
 
 namespace DistantLands.Lumen.Data
 {
-    [CreateAssetMenu(menuName = "Distant Lands/Lumen/New Flare Data", order = 391)]
+    [CreateAssetMenu(menuName = "Tools/Lumen/New Flare Data", order = 391)]
     public class FlareData : ScriptableObject
     {
         public delegate void SetupFlare();

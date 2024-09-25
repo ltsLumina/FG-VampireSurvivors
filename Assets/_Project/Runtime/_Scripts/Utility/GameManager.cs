@@ -34,7 +34,7 @@ public class GameManager : MonoBehaviour
         return;
         void ToggleUpdateLoops()
         {
-            pausables = FindObjectsOfType<MonoBehaviour>().OfType<IPausable>();
+            pausables = FindObjectsOfType<MonoBehaviour>(true).OfType<IPausable>();
 
             foreach (IPausable pausable in pausables)
             {

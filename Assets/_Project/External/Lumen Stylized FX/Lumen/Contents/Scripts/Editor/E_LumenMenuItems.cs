@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class E_LumenMenuItems : MonoBehaviour
 {
-    [MenuItem("Distant Lands/Lumen/Create Static Ray", false, 50)]
+    [MenuItem("Tools/Lumen/Create Static Ray", false, 50)]
     static void CreateStaticRay()
     {
 
@@ -20,7 +20,7 @@ public class E_LumenMenuItems : MonoBehaviour
 
     }
 
-    [MenuItem("Distant Lands/Lumen/Create Dynamic Ray", false, 50)]
+    [MenuItem("Tools/Lumen/Create Dynamic Ray", false, 50)]
     static void CreateDynamicRay()
     {
 
@@ -34,7 +34,7 @@ public class E_LumenMenuItems : MonoBehaviour
 
     }
 
-    [MenuItem("Distant Lands/Lumen/Clear Light FX Cache", false, 200)]
+    [MenuItem("Tools/Lumen/Clear Light FX Cache", false, 200)]
     static void Clear()
     {
 
@@ -62,7 +62,7 @@ public class E_LumenMenuItems : MonoBehaviour
 
     }
 
-    [MenuItem("Distant Lands/Lumen/Create Light Flare", false, 50)]
+    [MenuItem("Tools/Lumen/Create Light Flare", false, 50)]
     static void CreateLightFlare()
     {
 

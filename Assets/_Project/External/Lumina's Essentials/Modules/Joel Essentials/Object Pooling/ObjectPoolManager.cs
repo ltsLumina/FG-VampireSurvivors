@@ -19,6 +19,7 @@ public static class ObjectPoolManager
             if (objectPoolParent == null)
             {
                 var objectPoolParentGameObject = new GameObject("--- Object Pools ---");
+                objectPoolParentGameObject.transform.parent = GameObject.FindWithTag("[Header] MISC").transform;
                 objectPoolParent = objectPoolParentGameObject.transform;
             }
 
@@ -68,8 +69,9 @@ public static class ObjectPoolManager
     ///     Creates and returns a new pool if none is found.
     /// </summary>
     /// <param name="objectPrefab"></param>
+    /// <param name="startAmount"> This is only used if a new pool is created. </param>
     /// <returns></returns>
-    public static ObjectPool FindObjectPool(GameObject objectPrefab)
+    public static ObjectPool FindObjectPool(GameObject objectPrefab, int startAmount = 5)
     {
         if (objectPrefab == null)
         {
@@ -78,10 +80,12 @@ public static class ObjectPoolManager
         }
 
         if (ObjectPoolLookup.TryGetValue(objectPrefab, out ObjectPool objectPool)) return objectPool;
-        
+
         //Debug.Log($"No pool found for {objectPrefab.name}. \nCreating a new pool.");
-        objectPool                     = CreateNewPool(objectPrefab);
+        objectPool                     = CreateNewPool(objectPrefab, startAmount);
         ObjectPoolLookup[objectPrefab] = objectPool;
         return objectPool;
     }
 }
+
+

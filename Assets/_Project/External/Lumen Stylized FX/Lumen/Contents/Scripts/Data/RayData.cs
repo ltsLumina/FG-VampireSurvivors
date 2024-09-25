@@ -7,7 +7,7 @@ using UnityEditor;
 
 namespace DistantLands.Lumen.Data
 {
-    [CreateAssetMenu(menuName = "Distant Lands/Lumen/New Ray Data", order = 391)]
+    [CreateAssetMenu(menuName = "Tools/Lumen/New Ray Data", order = 391)]
     public class RayData : ScriptableObject
     {
         public delegate void SetupRay();

@@ -24,31 +24,38 @@ MonoBehaviour:
       type: 2}
   - name: Level 2
     level: 2
-    baseStats: {fileID: 0}
-    itemSpecificStats: {fileID: 0}
+    baseStats: {fileID: 11400000, guid: 03ea8368f6ce8564c83a8e7c41c44fe9, type: 2}
+    itemSpecificStats: {fileID: 11400000, guid: 42cbc110b32d65f45b46683161e067c1,
+      type: 2}
   - name: Level 3
     level: 3
-    baseStats: {fileID: 0}
-    itemSpecificStats: {fileID: 0}
+    baseStats: {fileID: 11400000, guid: d3463b5df0428dd498cc97fe42e36116, type: 2}
+    itemSpecificStats: {fileID: 11400000, guid: c90273300c09bc146987f3e14cfe062e,
+      type: 2}
   - name: Level 4
     level: 4
-    baseStats: {fileID: 0}
-    itemSpecificStats: {fileID: 0}
+    baseStats: {fileID: 11400000, guid: 165b2813b94115648b30af620471a23c, type: 2}
+    itemSpecificStats: {fileID: 11400000, guid: f88f2cf964adefd4bb83b531d702aac1,
+      type: 2}
   - name: Level 5
     level: 5
-    baseStats: {fileID: 0}
-    itemSpecificStats: {fileID: 0}
+    baseStats: {fileID: 11400000, guid: 961dcf17d66b049409b921aff7a94adf, type: 2}
+    itemSpecificStats: {fileID: 11400000, guid: a140fbee8049a77479b537de7d098612,
+      type: 2}
   - name: Level 6
     level: 6
-    baseStats: {fileID: 0}
-    itemSpecificStats: {fileID: 0}
+    baseStats: {fileID: 11400000, guid: da2dd9d0ddc738e49a6b83691e099715, type: 2}
+    itemSpecificStats: {fileID: 11400000, guid: 4c32cf64fda904747a5ed6f8355167bf,
+      type: 2}
   - name: Level 7
     level: 7
-    baseStats: {fileID: 0}
-    itemSpecificStats: {fileID: 0}
+    baseStats: {fileID: 11400000, guid: 56c9bf6a44542834da5a963fe989c80d, type: 2}
+    itemSpecificStats: {fileID: 11400000, guid: 94dc261b12ece4a40b2319020c300af0,
+      type: 2}
   - name: Level 8
     level: 8
-    baseStats: {fileID: 0}
-    itemSpecificStats: {fileID: 0}
+    baseStats: {fileID: 11400000, guid: 207e9dbff5a689143a0ac001a7dfb3ef, type: 2}
+    itemSpecificStats: {fileID: 11400000, guid: 4f49074f112dfd742ab818d19feb5449,
+      type: 2}
   knifePrefab: {fileID: 6277208900379832256, guid: c31f913ae8372f24aaa37a15081505ce,
     type: 3}
