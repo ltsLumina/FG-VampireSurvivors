@@ -1,5 +1,7 @@
 ﻿#region
 using System;
+using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
 #if UNITY_EDITOR
 using UnityEditor;
@@ -29,7 +31,7 @@ public class CharacterStats : ScriptableObject
     [Space(15)]
     [Header("Utility Stats")]
     [SerializeField] float cooldown = 0.95f; // 5% faster ("-5% cooldown")
-    [SerializeField] int amount = 1; // +1 item effect (e.g. 1 more lightning strike)
+    [SerializeField] int amount = 1;         // +1 item effect (e.g. 1 more lightning strike)
     [SerializeField] int revival = 0;
     [SerializeField] float magnet = 1.50f; // 50% radius // probably gonna re-do this one
 
@@ -38,14 +40,21 @@ public class CharacterStats : ScriptableObject
     [SerializeField] float luck = 1.30f;   // 30% luck
     [SerializeField] float growth = 1.15f; // 15% growth
 
-    [SerializeField] float greed; // increases amount of coins dropped
+    [SerializeField] float greed;      // increases amount of coins dropped
     [SerializeField] float curse = 0f; // increases difficulty. (enemy move speed, spawn rate, health)
 
     [Space(15)]
     [Header("Item-Adjusted Stats")]
-    [SerializeField] int reroll;           // Will be increased by the store/upgrades
+    [SerializeField] int reroll; // Will be increased by the store/upgrades
     [SerializeField] int skip;   // Will be increased by the store/upgrades
     [SerializeField] int banish; // Will be increased by the store/upgrades
+
+    Dictionary<string, Action<float>> statIncreasers;
+
+    /// <summary>
+    /// The JSON file that contains the serialized power-ups.
+    /// </summary>
+    public static string PowerUpsAsJson => File.ReadAllText(Application.persistentDataPath + "/statBuffs.json");
 
     void Reset()
     {
@@ -77,6 +86,28 @@ public class CharacterStats : ScriptableObject
 
     void OnEnable()
     {
+        #region Stat Increasers
+        statIncreasers = new()
+        { { "MaxHealth", value => maxHealth       =  Mathf.RoundToInt(maxHealth * (1 + value)) },
+          { "Recovery", value => recovery         += value },
+          { "Armor", value => armor               += (int) value },
+          { "MoveSpeed", value => moveSpeed       *= 1 + value },
+          { "Strength", value => strength         *= 1 + value },
+          { "Dexterity", value => dexterity       *= 1 + value },
+          { "Intelligence", value => intelligence *= 1 + value },
+          { "Wisdom", value => wisdom             *= 1 + value },
+          { "Cooldown", value => cooldown         *= 1 - value },
+          { "Amount", value => amount             += (int) value },
+          { "Revival", value => revival           += (int) value },
+          { "Magnet", value => magnet             *= 1 + value },
+          { "Luck", value => luck                 *= 1 + value },
+          { "Growth", value => growth             *= 1 + value },
+          { "Curse", value => curse               *= 1 + value },
+          { "Reroll", value => reroll             += (int) value },
+          { "Skip", value => skip                 += (int) value },
+          { "Banish", value => banish             += (int) value } };
+        #endregion
+        
 #if UNITY_EDITOR
         EditorApplication.playModeStateChanged -= OnPlayModeStateChanged;
         EditorApplication.playModeStateChanged += OnPlayModeStateChanged;
@@ -85,158 +116,8 @@ public class CharacterStats : ScriptableObject
 
     public void IncreaseStat(string statName, float value)
     {
-        switch (statName)
-        {
-            case "MaxHealth":
-                maxHealth += (int) value;
-                break;
-
-            case "Recovery":
-                recovery += value;
-                break;
-
-            case "Armor":
-                armor += (int) value;
-                break;
-
-            case "MoveSpeed":
-                moveSpeed += value;
-                break;
-
-            case "Strength":
-                strength += value;
-                break;
-
-            case "Dexterity":
-                dexterity += value;
-                break;
-
-            case "Intelligence":
-                intelligence += value;
-                break;
-
-            case "Wisdom":
-                wisdom += value;
-                break;
-
-            case "Cooldown":
-                cooldown += value;
-                break;
-
-            case "Amount":
-                amount += (int) value;
-                break;
-
-            case "Revival":
-                revival += (int) value;
-                break;
-
-            case "Magnet":
-                magnet += value;
-                break;
-
-            case "Luck":
-                luck += value;
-                break;
-
-            case "Growth":
-                growth += value;
-                break;
-
-            case "Curse":
-                curse += value;
-                break;
-
-            case "Reroll":
-                reroll += (int) value;
-                break;
-
-            case "Skip":
-                skip += (int) value;
-                break;
-
-            case "Banish":
-                banish += (int) value;
-                break;
-        }
-    }
-
-    public void DecreaseStat(string statName, float value)
-    {
-        switch (statName)
-        {
-            case "MaxHealth":
-                maxHealth -= (int) value;
-                break;
-
-            case "Recovery":
-                recovery -= value;
-                break;
-
-            case "Armor":
-                armor -= (int) value;
-                break;
-
-            case "MoveSpeed":
-                moveSpeed -= value;
-                break;
-
-            case "Strength":
-                strength -= value;
-                break;
-
-            case "Dexterity":
-                dexterity -= value;
-                break;
-
-            case "Intelligence":
-                intelligence -= value;
-                break;
-
-            case "Wisdom":
-                wisdom -= value;
-                break;
-
-            case "Cooldown":
-                cooldown -= value;
-                break;
-
-            case "Amount":
-                amount -= (int) value;
-                break;
-
-            case "Revival":
-                revival -= (int) value;
-                break;
-
-            case "Magnet":
-                magnet -= value;
-                break;
-
-            case "Luck":
-                luck -= value;
-                break;
-
-            case "Growth":
-                growth -= value;
-                break;
-
-            case "Curse":
-                curse -= value;
-                break;
-
-            case "Reroll":
-                reroll -= (int) value;
-                break;
-
-            case "Skip":
-                skip -= (int) value;
-                break;
-
-            case "Banish":
-                banish -= (int) value;
-                break;
-        }
+        if (statIncreasers.TryGetValue(statName, out Action<float> increaseAction)) increaseAction(value);
+        else Debug.LogWarning($"Stat {statName} not found.");
     }
 
     #region Properties
@@ -311,7 +192,7 @@ public class CharacterStats : ScriptableObject
             return curse;
         }
     }
-    
+
     [Value]
     public int Reroll => reroll;
     [Value]

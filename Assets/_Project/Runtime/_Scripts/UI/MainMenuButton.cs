@@ -3,10 +3,9 @@ using UnityEngine;
 using UnityEngine.UI;
 #endregion
 
-//TODO: redo entire main menu
-public class MainMenuManager : MonoBehaviour
+public class MainMenuButton : Button
 {
-    public void StartGame()
+    public void SelectCharacter() // Used on the "Start" button in unity.
     {
         Debug.Log("Starting the game...");
         SceneManagerExtended.LoadScene(1);

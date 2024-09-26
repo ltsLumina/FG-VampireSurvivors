@@ -9,12 +9,12 @@ public abstract class WeaponItem : Item
     /// NOTICE: The damage value is floored to the nearest integer.
     /// </summary>
     public float Damage => GetBaseStat(Levels.StatTypes.Damage);
-    
+
     /// <summary>
     /// Shorthand for GetBaseStat(Levels.StatTypes.Cooldown)
     /// </summary>
     public float Cooldown => GetBaseStat(Levels.StatTypes.Cooldown);
-    
+
     /// <summary>
     /// Shorthand for GetBaseStat(Levels.StatTypes.Zone)
     /// </summary>
@@ -35,8 +35,8 @@ public abstract class WeaponItem : Item
                 return Mathf.Abs(Mathf.FloorToInt(damage));
 
             case Levels.StatTypes.Cooldown:
-                float speed = baseStats.Cooldown * Character.Stat.Cooldown;
-                return Mathf.Abs(speed);
+                float cooldown = baseStats.Cooldown * Character.Stat.Cooldown;
+                return Mathf.Abs(cooldown);
 
             case Levels.StatTypes.Zone:
                 float area = baseStats.Zone; // Zone is determined per item and is (often) supposed to cover the entire screen.

@@ -165,7 +165,7 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IPausable
     {
         get
         {
-            if (InventoryManager.Instance) return maxHealth * Character.Stat.Curse;
+            if (InventoryManager.Instance) return maxHealth *= Character.Stat.Curse;
             return maxHealth; 
         }
         set => maxHealth = value;
@@ -175,7 +175,7 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IPausable
     {
         get
         {
-            if (InventoryManager.Instance) return speed * Character.Stat.Curse;
+            if (InventoryManager.Instance) return speed *= Character.Stat.Curse;
             return speed;
         }
         set => speed = value;

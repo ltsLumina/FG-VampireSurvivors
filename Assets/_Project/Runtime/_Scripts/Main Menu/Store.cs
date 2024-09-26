@@ -1,11 +1,13 @@
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
+using JetBrains.Annotations;
 using TMPro;
-using UnityEditor;
 using UnityEngine;
-using UnityEngine.UI;
+using VInspector;
 using Debug = UnityEngine.Debug;
 
 [ExecuteInEditMode]
@@ -13,35 +15,16 @@ public class Store : MonoBehaviour
 {
     [Min(0)]
     [SerializeField] int playerCoins;
-    [NonReorderable]
     [SerializeField] List<StatBuff> statBuffs;
-
-    List<ShopItem> shopItems;
     Dictionary<ShopItem, int> purchasedItems = new();
 
-    [VInspector.Button]
-    public void ShowJson()
-    {
-        string path = Application.persistentDataPath + "/statBuffs.json";
-        if (File.Exists(path)) Process.Start("notepad.exe", path);
-        else Debug.Log("statBuffs.json not found!");
-    }
-    
-    [VInspector.Button]
-    public void ClearJson()
-    {
-        string path = Application.persistentDataPath + "/statBuffs.json";
-        if (File.Exists(path))
-        {
-            File.WriteAllText(path, string.Empty);
-            Debug.Log("statBuffs.json cleared!");
-        }
-        else
-        {
-            Debug.Log("statBuffs.json not found!");
-        }
-    }
-    
+    List<ShopItem> shopItems;
+
+    public static List<string> StatNames { get; } = new()
+    { "MaxHealth", "Recovery", "Armor", "MoveSpeed", "Strength", "Dexterity",
+      "Intelligence", "Wisdom", "Cooldown", "Amount", "Revival", "Magnet",
+      "Luck", "Growth", "Curse", "Reroll", "Skip", "Banish" };
+
     void Start()
     {
         // // Initialize shop items
@@ -54,39 +37,83 @@ public class Store : MonoBehaviour
         //
         // };
 
-        // List of all stat names
-        
-        var statNames = new List<string>
-        { "MaxHealth", "Recovery", "Armor", "MoveSpeed", "Strength", "Dexterity",
-          "Intelligence", "Wisdom", "Cooldown", "Amount", "Revival", "Magnet",
-          "Luck", "Growth", "Curse", "Reroll", "Skip", "Banish" };
-
         // Initialize shop items
-        shopItems = statNames.Select(statName => new ShopItem(statName, 100)).ToList();
+        shopItems = StatNames.Select(statName => new ShopItem(statName, 100)).ToList();
         statBuffs = Resources.LoadAll<StatBuff>("Stat Buffs").ToList();
         
-        var buttons = GetComponentsInChildren<Button>();
+        var buttons = GetComponentsInChildren<StatBuffUIButton>();
         foreach (var button in buttons)
         {
-            string statName = statNames[buttons.ToList().IndexOf(button)];
+            string statName          = StatNames[buttons.ToList().IndexOf(button)];
+            string formattedStatName = Regex.Replace(statName, "(\\B[A-Z])", " $1");
 
             button.name = statName;
-            button.GetComponentInChildren<TextMeshProUGUI>().text = statName;
+            button.GetComponentInChildren<TextMeshProUGUI>().text = formattedStatName;
             button.onClick.AddListener(() => PurchaseItem(shopItems[buttons.ToList().IndexOf(button)]));
         }
     }
 
-    public void PurchaseItem(ShopItem item)
+    [Button, UsedImplicitly]
+    public void ShowJson()
+    {
+        string path = Application.persistentDataPath + "/statBuffs.json";
+        if (File.Exists(path)) Process.Start("notepad.exe", path);
+        else Debug.Log("statBuffs.json not found!");
+    }
+
+    [Button, UsedImplicitly]
+    public void ClearJson()
+    {
+        string path = Application.persistentDataPath + "/statBuffs.json";
+        if (File.Exists(path))
+        {
+            File.WriteAllText(path, string.Empty);
+            Debug.Log("statBuffs.json cleared!");
+            
+            // Clear all toggles
+            var buttons = GetComponentsInChildren<StatBuffUIButton>();
+            foreach (var button in buttons)
+            {
+                foreach (var toggle in button.Toggles) { toggle.isOn = false; }
+            }
+        }
+        else
+        {
+            Debug.Log("statBuffs.json not found!");
+        }
+    }
+
+    void PurchaseItem(ShopItem item)
     {
         if (playerCoins >= item.Cost)
         {
             playerCoins -= item.Cost;
             SaveStatBuff(item);
+
+            // Find the corresponding button and update its toggles
+            var button = GetComponentsInChildren<StatBuffUIButton>().FirstOrDefault(b => b.name == item.Name);
+
+            if (button == null) return;
+            var statBuffData = LoadStatBuffData(item.Name);
+            if (statBuffData  == null) return;
+            for (int i = 0; i < statBuffData.Level; i++) { button.Toggles[i].isOn = true; }
+            button.SetToggle(item.Name, statBuffData.Level);
         }
-        else
+        else { Debug.Log("Not enough coins!"); }
+    }
+
+    public static StatBuffData LoadStatBuffData(string statName)
+    {
+        string path = Application.persistentDataPath + "/statBuffs.json";
+
+        if (File.Exists(path) && File.ReadAllText(path) != string.Empty)
         {
-            Debug.Log("Not enough coins!");
+            string json             = File.ReadAllText(path);
+            var    statBuffDataList = JsonUtility.FromJson<StatBuffDataList>(json).Buffs;
+            return statBuffDataList.FirstOrDefault(b => b.StatName == statName);
         }
+
+        return null;
     }
 
     void SaveStatBuff(ShopItem item)
@@ -138,8 +165,7 @@ public class Store : MonoBehaviour
             var initialStatBuffData = new StatBuffData
             { StatName = item.Name,
               Level    = 1,
-              Value    = statBuff.GetValueForLevel(1),
-              MaxLevel = statBuff.MaxLevel };
+              Value    = statBuff.GetValueForLevel(1) };
 
             statBuffDataList.Add(initialStatBuffData);
             Logger.Log($"Buff level increased. \nBuff: {initialStatBuffData.StatName} increased to level {initialStatBuffData.Level}.");
@@ -152,16 +178,15 @@ public class Store : MonoBehaviour
         File.WriteAllText(path, json);
     }
 
-    [System.Serializable]
+    [Serializable]
     public class StatBuffData
     {
         public string StatName;
         public float Value;
         public int Level;
-        public int MaxLevel = 5; 
     }
 
-    [System.Serializable]
+    [Serializable]
     public class StatBuffDataList
     {
         public List<StatBuffData> Buffs;
@@ -175,7 +200,7 @@ public class ShopItem
         Name      = name;
         Cost      = cost;
     }
-    
+
     public string Name { get; set; }
     public int Cost { get; set; }
 }
