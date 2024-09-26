@@ -25,11 +25,9 @@ public abstract class Item : ScriptableObject
     /// <summary>
     ///     Contains a list of levels for the item.
     /// </summary>
-    [SerializeField] List<Levels> levelsList;
+    [SerializeField] protected List<Levels> levelsList;
 
     Levels levelEntries;
-
-    public ItemTypes ItemType => (ItemTypes) Enum.Parse(typeof(ItemTypes), GetType().Name);
 
     public string Name
     {
@@ -40,20 +38,6 @@ public abstract class Item : ScriptableObject
     public string Description => details.description;
 
     public Sprite Icon => details.icon;
-
-    /// <summary>
-    /// Shorthand for GetBaseStat(Levels.StatTypes.Damage)
-    /// NOTICE: The damage value is floored to the nearest integer.
-    /// </summary>
-    public float Damage => GetBaseStat(Levels.StatTypes.Damage);
-    /// <summary>
-    /// Shorthand for GetBaseStat(Levels.StatTypes.Cooldown)
-    /// </summary>
-    public float Cooldown => GetBaseStat(Levels.StatTypes.Cooldown);
-    /// <summary>
-    /// Shorthand for GetBaseStat(Levels.StatTypes.Zone)
-    /// </summary>
-    public float Zone => GetBaseStat(Levels.StatTypes.Zone);
 
     #region Utility | OnValidate
     void OnValidate()
@@ -141,7 +125,7 @@ public abstract class Item : ScriptableObject
     /// <summary>
     /// Gets the item from the inventory and returns the level of it as opposed to the item's level itself. (Which would likely always be zero)
     /// </summary>
-    /// <returns> The level of the item. <para>Notice: If the item is not in the inventory, it will return -1.</para> </returns>
+    /// <returns> The level of the item. <para>Notice: If the item is not found in the inventory, it will return -1.</para> </returns>
     public int GetItemLevel() => Inventory.GetItemLevel(this);
     #endregion
 
@@ -155,7 +139,7 @@ public abstract class Item : ScriptableObject
     /// </summary>
     public abstract void Play();
 
-    // TODO: Implement this method
+    // TODO: Implement this method later
     //public abstract void Evolve();
 
     #region Utility | Create method
@@ -174,48 +158,7 @@ public abstract class Item : ScriptableObject
     }
     #endregion
 
-    protected float GetBaseStat(Levels.StatTypes stat)
-    {
-        if (LevelInvalid(out int level)) return -1;
-        Levels    levelData = levelsList[level - 1];
-        
-        if (BaseStatInvalid()) return -1;
-        BaseStats baseStats = levelData.baseStats;
-
-        switch (stat)
-        {
-            case Levels.StatTypes.Damage:
-                float damage = baseStats.Damage * Character.Stat.Strength;
-                return Mathf.Abs(Mathf.FloorToInt(damage));
-
-            case Levels.StatTypes.Cooldown:
-                float speed = baseStats.Cooldown * Character.Stat.Cooldown;
-                return Mathf.Abs(speed);
-
-            case Levels.StatTypes.Zone:
-                float area = baseStats.Zone; // Zone is determined per item and is (often) supposed to cover the entire screen.
-                return Mathf.Abs(area);
-
-            default:
-                Debug.LogError("Stat type not found.");
-                return default;
-        }
-    }
-
-    protected float GetItemSpecificStat(ItemSpecificStats.Stats stat)
-    {
-        if (LevelInvalid(out int level)) return -1;
-
-        Levels            levelData         = levelsList[level - 1];
-        ItemSpecificStats itemSpecificStats = levelData.itemSpecificStats;
-
-        if (itemSpecificStats) return itemSpecificStats.GetItemSpecificStat(stat);
-
-        Debug.LogError("Type mismatch for stat type." + "\nRequested stat type: " + stat);
-        return default;
-    }
-
-    bool LevelInvalid(out int level)
+    protected bool LevelInvalid(out int level)
     {
         level = GetItemLevel();
         if (level == -1) return true;
@@ -223,17 +166,6 @@ public abstract class Item : ScriptableObject
         if (level < 1 || level > levelsList.Count)
         {
             Debug.LogError("Level out of bounds. Please enter a valid level." + "\nLevel entered: " + level);
-            return true;
-        }
-
-        return false;
-    }
-
-    bool BaseStatInvalid()
-    {
-        if (levelsList.Any(levelEntry => !levelEntry.baseStats))
-        {
-            Logger.LogError("Base stats are missing. \nPlease enter base stats for all levels.");
             return true;
         }
 

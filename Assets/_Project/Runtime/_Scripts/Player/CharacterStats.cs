@@ -9,11 +9,6 @@ using UnityEditor;
 [CreateAssetMenu(fileName = "Character Stats", menuName = "Character/Character Stats", order = 0)]
 public class CharacterStats : ScriptableObject
 {
-#if UNITY_EDITOR
-    [Tooltip("Reverts the changes made to the stats when exiting play mode. \nMust be enabled before entering play mode.")]
-    [SerializeField] bool revert;
-#endif
-
     [Header("Player Stats")]
     [SerializeField]
     public int maxHealth = 120;
@@ -324,6 +319,7 @@ public class CharacterStats : ScriptableObject
             return curse;
         }
     }
+    
     [Value]
     public int Reroll => reroll;
     [Value]
@@ -335,6 +331,7 @@ public class CharacterStats : ScriptableObject
 #if UNITY_EDITOR
     string initialJson;
 
+    //TODO: This wont work in a build.
     void OnPlayModeStateChanged(PlayModeStateChange obj)
     {
         switch (obj)
@@ -345,13 +342,7 @@ public class CharacterStats : ScriptableObject
 
             case PlayModeStateChange.ExitingPlayMode:
                 EditorApplication.playModeStateChanged -= OnPlayModeStateChanged;
-
-                if (revert)
-                {
-                    EditorJsonUtility.FromJsonOverwrite(initialJson, this);
-                    revert = false;
-                }
-
+                EditorJsonUtility.FromJsonOverwrite(initialJson, this);
                 break;
         }
     }

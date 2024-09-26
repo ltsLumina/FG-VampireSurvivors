@@ -4,7 +4,7 @@ using UnityEngine;
 #endregion
 
 [CreateAssetMenu(fileName = "Knife", menuName = "Items/Knife")]
-public class Knife : Item
+public class Knife : WeaponItem
 {
     [Header("Knife")]
     [SerializeField] GameObject knifePrefab;

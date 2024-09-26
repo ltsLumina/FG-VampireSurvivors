@@ -4,8 +4,8 @@ using System.Collections.Generic;
 using UnityEngine;
 #endregion
 
-[CreateAssetMenu(fileName = "Lightning Ring", menuName = "Items/Lightning Ring")]
-public class LightningRing : Item
+[CreateAssetMenu(fileName = "Lightning Ring", menuName = "Items/Weapons/Lightning Ring")]
+public class LightningRing : WeaponItem
 {
     [Header("Other")]
     [SerializeField] GameObject lightningEffect;

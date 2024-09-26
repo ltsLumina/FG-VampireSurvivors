@@ -1,4 +1,5 @@
 #region
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -7,9 +8,10 @@ using UnityEngine;
 public class GameManager : MonoBehaviour
 {
     IEnumerable<IPausable> pausables;
-    public static bool IsPaused => Time.timeScale == 0;
-
+    
     public static GameManager Instance { get; private set; }
+    
+    public static bool IsPaused => Time.timeScale == 0;
 
     void Awake()
     {
@@ -17,9 +19,38 @@ public class GameManager : MonoBehaviour
         else Destroy(gameObject);
     }
 
-    void Start() =>
+    void Start()
+    {
         // Add all IPausable objects to the pausables array
         pausables = FindObjectsOfType<MonoBehaviour>(true).OfType<IPausable>();
+        
+        LoadAndApplyStatBuffs();
+        
+        return;
+        void LoadAndApplyStatBuffs()
+        {
+            string path = Application.persistentDataPath + "/statBuffs.json";
+
+            if (System.IO.File.Exists(path))
+            {
+                string                   json             = System.IO.File.ReadAllText(path);
+                List<Store.StatBuffData> statBuffDataList = JsonUtility.FromJson<Store.StatBuffDataList>(json).Buffs;
+
+                foreach (Store.StatBuffData statBuffData in statBuffDataList)
+                {
+                    ApplyStatBuff(statBuffData.StatName, statBuffData.Value);
+                }
+            }
+
+            return;
+
+            void ApplyStatBuff(string statName, float value)
+            {
+                var characterStats = Character.Stat;
+                characterStats.IncreaseStat(statName, value);
+            }
+        }
+    }
 
     public void PauseGame() => Time.timeScale = 0;
 

@@ -4,7 +4,7 @@ using UnityEngine;
 #endregion
 
 [CreateAssetMenu(fileName = "Garlic", menuName = "Items/Garlic")]
-public class Garlic : Item
+public class Garlic : WeaponItem
 {
     [Header("Effects")]
     [SerializeField] GameObject garlicEffect;

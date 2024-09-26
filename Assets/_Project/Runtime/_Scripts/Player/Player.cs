@@ -114,7 +114,7 @@ public sealed partial class Player : MonoBehaviour, IDamageable, IPausable
     {
         if (!InventoryManager.Instance) return;
 
-        Item garlic = Inventory.GetItem<Garlic>();
+        WeaponItem garlic = Inventory.GetItem<Garlic>();
 
         if (garlic)
         {
@@ -122,7 +122,7 @@ public sealed partial class Player : MonoBehaviour, IDamageable, IPausable
             Gizmos.DrawWireSphere(transform.position, garlic.Zone);
         }
 
-        Item lightningRing = Inventory.GetItem<LightningRing>();
+        WeaponItem lightningRing = Inventory.GetItem<LightningRing>();
 
         if (lightningRing)
         {
