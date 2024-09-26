@@ -2,7 +2,7 @@
 using UnityEngine;
 
 [CustomEditor(typeof(TimeManager))]
-public class RoundTimerEditor : Editor
+public class TimeManagerEditor : Editor
 {
     float newTime;
 

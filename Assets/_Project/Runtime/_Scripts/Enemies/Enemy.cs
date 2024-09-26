@@ -14,7 +14,7 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IPausable
 
     [Header("Stats")]
     [SerializeField] float health = 100;
-    [SerializeField] int maxHealth = 100;
+    [SerializeField] float maxHealth = 100;
     [SerializeField] float speed = 3;
 
     [Header("Experience")]
@@ -161,15 +161,23 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IPausable
         }
     }
 
-    public int MaxHealth
+    public float MaxHealth
     {
-        get => maxHealth;
+        get
+        {
+            if (InventoryManager.Instance) return maxHealth * Character.Stat.Curse;
+            return maxHealth; 
+        }
         set => maxHealth = value;
     }
 
     public float Speed
     {
-        get => speed;
+        get
+        {
+            if (InventoryManager.Instance) return speed * Character.Stat.Curse;
+            return speed;
+        }
         set => speed = value;
     }
 

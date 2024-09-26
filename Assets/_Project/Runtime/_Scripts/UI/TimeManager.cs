@@ -91,13 +91,13 @@ public class TimeManager : MonoBehaviour
     #region Timer Methods
     void IncreaseTime(float delta)
     {
-        currentTime = currentTime + delta;
+        currentTime += delta;
         if (hasTimeLimit && currentTime > timeLimit) currentTime = timeLimit;
     }
 
     void DecreaseTime(float delta)
     {
-        currentTime = currentTime - delta;
+        currentTime -= delta;
         if (currentTime < 0.0f) currentTime                      = 0.0f;
         if (hasTimeLimit && currentTime < timeLimit) currentTime = timeLimit;
     }

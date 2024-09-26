@@ -6,6 +6,7 @@ using UnityEngine;
 public class StatBuff : ScriptableObject
 {
     [SerializeField] int maxLevel = 5;
+    [NonReorderable]
     [SerializeField] List<float> levelValues;
 
     public int MaxLevel => maxLevel;
@@ -21,21 +22,12 @@ public class StatBuff : ScriptableObject
         return levelValues[level - 1];
     }
 
-    void OnEnable()
-    {
-        if (levelValues.Count == 0)
-        {
-            // Initialize levelValues list with the maxLevel value
-            for (int i = 0; i < maxLevel; i++) { levelValues.Add(0); }
-        }
-    }
-
     void OnValidate()
     {
         if (levelValues.Count > maxLevel)
         {
-            Debug.LogWarning("levelValues list is capped at 5. Removing excess values.");
-            levelValues.RemoveRange(5, levelValues.Count - 5);
+            Debug.LogWarning("The levelValues list is longer than the maxLevel value. Trimming the list to match the maxLevel value.");
+            levelValues.RemoveRange(maxLevel, levelValues.Count - maxLevel);
         }
     }
 }
