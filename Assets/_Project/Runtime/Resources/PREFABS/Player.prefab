@@ -29,6 +29,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 775108880242485112}
   - {fileID: 7699000194800846499}
   m_Father: {fileID: 4143174465472440822}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -225,14 +226,6 @@ MonoBehaviour:
     m_ActionName: Player/Move[/Keyboard/w,/Keyboard/upArrow,/Keyboard/s,/Keyboard/downArrow,/Keyboard/a,/Keyboard/leftArrow,/Keyboard/d,/Keyboard/rightArrow]
   - m_PersistentCalls:
       m_Calls: []
-    m_ActionId: 3c3cf7eb-b52b-4913-87a6-402f5012020c
-    m_ActionName: Player/Look[/Mouse/delta]
-  - m_PersistentCalls:
-      m_Calls: []
-    m_ActionId: f5f2a111-9176-49a7-9e91-687e591a2954
-    m_ActionName: Player/Fire[/Mouse/leftButton]
-  - m_PersistentCalls:
-      m_Calls: []
     m_ActionId: cbcae8ca-d1ad-4a1a-bea8-506ef6c49951
     m_ActionName: UI/Navigate[/Keyboard/w,/Keyboard/upArrow,/Keyboard/s,/Keyboard/downArrow,/Keyboard/a,/Keyboard/leftArrow,/Keyboard/d,/Keyboard/rightArrow]
   - m_PersistentCalls:
@@ -265,12 +258,12 @@ MonoBehaviour:
     m_ActionName: UI/RightClick[/Mouse/rightButton]
   - m_PersistentCalls:
       m_Calls: []
-    m_ActionId: 48d747fd-ae9f-4b32-9d6e-46f1924b6027
-    m_ActionName: UI/TrackedDevicePosition
+    m_ActionId: 774754c4-6efc-43ad-9907-330521ffbcb1
+    m_ActionName: Player/Pause[/Keyboard/escape]
   - m_PersistentCalls:
       m_Calls: []
-    m_ActionId: bab4d773-8697-4a8b-bc0c-5a15343153db
-    m_ActionName: UI/TrackedDeviceOrientation
+    m_ActionId: c9b630ae-9322-43ff-a505-c9129836fac1
+    m_ActionName: UI/Pause[/Keyboard/escape]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: Keyboard&Mouse
   m_DefaultActionMap: Player
@@ -698,9 +691,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 71b081fa0ced07740b684f4bf1b3ddaf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  health: 100
-  speed: 8
+  currentHealth: 100
+  healthRegenDelay: 3
+  baseSpeed: 5
   levelUpAura: {fileID: 7527732922416701009}
+  bloodAura: {fileID: 580510171291956200}
   onHit:
     m_PersistentCalls:
       m_Calls: []
@@ -719,10 +714,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b950967660b04140abaf887af9436faf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  character: {fileID: 0}
   inventory:
   - name: Lightning Ring
     level: 1
     item: {fileID: 11400000, guid: 525815cef62963248814760cc7e69324, type: 2}
+  onItemAdded:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!136 &8663757204412334232
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -773,6 +772,104 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 116
   m_CollisionDetection: 1
+--- !u!1001 &778699275490750318
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 6933035571393765844}
+    m_Modifications:
+    - target: {fileID: 1639086506678902, guid: 631d19474f303c2438dd37274b631d4c, type: 3}
+      propertyPath: m_Name
+      value: Blood aura
+      objectReference: {fileID: 0}
+    - target: {fileID: 1639086506678902, guid: 631d19474f303c2438dd37274b631d4c, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4437315319515158, guid: 631d19474f303c2438dd37274b631d4c, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4437315319515158, guid: 631d19474f303c2438dd37274b631d4c, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.25
+      objectReference: {fileID: 0}
+    - target: {fileID: 4437315319515158, guid: 631d19474f303c2438dd37274b631d4c, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4437315319515158, guid: 631d19474f303c2438dd37274b631d4c, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4437315319515158, guid: 631d19474f303c2438dd37274b631d4c, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4437315319515158, guid: 631d19474f303c2438dd37274b631d4c, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4437315319515158, guid: 631d19474f303c2438dd37274b631d4c, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4437315319515158, guid: 631d19474f303c2438dd37274b631d4c, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4437315319515158, guid: 631d19474f303c2438dd37274b631d4c, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4437315319515158, guid: 631d19474f303c2438dd37274b631d4c, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 198189381761195142, guid: 631d19474f303c2438dd37274b631d4c,
+        type: 3}
+      propertyPath: stopAction
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 198189381761195142, guid: 631d19474f303c2438dd37274b631d4c,
+        type: 3}
+      propertyPath: InitialModule.startSize.minScalar
+      value: 13.64
+      objectReference: {fileID: 0}
+    - target: {fileID: 199272843447730966, guid: 631d19474f303c2438dd37274b631d4c,
+        type: 3}
+      propertyPath: m_Materials.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 199697205089711870, guid: 631d19474f303c2438dd37274b631d4c,
+        type: 3}
+      propertyPath: m_Materials.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 199701917445325064, guid: 631d19474f303c2438dd37274b631d4c,
+        type: 3}
+      propertyPath: m_Materials.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 631d19474f303c2438dd37274b631d4c, type: 3}
+--- !u!198 &580510171291956200 stripped
+ParticleSystem:
+  m_CorrespondingSourceObject: {fileID: 198189381761195142, guid: 631d19474f303c2438dd37274b631d4c,
+    type: 3}
+  m_PrefabInstance: {fileID: 778699275490750318}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &775108880242485112 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4437315319515158, guid: 631d19474f303c2438dd37274b631d4c,
+    type: 3}
+  m_PrefabInstance: {fileID: 778699275490750318}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &7694452345877366639
 PrefabInstance:
   m_ObjectHideFlags: 0

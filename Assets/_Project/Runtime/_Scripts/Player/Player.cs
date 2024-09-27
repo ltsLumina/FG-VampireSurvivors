@@ -17,13 +17,16 @@ public sealed partial class Player : MonoBehaviour, IDamageable, IPausable
 
     [Space(20)]
     [Header("Effects")]
-    [SerializeField] ParticleSystem levelUpAura;
+    [SerializeField] ParticleSystem levelUpEffect;
+    [SerializeField] ParticleSystem healingEffect;
+    [SerializeField] ParticleSystem hitEffect;
+    [SerializeField] ParticleSystem deathEffect;
 
     [Header("Events")]
     [SerializeField] UnityEvent<int> onHit;
     [SerializeField] UnityEvent onDeath;
-    Healthbar healthbar;
 
+    Healthbar healthbar;
     InputManager inputManager;
     Coroutine regeneratingHealthCoroutine;
 
@@ -60,20 +63,20 @@ public sealed partial class Player : MonoBehaviour, IDamageable, IPausable
 
     void OnEnable()
     {
+        onHit.AddListener(_ => { EffectPlayer.PlayEffect(hitEffect); });
+        
         onDeath.AddListener
         (() =>
         {
+            EffectPlayer.PlayEffect(deathEffect);
+            
             StopAllCoroutines(); // TODO: This will cause issues with revival in the future.
             Logger.LogWarning("Player has died." + "\nStopping all coroutines executing on this MonoBehaviour.");
         });
 
         Experience.OnLevelUp += () =>
         {
-            EffectPlayer.PlayEffect(levelUpAura);
-            
-            // Increase player's health by 10% of their max health on level up
-            float heal = Character.Stat.MaxHealth * 0.10f;
-            CurrentHealth += heal;
+            EffectPlayer.PlayEffect(levelUpEffect);
         };
 
         UseItems(); // AttackLoop.cs
@@ -183,6 +186,8 @@ public sealed partial class Player : MonoBehaviour, IDamageable, IPausable
 
         yield return new WaitForSeconds(healthRegenDelay);
 
+        EffectPlayer.PlayEffect(healingEffect);
+        
         while (CurrentHealth < Character.Stat.MaxHealth)
         {
             float heal = Character.Stat.Recovery * Time.deltaTime;

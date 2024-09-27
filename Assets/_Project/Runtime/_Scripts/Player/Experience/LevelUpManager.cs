@@ -42,6 +42,12 @@ public class LevelUpManager : MonoBehaviour
 
     void OnEnable()
     {
+        onMenuShown.AddListener(() =>
+        {
+            float heal = Character.Stat.MaxHealth * 0.10f;
+            Player.Instance.CurrentHealth += heal;
+        });
+        
         foreach (var choice in levelUpChoices) { choice.GetComponent<Button>().onClick.AddListener(HideLevelUpMenu); }
         
         Debug.Assert(levelUpChoices.Count == 3, $"No {nameof(LevelUpChoice)}-buttons have been assigned to the {nameof(LevelUpManager)}. \nPlease assign them in the inspector.");

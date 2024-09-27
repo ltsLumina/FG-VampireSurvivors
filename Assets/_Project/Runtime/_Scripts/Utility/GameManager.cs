@@ -1,6 +1,6 @@
 #region
-using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using UnityEngine;
 #endregion
@@ -8,9 +8,9 @@ using UnityEngine;
 public class GameManager : MonoBehaviour
 {
     IEnumerable<IPausable> pausables;
-    
+
     public static GameManager Instance { get; private set; }
-    
+
     public static bool IsPaused => Time.timeScale == 0;
 
     void Awake()
@@ -31,9 +31,9 @@ public class GameManager : MonoBehaviour
         {
             string path = Application.persistentDataPath + "/statBuffs.json";
 
-            if (System.IO.File.Exists(path))
+            if (File.Exists(path) && File.ReadAllText(path) != string.Empty)
             {
-                string                   json             = System.IO.File.ReadAllText(path);
+                string                   json             = File.ReadAllText(path);
                 List<Store.StatBuffData> statBuffDataList = JsonUtility.FromJson<Store.StatBuffDataList>(json).Buffs;
 
                 foreach (Store.StatBuffData statBuffData in statBuffDataList)
