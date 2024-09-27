@@ -8,6 +8,7 @@ TagManager:
   - XP
   - Card
   - '[Header] MISC'
+  - '[Canvas] Pop-Ups Canvas'
   layers:
   - Default
   - TransparentFX

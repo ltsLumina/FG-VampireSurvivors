@@ -14,7 +14,9 @@ public class MainMenuButton : Button
     public void Settings()
     {
         Debug.Log("Opening the settings menu...");
-        FindObjectOfType<HorizontalLayoutGroup>(true).transform.parent.gameObject.SetActive(true);
+        var menu = GameObject.Find("Settings Menu");
+        menu.transform.GetChild(0).gameObject.SetActive(!menu.transform.GetChild(0).gameObject.activeSelf);
+        menu.transform.GetChild(1).gameObject.SetActive(!menu.transform.GetChild(1).gameObject.activeSelf);
     }
 
     public void QuitGame()

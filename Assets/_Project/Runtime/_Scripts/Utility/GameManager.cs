@@ -33,7 +33,7 @@ public class GameManager : MonoBehaviour
 
             if (File.Exists(path) && File.ReadAllText(path) != string.Empty)
             {
-                string                   json             = File.ReadAllText(path);
+                string json = File.ReadAllText(path);
                 List<Store.StatBuffData> statBuffDataList = JsonUtility.FromJson<Store.StatBuffDataList>(json).Buffs;
 
                 foreach (Store.StatBuffData statBuffData in statBuffDataList)

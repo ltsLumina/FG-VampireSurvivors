@@ -58,10 +58,14 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IPausable
         Init();
 
         return;
-
         void Init()
         {
-            onDeath.AddListener(() => { ExperiencePickup.Create(XPYield, transform.position, Random.rotation); });
+            onDeath.AddListener(() =>
+            {
+                ExperiencePickup.Create(XPYield, transform.position, Random.rotation);
+                int coins = Random.Range(10, 25);
+                Balance.AddCoins(coins);
+            });
 
             Agent.speed = Speed;
             transform.LookAt(Player.Instance.transform);
@@ -108,6 +112,8 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IPausable
     public void TakeDamage(float incomingDamage)
     {
         CurrentHealth -= (int) incomingDamage;
+        
+        //DamagePopUpText.Instantiate(transform, (int) incomingDamage);
         onHit?.Invoke((int) incomingDamage);
     }
 

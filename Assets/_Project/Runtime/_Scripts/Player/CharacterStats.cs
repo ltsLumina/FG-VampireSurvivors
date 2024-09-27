@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
+using VInspector;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -51,11 +52,20 @@ public class CharacterStats : ScriptableObject
 
     Dictionary<string, Action<float>> statIncreasers;
 
-    /// <summary>
-    /// The JSON file that contains the serialized power-ups.
-    /// </summary>
-    public static string PowerUpsAsJson => File.ReadAllText(Application.persistentDataPath + "/statBuffs.json");
+    [Button]
+    public void ClearJSON()
+    {
+        string path = Application.persistentDataPath + "/statBuffs.json";
 
+        if (File.Exists(path))
+        {
+            string json = File.ReadAllText(path);
+            File.WriteAllText(json, string.Empty);
+            Debug.Log("CharacterStats.json deleted.");
+        }
+        else { Debug.LogWarning("statBuffs.json not found.");}
+        }
+    
     void Reset()
     {
         maxHealth = 120;

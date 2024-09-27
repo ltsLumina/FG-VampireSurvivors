@@ -13,12 +13,16 @@ using Debug = UnityEngine.Debug;
 [ExecuteInEditMode]
 public class Store : MonoBehaviour
 {
-    [Min(0)]
-    [SerializeField] int playerCoins;
     [SerializeField] List<StatBuff> statBuffs;
     Dictionary<ShopItem, int> purchasedItems = new();
 
     List<ShopItem> shopItems;
+
+    static int coins
+    {
+        get => Balance.Coins;
+        set => Balance.Coins = value;
+    }
 
     public static List<string> StatNames { get; } = new()
     { "MaxHealth", "Recovery", "Armor", "MoveSpeed", "Strength", "Dexterity",
@@ -85,9 +89,9 @@ public class Store : MonoBehaviour
 
     void PurchaseItem(ShopItem item)
     {
-        if (playerCoins >= item.Cost)
+        if (coins >= item.Cost)
         {
-            playerCoins -= item.Cost;
+            coins -= item.Cost;
             SaveStatBuff(item);
 
             // Find the corresponding button and update its toggles

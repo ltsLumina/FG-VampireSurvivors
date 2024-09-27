@@ -47,6 +47,7 @@ MonoBehaviour:
         - GlobalObjectId_V1-2-99c9720ab356a0642a771bea13969a05-923491310-0
         - GlobalObjectId_V1-2-99c9720ab356a0642a771bea13969a05-1091990732-0
         - GlobalObjectId_V1-2-99c9720ab356a0642a771bea13969a05-987036862-0
+        - GlobalObjectId_V1-2-99c9720ab356a0642a771bea13969a05-713147113-0
         values:
         - iColor: 0
           icon: d_eyeDropper.sml
@@ -102,9 +103,175 @@ MonoBehaviour:
           icon: d_eyeDropper.sml
         - iColor: 0
           icon: d_eyeDropper.sml
+        - iColor: 0
+          icon: Canvas Icon
       goDatasByInstanceId:
-        keys: 
-        values: []
+        keys: a2920000d4930000609400009494000098920000de940000709400008a94000084920000549300008a920000c094000042940000f692000026920000f0940000a6930000c09200004e940000749300008e940000949200007c9400009c92000090930000be930000ae930000ccb00000feb100008ab20000beb20000c2b0000008b300009ab20000b4b20000aeb000007eb10000b4b00000eab200006cb2000020b1000050b000001ab30000d0b10000eab0000078b200009eb10000b8b20000beb00000a6b20000c6b00000bab10000e8b10000d8b1000032be000064bf0000f0bf000024c0000028be00006ec0000000c000001ac0000014be0000e4be00001abe000050c00000d2bf000086be0000b6bd000080c0000036bf000050be0000debf000004bf00001ec0000024be00000cc000002cbe000020bf00004ebf00003ebf00000657feff
+        values:
+        - iColor: 0
+          icon: d_eyeDropper.sml
+        - iColor: 0
+          icon: Camera Icon
+        - iColor: 0
+          icon: Camera Icon
+        - iColor: 0
+          icon: d_eyeDropper.sml
+        - iColor: 0
+          icon: d_eyeDropper.sml
+        - iColor: 0
+          icon: d_eyeDropper.sml
+        - iColor: 0
+          icon: d_eyeDropper.sml
+        - iColor: 0
+          icon: d_eyeDropper.sml
+        - iColor: 0
+          icon: d_eyeDropper.sml
+        - iColor: 0
+          icon: Canvas Icon
+        - iColor: 0
+          icon: Canvas Icon
+        - iColor: 0
+          icon: Canvas Icon
+        - iColor: 0
+          icon: Canvas Icon
+        - iColor: 0
+          icon: EventSystem Icon
+        - iColor: 0
+          icon: Settings Icon
+        - iColor: 0
+          icon: d_eyeDropper.sml
+        - iColor: 0
+          icon: d_eyeDropper.sml
+        - iColor: 0
+          icon: DirectionalLight Icon
+        - iColor: 0
+          icon: DirectionalLight Icon
+        - iColor: 0
+          icon: PreMatSphere
+        - iColor: 0
+          icon: PreMatCube
+        - iColor: 0
+          icon: PreMatQuad
+        - iColor: 0
+          icon: PreMatQuad
+        - iColor: 0
+          icon: PreMatQuad
+        - iColor: 0
+          icon: 
+        - iColor: 0
+          icon: d_eyeDropper.sml
+        - iColor: 0
+          icon: d_eyeDropper.sml
+        - iColor: 0
+          icon: d_eyeDropper.sml
+        - iColor: 0
+          icon: Camera Icon
+        - iColor: 0
+          icon: Camera Icon
+        - iColor: 0
+          icon: d_eyeDropper.sml
+        - iColor: 0
+          icon: d_eyeDropper.sml
+        - iColor: 0
+          icon: d_eyeDropper.sml
+        - iColor: 0
+          icon: d_eyeDropper.sml
+        - iColor: 0
+          icon: d_eyeDropper.sml
+        - iColor: 0
+          icon: d_eyeDropper.sml
+        - iColor: 0
+          icon: Canvas Icon
+        - iColor: 0
+          icon: Canvas Icon
+        - iColor: 0
+          icon: Canvas Icon
+        - iColor: 0
+          icon: Canvas Icon
+        - iColor: 0
+          icon: EventSystem Icon
+        - iColor: 0
+          icon: Settings Icon
+        - iColor: 0
+          icon: d_eyeDropper.sml
+        - iColor: 0
+          icon: d_eyeDropper.sml
+        - iColor: 0
+          icon: DirectionalLight Icon
+        - iColor: 0
+          icon: DirectionalLight Icon
+        - iColor: 0
+          icon: PreMatSphere
+        - iColor: 0
+          icon: PreMatCube
+        - iColor: 0
+          icon: PreMatQuad
+        - iColor: 0
+          icon: PreMatQuad
+        - iColor: 0
+          icon: PreMatQuad
+        - iColor: 0
+          icon: 
+        - iColor: 0
+          icon: d_eyeDropper.sml
+        - iColor: 0
+          icon: d_eyeDropper.sml
+        - iColor: 0
+          icon: d_eyeDropper.sml
+        - iColor: 0
+          icon: Camera Icon
+        - iColor: 0
+          icon: Camera Icon
+        - iColor: 0
+          icon: d_eyeDropper.sml
+        - iColor: 0
+          icon: d_eyeDropper.sml
+        - iColor: 0
+          icon: d_eyeDropper.sml
+        - iColor: 0
+          icon: d_eyeDropper.sml
+        - iColor: 0
+          icon: d_eyeDropper.sml
+        - iColor: 0
+          icon: d_eyeDropper.sml
+        - iColor: 0
+          icon: Canvas Icon
+        - iColor: 0
+          icon: Canvas Icon
+        - iColor: 0
+          icon: Canvas Icon
+        - iColor: 0
+          icon: Canvas Icon
+        - iColor: 0
+          icon: EventSystem Icon
+        - iColor: 0
+          icon: Settings Icon
+        - iColor: 0
+          icon: d_eyeDropper.sml
+        - iColor: 0
+          icon: d_eyeDropper.sml
+        - iColor: 0
+          icon: DirectionalLight Icon
+        - iColor: 0
+          icon: DirectionalLight Icon
+        - iColor: 0
+          icon: PreMatSphere
+        - iColor: 0
+          icon: PreMatCube
+        - iColor: 0
+          icon: PreMatQuad
+        - iColor: 0
+          icon: PreMatQuad
+        - iColor: 0
+          icon: PreMatQuad
+        - iColor: 0
+          icon: 
+        - iColor: 0
+          icon: d_eyeDropper.sml
+        - iColor: 0
+          icon: d_eyeDropper.sml
+        - iColor: 0
+          icon: Canvas Icon
     - goDatasByGlobalId:
         keys: []
         values: []
@@ -130,8 +297,28 @@ MonoBehaviour:
         - iColor: 0
           icon: Canvas Icon
       goDatasByInstanceId:
-        keys: 2c860000208700000e8700006c87000038daffff
+        keys: 068700004e8a00003c8a0000608b0000c08b00001a9600006299000050990000749a0000d49a0000f8b3000040b700002eb7000052b80000b2b80000
         values:
+        - iColor: 0
+          icon: EventSystem Icon
+        - iColor: 0
+          icon: Canvas Icon
+        - iColor: 0
+          icon: Canvas Icon
+        - iColor: 0
+          icon: Canvas Icon
+        - iColor: 0
+          icon: Canvas Icon
+        - iColor: 0
+          icon: EventSystem Icon
+        - iColor: 0
+          icon: Canvas Icon
+        - iColor: 0
+          icon: Canvas Icon
+        - iColor: 0
+          icon: Canvas Icon
+        - iColor: 0
+          icon: Canvas Icon
         - iColor: 0
           icon: EventSystem Icon
         - iColor: 0
