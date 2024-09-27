@@ -152,6 +152,10 @@ public sealed partial class Player : MonoBehaviour, IDamageable, IPausable
 
                 Death();
             }
+            else if (Mathf.Approximately(currentHealth, Character.Stat.MaxHealth))
+            {
+                healingEffect.gameObject.SetActive(false);
+            }
         }
     }
 

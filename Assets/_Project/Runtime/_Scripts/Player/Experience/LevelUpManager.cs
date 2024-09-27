@@ -57,6 +57,8 @@ public class LevelUpManager : MonoBehaviour
     {
         if (levelUpMenu.gameObject.activeSelf) return;
 
+        Cursor.visible = true;
+
         PopulateLevelUpChoices();
 
         AnimateMenu(levelUpMenu, Vector3.one, 0.5f, 0.5f, true);

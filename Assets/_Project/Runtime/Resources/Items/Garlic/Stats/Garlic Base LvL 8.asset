@@ -13,6 +13,5 @@ MonoBehaviour:
   m_Name: Garlic Base LvL 8
   m_EditorClassIdentifier: 
   damage: 200
-  speed: 0.25
-  duration: 0
-  area: 15
+  cooldown: 0
+  zone: 5

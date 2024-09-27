@@ -19,8 +19,6 @@ public class LevelUpChoice : MonoBehaviour
 
     Button button;
 
-    public Item Item => item;
-
     void Awake()
     {
         button = GetComponent<Button>();

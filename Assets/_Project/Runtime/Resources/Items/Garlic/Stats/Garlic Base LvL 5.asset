@@ -13,6 +13,5 @@ MonoBehaviour:
   m_Name: Garlic Base LvL 5
   m_EditorClassIdentifier: 
   damage: 65
-  speed: 0.75
-  duration: 0
-  area: 10
+  cooldown: 0
+  zone: 5
