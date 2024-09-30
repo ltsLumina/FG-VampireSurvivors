@@ -21,7 +21,7 @@ public class InventoryEditor : Editor
         DrawDefaultInspector();
 
         var inventoryManager = (InventoryManager) target;
-
+        
         using (new GUILayout.HorizontalScope("box"))
         {
             objectField = EditorGUILayout.ObjectField("Item", objectField, typeof(Item), false, GUILayout.ExpandWidth(true));

@@ -14,8 +14,14 @@ using Debug = UnityEngine.Debug;
 public class Store : MonoBehaviour
 {
     [SerializeField] List<StatBuff> statBuffs;
-    Dictionary<ShopItem, int> purchasedItems = new();
 
+    /// <summary>
+    ///     Contains the name and cost of the item.
+    /// <para></para>
+    ///     <para>Key: Item name</para>
+    ///     <para>Value: Item cost</para>
+    /// </summary>
+    readonly Dictionary<ShopItem, int> purchasedItems = new();
     List<ShopItem> shopItems;
 
     static int coins
@@ -31,16 +37,6 @@ public class Store : MonoBehaviour
 
     void Start()
     {
-        // // Initialize shop items
-        // shopItems = new()
-        // {
-        //     new(nameof(Character.Stat.Strength), 100),
-        //     new(nameof(Character.Stat.Dexterity), 100),
-        //     new(nameof(Character.Stat.Intelligence), 100),
-        //     new (nameof(Character.Stat.Wisdom), 100),
-        //
-        // };
-
         // Initialize shop items
         shopItems = StatNames.Select(statName => new ShopItem(statName, 100)).ToList();
         statBuffs = Resources.LoadAll<StatBuff>("Stat Buffs").ToList();
@@ -96,16 +92,37 @@ public class Store : MonoBehaviour
 
             // Find the corresponding button and update its toggles
             var button = GetComponentsInChildren<StatBuffUIButton>().FirstOrDefault(b => b.name == item.Name);
-
             if (button == null) return;
+
             var statBuffData = LoadStatBuffData(item.Name);
             if (statBuffData  == null) return;
             for (int i = 0; i < statBuffData.Level; i++) { button.Toggles[i].isOn = true; }
             button.SetToggle(item.Name, statBuffData.Level);
+            
+            // Update the purchased items
+            if (!purchasedItems.TryAdd(item, 1)) purchasedItems[item]++;
+            Debug.Log($"Purchased {item.Name} for {item.Cost} coins.");
+            Debug.Log("Total cost of purchased items: " + purchasedItems.Sum(i => i.Value * shopItems.First(s => s.Name == i.Key.Name).Cost));
         }
         else { Debug.Log("Not enough coins!"); }
     }
 
+    public void RefundPurchases()
+    {
+        foreach (var item in purchasedItems.ToList())
+        {
+            // Refund the coins and reset the purchased items
+            coins += item.Value * shopItems.First(i => i.Name == item.Key.Name).Cost;
+            purchasedItems[item.Key] =  0;
+
+            // Find the corresponding button and update its toggles
+            var button = GetComponentsInChildren<StatBuffUIButton>().FirstOrDefault(b => b.name == item.Key.Name);
+            if (button == null) continue;
+
+            foreach (StatBuffUIToggle toggle in button.Toggles) { toggle.isOn = false; }
+        }
+    }
+    
     public static StatBuffData LoadStatBuffData(string statName)
     {
         string path = Application.persistentDataPath + "/statBuffs.json";

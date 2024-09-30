@@ -192,7 +192,7 @@ public abstract class Item : ScriptableObject
         }
 
         [Header("Item Stats")]
-        [SerializeField, HideInInspector, UsedImplicitly] // The name field is used to rename the "Element X" in the inspector to match the item level
+        [HideInInspector, UsedImplicitly] // The name field is used to rename the "Element X" in the inspector to match the item level
         public string name;
 
         [HideInInspector]

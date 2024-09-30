@@ -1,6 +1,3 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -11,13 +8,14 @@ using UnityEngine.UI;
 [ExecuteInEditMode]
 public class CoinText : TextMeshProUGUI
 {
-    Image icon;
-
+    [SerializeField] bool prepend;
+    [SerializeField] Image icon;
+    
     void Update()
     {
-        text = $"Coins: {Balance.Coins}";
+        text = prepend ? $"Coins: {Balance.Coins}" : $"{Balance.Coins}";
         // move the icon inline with the length of the text
-        icon = GetComponentInChildren<Image>();
-        icon.rectTransform.anchoredPosition = new Vector2(preferredWidth + 35, -20);
+        if (!icon) return;
+        icon.rectTransform.anchoredPosition = new (preferredWidth + 35, -20);
     }
 }

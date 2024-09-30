@@ -59,12 +59,11 @@ public class CharacterStats : ScriptableObject
 
         if (File.Exists(path))
         {
-            string json = File.ReadAllText(path);
-            File.WriteAllText(json, string.Empty);
-            Debug.Log("CharacterStats.json deleted.");
+            File.WriteAllText(path, string.Empty);
+            Debug.Log("statBuffs.json cleared!");
         }
-        else { Debug.LogWarning("statBuffs.json not found.");}
-        }
+        else { Debug.Log("statBuffs.json not found!"); }
+    }
     
     void Reset()
     {
