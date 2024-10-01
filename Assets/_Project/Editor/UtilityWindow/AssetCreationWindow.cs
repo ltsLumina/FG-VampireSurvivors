@@ -15,15 +15,16 @@ public class AssetCreationWindow : EditorWindow
 
     public static Action activeMenu;
     public static bool createdSuccessfully;
+    Vector2 scrollPos;
 
-    [MenuItem("Tools/Character Menu")]
+    [MenuItem("Tools/Create Asset Menu")]
     public static void Open()
     {
         if (window) { window.Focus(); }
         else
         {
             window              = GetWindow<AssetCreationWindow>(true);
-            window.titleContent = new ("Utility Window");
+            window.titleContent = new ("Create Assets...");
             window.minSize      = new (winSize.x, winSize.y / 2);
             window.Show();
         }
@@ -39,7 +40,13 @@ public class AssetCreationWindow : EditorWindow
         activeMenu ??= DefaultMenu;
     }
 
-    void OnGUI() => activeMenu();
+    void OnGUI()
+    {
+        using var scrollView = new ScrollViewScope(scrollPos);
+
+        scrollPos = scrollView.scrollPosition;
+        activeMenu();
+    }
 
     #region GUI
     public static void DefaultMenu()

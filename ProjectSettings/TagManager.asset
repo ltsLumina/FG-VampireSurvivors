@@ -9,6 +9,8 @@ TagManager:
   - Card
   - '[Header] MISC'
   - '[Canvas] Pop-Ups Canvas'
+  - '[Canvas] Game-Over Canvas'
+  - '[Canvas] Results Canvas'
   layers:
   - Default
   - TransparentFX

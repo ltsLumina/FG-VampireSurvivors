@@ -8,6 +8,8 @@ public class Knife : WeaponItem
 {
     [Header("Knife")]
     [SerializeField] GameObject knifePrefab;
+    [SerializeField] float velocity = 10f;
+    [SerializeField] int numShots = 30;
 
     public override void Use()
     {
@@ -27,7 +29,7 @@ public class Knife : WeaponItem
 
         GameObject knife = Instantiate(knifePrefab, Player.Instance.transform.position + offset, Quaternion.identity);
         knife.transform.rotation = Quaternion.LookRotation(shootDir);
-        knife.GetComponent<Rigidbody>().AddForce(shootDir * Character.Stat.Dexterity, ForceMode.Impulse);
+        knife.GetComponent<Rigidbody>().AddForce(shootDir * (velocity * Character.Stat.Dexterity), ForceMode.Impulse);
         
         Destroy(knife, 3f * Character.Stat.Intelligence);
     }
@@ -43,7 +45,6 @@ public class Knife : WeaponItem
 
     IEnumerator CardEffect()
     {
-        int   numShots  = 25;
         float angleStep = 360f / numShots;
         float angle     = 0f;
 

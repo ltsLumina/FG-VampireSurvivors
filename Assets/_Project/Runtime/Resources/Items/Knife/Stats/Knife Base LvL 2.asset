@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: Knife Base LvL 2
   m_EditorClassIdentifier: 
   damage: 100
-  cooldown: 1
+  cooldown: 0.95
   zone: 0

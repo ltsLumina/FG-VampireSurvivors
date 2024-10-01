@@ -172,7 +172,7 @@ public sealed partial class Player : MonoBehaviour, IDamageable, IPausable
     #region Health/Damage
     public void TakeDamage(float damage)
     {
-        if (CurrentHealth <= 0) return;
+        if (IsDead) return;
 
         CurrentHealth -= (int) damage - Character.Stat.Armor;
         onHit?.Invoke((int) damage);
@@ -186,7 +186,11 @@ public sealed partial class Player : MonoBehaviour, IDamageable, IPausable
 
     IEnumerator RegenerateHealth()
     {
-        if (CurrentHealth >= Character.Stat.MaxHealth) yield break;
+        if (IsDead)
+        {
+            StopCoroutine(RegenerateHealth());
+            yield break;
+        }
 
         yield return new WaitForSeconds(healthRegenDelay);
 
@@ -203,9 +207,9 @@ public sealed partial class Player : MonoBehaviour, IDamageable, IPausable
     void Death()
     {
         Debug.Log("Player has died.");
-        enabled = false;
-
         onDeath?.Invoke();
+
+        enabled = false;
     }
     #endregion
 }

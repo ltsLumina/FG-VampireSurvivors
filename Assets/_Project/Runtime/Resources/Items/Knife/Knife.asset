@@ -57,5 +57,6 @@ MonoBehaviour:
     baseStats: {fileID: 11400000, guid: 207e9dbff5a689143a0ac001a7dfb3ef, type: 2}
     itemSpecificStats: {fileID: 11400000, guid: 4f49074f112dfd742ab818d19feb5449,
       type: 2}
+  velocity: 10
   knifePrefab: {fileID: 6277208900379832256, guid: c31f913ae8372f24aaa37a15081505ce,
     type: 3}

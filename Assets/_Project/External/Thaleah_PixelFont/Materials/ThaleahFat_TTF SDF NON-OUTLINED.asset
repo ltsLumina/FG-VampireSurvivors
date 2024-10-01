@@ -11,8 +11,7 @@ Material:
   m_Shader: {fileID: 4800000, guid: 68e6db2ebdc24f95958faec2be5558d6, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
-  m_ValidKeywords:
-  - UNDERLAY_ON
+  m_ValidKeywords: []
   m_InvalidKeywords: []
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
@@ -119,11 +118,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 71c1514a6bd24e1e882cebbe1904ce04, type: 3}
-  m_Name: ThaleahFat_TTF SDF
+  m_Name: ThaleahFat_TTF SDF NON-OUTLINED
   m_EditorClassIdentifier: 
-  hashCode: -1830451546
+  hashCode: 1396388352
   material: {fileID: -7526973247068231971}
-  materialHashCode: -974045242
+  materialHashCode: -1750401632
   m_Version: 1.1.0
   m_SourceFontFileGUID: 585188cdc4600544eb408bee749e4b3a
   m_SourceFontFile_EditorRef: {fileID: 12800000, guid: 585188cdc4600544eb408bee749e4b3a,

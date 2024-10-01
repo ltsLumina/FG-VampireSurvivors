@@ -144,7 +144,7 @@ public class CharacterStats : ScriptableObject
     [Multiplier]
     public float Strength => strength;
     /// <summary>
-    ///     Speed
+    ///     (Projectile) Speed
     /// </summary>
     [Multiplier]
     public float Dexterity => dexterity;

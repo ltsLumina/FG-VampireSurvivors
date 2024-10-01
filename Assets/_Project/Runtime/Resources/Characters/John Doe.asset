@@ -14,5 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   characterName: John Doe
   description: Grants +10% damage per level (not)
-  startingItem: {fileID: 11400000, guid: 525815cef62963248814760cc7e69324, type: 2}
+  startingItem: {fileID: 11400000, guid: cb232441d14236a4c926f8070ded54ee, type: 2}
   stats: {fileID: 11400000, guid: 4f223a12ac71edc47a0f2bf82e906330, type: 2}

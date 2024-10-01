@@ -11,7 +11,7 @@ public class MainMenuButton : Button
         SceneManagerExtended.LoadScene(1);
     }
 
-    public void Settings()
+    public void Settings() // TODO: this is horrendous
     {
         Debug.Log("Opening the settings menu...");
         var menu = GameObject.Find("Settings Menu");
