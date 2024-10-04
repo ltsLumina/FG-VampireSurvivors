@@ -29,5 +29,8 @@ public static class Balance
     public static void RemoveCoins(int amount) => coins -= amount;
     
     [UsedImplicitly]
-    public static void EDITOR_SetCoins() => Coins = 99999;
+    public static void EDITOR_SetCoinsMAX() => Coins = 99999;
+    
+    [UsedImplicitly]
+    public static void EDITOR_ResetCoins() => Coins = 0;
 }

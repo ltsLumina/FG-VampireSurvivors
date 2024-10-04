@@ -10,9 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ab00a3501329412599c6f6ec780f55b1, type: 3}
-  m_Name: Cooldown
+  m_Name: Greed
   m_EditorClassIdentifier: 
-  maxLevel: 2
+  maxLevel: 5
   levelValues:
-  - 0.05
-  - 0.05
+  - 0.1
+  - 0.1
+  - 0.1
+  - 0.1
+  - 0.1

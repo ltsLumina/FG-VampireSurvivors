@@ -35,6 +35,8 @@ public sealed partial class Player : MonoBehaviour, IDamageable, IPausable
     public static bool IsDead => Instance.CurrentHealth <= 0;
 
     public static Vector3 Position => Instance.transform.position;
+    
+    public static int EnemiesDefeated { get; set; }
 
     void Awake()
     {
@@ -209,7 +211,7 @@ public sealed partial class Player : MonoBehaviour, IDamageable, IPausable
         Debug.Log("Player has died.");
         onDeath?.Invoke();
 
-        enabled = false;
+        Pause();
     }
     #endregion
 }

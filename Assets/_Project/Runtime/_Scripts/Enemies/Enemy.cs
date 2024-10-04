@@ -65,7 +65,10 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IPausable
             {
                 ExperiencePickup.Create(XPYield, transform.position, Random.rotation);
                 int coins = Random.Range(10, 25);
+                coins = Mathf.RoundToInt(coins * (1 + Character.Stat.Greed));
                 Balance.AddCoins(coins);
+                ResultStats.SetResults(ResultStats.Stats.GoldEarned, Balance.Coins);
+                ResultStats.SetResults(ResultStats.Stats.EnemiesDefeated, Player.EnemiesDefeated);
             });
 
             Agent.speed = Speed;
@@ -149,6 +152,8 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IPausable
         StopAllCoroutines();
 
         onDeath?.Invoke();
+
+        Player.EnemiesDefeated++;
     }
 
     #region Enemy Properties

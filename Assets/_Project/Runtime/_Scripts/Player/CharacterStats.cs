@@ -85,7 +85,7 @@ public class CharacterStats : ScriptableObject
         luck   = 1.30f; // 30% luck
         growth = 1.15f; // 15% growth
 
-        //greed = 0;
+        greed = 0;
         curse = 0;
 
         reroll = 0; // Will be increased by the store/upgrades
@@ -105,12 +105,13 @@ public class CharacterStats : ScriptableObject
           { "Dexterity", value => dexterity       *= 1 + value },
           { "Intelligence", value => intelligence *= 1 + value },
           { "Wisdom", value => wisdom             *= 1 + value },
-          { "Cooldown", value => cooldown         *= 1 - value },
+          { "Cooldown", value => cooldown         -= value },
           { "Amount", value => amount             += (int) value },
           { "Revival", value => revival           += (int) value },
           { "Magnet", value => magnet             *= 1 + value },
           { "Luck", value => luck                 *= 1 + value },
           { "Growth", value => growth             *= 1 + value },
+          { "Greed", value => greed               *= 1 + value },
           { "Curse", value => curse               *= 1 + value },
           { "Reroll", value => reroll             += (int) value },
           { "Skip", value => skip                 += (int) value },
@@ -158,7 +159,7 @@ public class CharacterStats : ScriptableObject
     /// </summary>
     [Multiplier]
     public float Wisdom => wisdom;
-    [Multiplier]
+    [Value]
     public float Cooldown => cooldown;
     [Value]
     public int Amount => amount;
@@ -191,6 +192,9 @@ public class CharacterStats : ScriptableObject
             return modifiedGrowth;
         }
     }
+    
+    [Multiplier]
+    public float Greed => greed;
 
     [Multiplier]
     public float Curse

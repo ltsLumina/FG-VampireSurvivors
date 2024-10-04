@@ -1,18 +1,17 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
-[CreateAssetMenu(fileName = "Wave", menuName = "Wave")]
 public class Wave : ScriptableObject
 {
     [SerializeField] List<EnemyGroup> enemyGroup;
 
     public List<EnemyGroup> EnemyGroups => enemyGroup;
 
-    public void Spawn()
+    public void Spawn(bool delayed = false)
     {
-        // Assuming you have a reference to the player
         GameObject player = GameObject.FindWithTag("Player");
 
         if (player == null)
@@ -21,24 +20,52 @@ public class Wave : ScriptableObject
             return;
         }
 
-        Vector3 playerPosition = player.transform.position;
-        float   spawnDistance  = 25f; // Distance from the player to spawn enemies
+        float[] spawnDistances = { 50, 75, 100 };
+        float spawnDistance = Random.Range(spawnDistances[0], spawnDistances[^1]);
 
+        if (!delayed) SpawnWithoutDelay(player, spawnDistance);
+        else player.GetComponent<MonoBehaviour>().StartCoroutine(SpawnEnemiesWithDelay(player, spawnDistance));
+    }
+    
+    void SpawnWithoutDelay(GameObject player, float spawnDistance)
+    {
         foreach (EnemyGroup group in enemyGroup)
         {
             for (int i = 0; i < group.amount * Character.Stat.Curse; i++)
             {
-                // Find the correct pool for the current wave
                 var pool = EnemySpawner.Pools.Find(pool => pool.GetPooledObjectPrefab() == group.enemy.gameObject && pool.name.Contains(name));
+
                 if (pool)
                 {
-                    // Calculate a random direction and spawn position
                     Vector2 randomDirection = Random.insideUnitCircle.normalized;
-                    Vector3 spawnPosition   = playerPosition + new Vector3(randomDirection.x, 0, randomDirection.y) * spawnDistance;
+                    Vector3 spawnPosition   = player.transform.position + new Vector3(randomDirection.x, 0, randomDirection.y) * spawnDistance;
 
-                    // Spawn enemy
                     GameObject enemy = pool.GetPooledObject(true);
                     enemy.transform.position = spawnPosition;
+                }
+                else { Debug.LogError($"No pool found for enemy {group.enemy.name} in wave {name}"); }
+            }
+        }
+    }
+
+    IEnumerator SpawnEnemiesWithDelay(GameObject player, float spawnDistance)
+    {
+        foreach (EnemyGroup group in enemyGroup)
+        {
+            for (int i = 0; i < group.amount * Character.Stat.Curse; i++)
+            {
+                var pool = EnemySpawner.Pools.Find(pool => pool.GetPooledObjectPrefab() == group.enemy.gameObject && pool.name.Contains(name));
+
+                if (pool)
+                {
+                    Vector2 randomDirection = Random.insideUnitCircle.normalized;
+                    Vector3 spawnPosition   = player.transform.position + new Vector3(randomDirection.x, 0, randomDirection.y) * spawnDistance;
+
+                    GameObject enemy = pool.GetPooledObject(true);
+                    enemy.transform.position = spawnPosition;
+
+                    // Add a delay between spawns
+                    yield return new WaitForSeconds(0.5f); // Adjust the delay as needed
                 }
                 else { Debug.LogError($"No pool found for enemy {group.enemy.name} in wave {name}"); }
             }

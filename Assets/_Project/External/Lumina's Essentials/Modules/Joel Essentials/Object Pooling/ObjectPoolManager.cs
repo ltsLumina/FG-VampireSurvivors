@@ -1,10 +1,20 @@
 #region
 using System.Collections.Generic;
+using UnityEditor;
+using UnityEditor.SceneManagement;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 #endregion
 
 public static class ObjectPoolManager
 {
+    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
+    static void OnSceneLoaded() // Clear the object pools when the scene is loaded.
+    {
+        objectPools.Clear();
+        ObjectPoolLookup.Clear();
+    }
+    
     readonly static List<ObjectPool> objectPools = new ();
 
     static Transform objectPoolParent;

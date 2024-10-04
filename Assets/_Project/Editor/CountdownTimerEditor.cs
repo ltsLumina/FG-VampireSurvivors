@@ -1,8 +1,8 @@
 ﻿using UnityEditor;
 using UnityEngine;
 
-[CustomEditor(typeof(TimeManager))]
-public class TimeManagerEditor : Editor
+[CustomEditor(typeof(CountdownTimer))]
+public class CountdownTimerEditor : Editor
 {
     float newTime;
 
@@ -10,7 +10,7 @@ public class TimeManagerEditor : Editor
     {
         base.OnInspectorGUI();
 
-        var timer = (TimeManager) target;
+        var timer = (CountdownTimer) target;
 
         GUILayout.Space(20);
 

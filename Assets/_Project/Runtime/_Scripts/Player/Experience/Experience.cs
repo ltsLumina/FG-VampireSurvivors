@@ -7,7 +7,9 @@ using UnityEngine;
 public static class Experience
 {
     public delegate void GainedXP(int amount);
+    public static event GainedXP OnGainedXP;
     public delegate void LevelUp();
+    public static event LevelUp OnLevelUp;
     static int xp;
 
     readonly static XPBreakpoints breakpointsSO;
@@ -80,9 +82,6 @@ public static class Experience
         ResetLevel();
         ResetXPToLevelUp();
     }
-
-    public static event GainedXP OnGainedXP;
-    public static event LevelUp OnLevelUp;
 
 #if UNITY_EDITOR
     public static void EDITOR_GainLevel()

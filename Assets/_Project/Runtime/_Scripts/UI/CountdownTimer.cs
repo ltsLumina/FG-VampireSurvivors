@@ -5,7 +5,7 @@ using TMPro;
 using UnityEngine;
 #endregion
 
-public class TimeManager : MonoBehaviour
+public class CountdownTimer : MonoBehaviour
 {
     [Header("Reference"), Space(10), ReadOnly]
     [SerializeField] TextMeshProUGUI timerText;
@@ -34,7 +34,7 @@ public class TimeManager : MonoBehaviour
     public static event TimerEnded OnTimerEnded;
     
     // -- Properties --
-    public static TimeManager Instance { get; private set; }
+    public static CountdownTimer Instance { get; private set; }
     public TimeSpan Time
     {
         get => TimeSpan.FromSeconds(currentTime);
@@ -70,7 +70,6 @@ public class TimeManager : MonoBehaviour
         TimerFinished();
 
         return;
-
         void TimerFinished()
         {
             // do timer finished stuff
@@ -80,7 +79,7 @@ public class TimeManager : MonoBehaviour
 
     void Update()
     {
-        if (timerText == null) return;
+        if (timerText == null || Finished) return;
 
         if (countdownMode) DecreaseTime(UnityEngine.Time.deltaTime);
         else IncreaseTime(UnityEngine.Time.deltaTime);
@@ -136,5 +135,12 @@ public class TimeManager : MonoBehaviour
                 break;
             }
         }
+    }
+
+    public void StopTimer()
+    {
+        Finished = true;
+        OnTimerEnded?.Invoke();
+        Debug.Log("Timer has been stopped.");
     }
 }

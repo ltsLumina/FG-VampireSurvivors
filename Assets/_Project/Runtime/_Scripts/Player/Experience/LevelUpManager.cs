@@ -36,7 +36,11 @@ public class LevelUpManager : MonoBehaviour
 
     void Start()
     {
+        gameObject.SetActive(true);
         levelUpMenu.localScale = Vector3.zero;
+        
+        // Set the canvas to be active, but the menu to be inactive.
+        gameObject.SetActive(true);
         levelUpMenu.gameObject.SetActive(false);
     }
 

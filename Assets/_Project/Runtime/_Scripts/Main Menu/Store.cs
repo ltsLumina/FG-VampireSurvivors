@@ -24,6 +24,9 @@ public class Store : MonoBehaviour
     readonly Dictionary<ShopItem, int> purchasedItems = new();
     List<ShopItem> shopItems;
 
+    /// <summary>
+    /// The current amount of coins the player has.
+    /// </summary>
     static int coins
     {
         get => Balance.Coins;
@@ -33,10 +36,13 @@ public class Store : MonoBehaviour
     public static List<string> StatNames { get; } = new()
     { "MaxHealth", "Recovery", "Armor", "MoveSpeed", "Strength", "Dexterity",
       "Intelligence", "Wisdom", "Cooldown", "Amount", "Revival", "Magnet",
-      "Luck", "Growth", "Curse", "Reroll", "Skip", "Banish" };
+      "Luck", "Growth", "Greed", "Curse", "Reroll", "Skip", "Banish" };
 
     void Start()
     {
+        // hide on play
+        if (Application.isPlaying) gameObject.SetActive(false);
+        
         // Initialize shop items
         shopItems = StatNames.Select(statName => new ShopItem(statName, 100)).ToList();
         statBuffs = Resources.LoadAll<StatBuff>("Stat Buffs").ToList();

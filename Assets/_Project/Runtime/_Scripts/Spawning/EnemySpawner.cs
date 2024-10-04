@@ -1,5 +1,6 @@
 // EnemySpawner.cs
 #region
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using JetBrains.Annotations;
@@ -44,6 +45,30 @@ public class EnemySpawner : MonoBehaviour, IPausable
         set => waves = value;
     }
 
+    #region Skip Wave Button
+    [Button("Skip Wave")]
+    [UsedImplicitly]
+    public void SkipWave()
+    {
+        int currentMinute = CountdownTimer.Instance.Time.Minutes;
+        int nextMinute    = currentMinute + 1;
+        CountdownTimer.Instance.AddTime(60);
+
+        if (nextMinute < waves.Count)
+        {
+            // Cancel the current InvokeRepeating
+            CancelInvoke(nameof(SpawnWaves));
+
+            // Spawn the next wave
+            waves[nextMinute].Spawn();
+            Debug.Log("Spawning wave " + waves[nextMinute].name);
+
+            // Re-invoke the SpawnWaves method to continue spawning waves every 60 seconds
+            InvokeRepeating(nameof(SpawnWaves), 60f - CountdownTimer.Instance.Time.Seconds, 60f);
+        }
+    }
+    #endregion
+
     void Awake()
     {
         Pools.Clear(); // Clear the pools list in case it's not empty. This prevents errors when using Unity Editor Mode options.
@@ -64,9 +89,12 @@ public class EnemySpawner : MonoBehaviour, IPausable
     void Start()
     {
         Debug.Assert(waves.Count > 0, "No waves have been set up in the EnemySpawner.");
-
-        // Start spawning waves every 60 seconds. (Also spawn the first wave immediately.)
-        InvokeRepeating(nameof(SpawnWaves), 0f, 60f);
+        
+        SpawnWaves();
+        
+        // Spawn the enemies of the wave concurrently
+        int currentMinute = CountdownTimer.Instance.Time.Minutes;
+        StartCoroutine(SpawnWavesCoroutine(waves[currentMinute]));
 
         if (repeat)
         {
@@ -76,12 +104,34 @@ public class EnemySpawner : MonoBehaviour, IPausable
             if (rapidFire)
             {
                 CancelInvoke(nameof(RepeatSpawn));
-                
+
                 // spawn the first wave rapidly
                 InvokeRepeating(nameof(RepeatSpawn), 0f, rapidFireInterval);
             }
         }
     }
+
+    IEnumerator SpawnWavesCoroutine(Wave wave)
+    {
+        while (true)
+        {
+            wave.Spawn(true);
+            yield return new WaitForSeconds(5);
+        }
+    }
+
+    public void SpawnWaves()
+    {
+        int currentMinute = CountdownTimer.Instance.Time.Minutes;
+        if (currentMinute < waves.Count)
+        {
+            var wave = waves[currentMinute];
+            wave.Spawn();
+            Debug.Log("Spawning " + waves[currentMinute].name);
+        }
+    }
+
+    void RepeatSpawn() => waves[0].Spawn();
 
 #if UNITY_EDITOR
     void OnGUI()
@@ -108,39 +158,4 @@ public class EnemySpawner : MonoBehaviour, IPausable
 #endif
 
     public void Pause() => enabled = !enabled;
-
-    [Button("Skip Wave")]
-    [UsedImplicitly]
-    public void SkipWave()
-    {
-        int currentMinute = TimeManager.Instance.Time.Minutes;
-        int nextMinute    = currentMinute + 1;
-        TimeManager.Instance.AddTime(60);
-
-        if (nextMinute < waves.Count)
-        {
-            // Cancel the current InvokeRepeating
-            CancelInvoke(nameof(SpawnWaves));
-
-            // Spawn the next wave
-            waves[nextMinute].Spawn();
-            Debug.Log("Spawning wave " + waves[nextMinute].name);
-
-            // Re-invoke the SpawnWaves method to continue spawning waves every 60 seconds
-            InvokeRepeating(nameof(SpawnWaves), 60f - TimeManager.Instance.Time.Seconds, 60f);
-        }
-    }
-
-    void RepeatSpawn() => waves[0].Spawn();
-
-    public void SpawnWaves()
-    {
-        int currentMinute = TimeManager.Instance.Time.Minutes;
-
-        if (currentMinute < waves.Count)
-        {
-            waves[currentMinute].Spawn();
-            Debug.Log("Spawning " + waves[currentMinute].name);
-        }
-    }
 }

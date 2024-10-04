@@ -63,7 +63,7 @@ public class ObjectPool : MonoBehaviour
     /// <returns></returns>
     public GameObject GetPooledObject(bool setActive = false)
     {
-        foreach (GameObject pooledObject in pooledObjects.Where(pooledObject => !pooledObject.activeInHierarchy))
+        foreach (GameObject pooledObject in pooledObjects!.Where(pooledObject => !pooledObject.activeInHierarchy))
         {
             pooledObject.SetActive(setActive);
             return pooledObject;

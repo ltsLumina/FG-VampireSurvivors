@@ -101,7 +101,7 @@ public class GameManager : MonoBehaviour
         var sequence = DOTween.Sequence();
         ui.localScale = Vector3.zero;
         ui.gameObject.SetActive(true);
-        sequence.Append(ui.DOScale(1, 1f).SetEase(Ease.OutExpo));
+        sequence.Append(ui.DOScale(1, 1f).SetEase(Ease.Linear));
     }
     
     public void LoadScene(int sceneIndex) => SceneManagerExtended.LoadScene(sceneIndex);
