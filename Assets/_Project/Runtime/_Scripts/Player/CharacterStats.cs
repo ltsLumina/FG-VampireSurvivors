@@ -52,19 +52,6 @@ public class CharacterStats : ScriptableObject
 
     Dictionary<string, Action<float>> statIncreasers;
 
-    [Button]
-    public void ClearJSON()
-    {
-        string path = Application.persistentDataPath + "/statBuffs.json";
-
-        if (File.Exists(path))
-        {
-            File.WriteAllText(path, string.Empty);
-            Debug.Log("statBuffs.json cleared!");
-        }
-        else { Debug.Log("statBuffs.json not found!"); }
-    }
-    
     void Reset()
     {
         maxHealth = 120;
@@ -96,32 +83,53 @@ public class CharacterStats : ScriptableObject
     void OnEnable()
     {
         #region Stat Increasers
-        statIncreasers = new()
-        { { "MaxHealth", value => maxHealth       =  Mathf.RoundToInt(maxHealth * (1 + value)) },
-          { "Recovery", value => recovery         += value },
-          { "Armor", value => armor               += (int) value },
-          { "MoveSpeed", value => moveSpeed       *= 1 + value },
-          { "Strength", value => strength         *= 1 + value },
-          { "Dexterity", value => dexterity       *= 1 + value },
-          { "Intelligence", value => intelligence *= 1 + value },
-          { "Wisdom", value => wisdom             *= 1 + value },
-          { "Cooldown", value => cooldown         -= value },
-          { "Amount", value => amount             += (int) value },
-          { "Revival", value => revival           += (int) value },
-          { "Magnet", value => magnet             *= 1 + value },
-          { "Luck", value => luck                 *= 1 + value },
-          { "Growth", value => growth             *= 1 + value },
-          { "Greed", value => greed               *= 1 + value },
-          { "Curse", value => curse               *= 1 + value },
-          { "Reroll", value => reroll             += (int) value },
-          { "Skip", value => skip                 += (int) value },
-          { "Banish", value => banish             += (int) value } };
+        statIncreasers = new ()
+        {
+        { "MaxHealth", multiplier =>
+        {
+            // Convert to float to allow for percentage increase
+            float floatHealth = maxHealth;
+            floatHealth = floatHealth.AddPercent(multiplier);
+            maxHealth   = Mathf.CeilToInt(floatHealth);
+        } },
+        { "Recovery", value => recovery              += value },
+        { "Armor", value => armor                    += (int) value },
+        { "MoveSpeed", multiplier => moveSpeed       =  moveSpeed.AddPercent(multiplier) },
+        { "Strength", multiplier => strength         =  strength.AddPercent(multiplier) },
+        { "Dexterity", multiplier => dexterity       =  dexterity.AddPercent(multiplier) },
+        { "Intelligence", multiplier => intelligence =  intelligence.AddPercent(multiplier) },
+        { "Wisdom", multiplier => wisdom             =  wisdom.AddPercent(multiplier) },
+        { "Cooldown", value => cooldown              -= value },
+        { "Amount", value => amount                  += (int) value },
+        { "Revival", value => revival                += (int) value },
+        { "Magnet", multiplier => magnet             =  magnet.AddPercent(multiplier) },
+        { "Luck", multiplier => luck                 =  luck.AddPercent(multiplier) },
+        { "Growth", multiplier => growth             =  growth.AddPercent(multiplier) },
+        { "Greed", multiplier => greed               =  greed.AddPercent(multiplier) },
+        { "Curse", multiplier => curse               =  curse.AddPercent(multiplier) },
+        { "Reroll", value => reroll                  += (int) value },
+        { "Skip", value => skip                      += (int) value },
+        { "Banish", value => banish                  += (int) value } };
         #endregion
+
         
-#if UNITY_EDITOR
+        #if UNITY_EDITOR
         EditorApplication.playModeStateChanged -= OnPlayModeStateChanged;
         EditorApplication.playModeStateChanged += OnPlayModeStateChanged;
-#endif
+        #endif
+        }
+
+    [Button]
+    public void ClearJSON()
+    {
+        string path = Application.persistentDataPath + "/statBuffs.json";
+
+        if (File.Exists(path))
+        {
+            File.WriteAllText(path, string.Empty);
+            Debug.Log("statBuffs.json cleared!");
+        }
+        else { Debug.Log("statBuffs.json not found!"); }
     }
 
     public void IncreaseStat(string statName, float value)
@@ -192,7 +200,7 @@ public class CharacterStats : ScriptableObject
             return modifiedGrowth;
         }
     }
-    
+
     [Multiplier]
     public float Greed => greed;
 
@@ -217,7 +225,7 @@ public class CharacterStats : ScriptableObject
 #if UNITY_EDITOR
     string initialJson;
 
-    //TODO: This wont work in a build.
+    //TODO: This wont work in a build, probably.
     void OnPlayModeStateChanged(PlayModeStateChange obj)
     {
         switch (obj)
