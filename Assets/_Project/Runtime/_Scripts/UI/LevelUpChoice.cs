@@ -41,6 +41,7 @@ public class LevelUpChoice : MonoBehaviour
     {
         itemIcon.sprite = item.Icon;
         itemName.text   = item.Name;
+        itemDescription.text = item.GetItemLevelDescription(item);
 
         // If the item level is -1, set the level text to "New!".
         // The method returns -1 if the item is not in the inventory.
@@ -55,8 +56,6 @@ public class LevelUpChoice : MonoBehaviour
             itemLevel.color = Color.white;
             itemLevel.text  = $"level: {item.GetItemLevel().ToString()}"; 
         }
-
-        itemDescription.text = item.Description;
     }
 
     /// <summary>

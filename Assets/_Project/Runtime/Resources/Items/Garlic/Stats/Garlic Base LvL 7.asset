@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: Garlic Base LvL 7
   m_EditorClassIdentifier: 
   damage: 100
-  cooldown: 0
-  zone: 5
+  cooldown: 1.1
+  zone: 10

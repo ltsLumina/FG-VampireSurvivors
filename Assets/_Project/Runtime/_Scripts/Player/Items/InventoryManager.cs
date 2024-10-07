@@ -188,14 +188,13 @@ public class InventoryManager : MonoBehaviour
 /// </summary>
 public static class Inventory
 {
-    // Cache the instance of the InventoryManager
     static InventoryManager instance => InventoryManager.Instance;
 
-    public static List<Item> Items => instance.Inventory.Select(itemEntry => itemEntry.Item).ToList();
+    public static List<Item> Items => instance.Inventory.Select(entry => entry.Item).ToList();
 
     public static T GetItem<T>() where T : Item => instance.GetItem<T>();
-
-    public static int GetItemLevel(Item item) => instance.GetItemLevel(item);
+    
+    public static int GetItemLevel(this Item item) => instance.GetItemLevel(item);
 
     public static void AddItem(Item item) => instance.AddItem(item);
 }

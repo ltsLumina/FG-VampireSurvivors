@@ -181,8 +181,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: XP gain increases by 7%
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 37a49ff468e6ff94baae6510501ad93f, type: 2}
-  m_sharedMaterial: {fileID: -7526973247068231971, guid: 37a49ff468e6ff94baae6510501ad93f,
+  m_fontAsset: {fileID: 11400000, guid: 09f79cf523032fe47aec939e63f33535, type: 2}
+  m_sharedMaterial: {fileID: -7526973247068231971, guid: 09f79cf523032fe47aec939e63f33535,
     type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
@@ -627,8 +627,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: 'level: 2'
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 37a49ff468e6ff94baae6510501ad93f, type: 2}
-  m_sharedMaterial: {fileID: -7526973247068231971, guid: 37a49ff468e6ff94baae6510501ad93f,
+  m_fontAsset: {fileID: 11400000, guid: 09f79cf523032fe47aec939e63f33535, type: 2}
+  m_sharedMaterial: {fileID: -7526973247068231971, guid: 09f79cf523032fe47aec939e63f33535,
     type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}

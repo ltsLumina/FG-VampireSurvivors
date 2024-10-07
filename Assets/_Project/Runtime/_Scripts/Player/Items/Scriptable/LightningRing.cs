@@ -1,6 +1,7 @@
 ﻿#region
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 #endregion
 
@@ -25,7 +26,7 @@ public class LightningRing : WeaponItem
     /// </summary>
     /// <param name="damage"> Optional damage parameter. If not provided, the item's damage stat will be used. </param>
     /// <param name="zone"> Optional area parameter. If not provided, the item's area stat will be used. </param>
-    void Attack(float? damage = null)
+    void Attack(float? damage = null, bool target = false)
     {
         float statDamage = damage ?? Damage;
 
@@ -36,6 +37,18 @@ public class LightningRing : WeaponItem
         foreach (Collider collider in lightningColliders)
         {
             if (collider.TryGetComponent(out Enemy enemy)) enemies.Add(enemy);
+        }
+
+        if (target)
+        {
+            // strike the enemy with the highest health
+            if (enemies.Count > 0)
+            {
+                Enemy targetEnemy = enemies.OrderByDescending(e => e.CurrentHealth).First();
+                Instantiate(lightningEffect, targetEnemy.transform.position, Quaternion.identity);
+                targetEnemy.TakeDamage(statDamage);
+                return;
+            }
         }
 
         // Strikes the amount of enemies equal to the item's lightning strikes stat
@@ -66,12 +79,11 @@ public class LightningRing : WeaponItem
     IEnumerator CardEffect()
     {
         int enemiesToHit = Random.Range(15, 25);
-
-        // Strikes 25 enemies
+        
         for (int i = 0; i < enemiesToHit; i++)
         {
             yield return new WaitForSeconds(0.1f);
-            Attack(damage: 999);
+            Attack(null, true);
         }
     }
 }

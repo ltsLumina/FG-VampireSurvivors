@@ -123,7 +123,7 @@ public class LevelUpManager : MonoBehaviour
 
     void PopulateLevelUpChoices()
     {
-        List<Item> selectedItems = new List<Item>();
+        List<Item> selectedItems = new ();
         foreach (var choice in levelUpChoices) { choice.GetItem(selectedItems); }
     }
 

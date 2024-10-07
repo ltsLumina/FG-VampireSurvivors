@@ -15,7 +15,7 @@ MonoBehaviour:
   enemyGroup:
   - enemy: {fileID: 5210179278632098843, guid: 15b1794d446b6b64cb1b5a3803a71973, type: 3}
     amount: 10
-    spawnInterval: 0.5
   - enemy: {fileID: 4138527325469070198, guid: 945ab9901d4850f47a11210080f014d0, type: 3}
     amount: 5
-    spawnInterval: 0.5
+  - enemy: {fileID: 2032457332024221735, guid: 2d51b4c179b6b2e4786114386d4d9f51, type: 3}
+    amount: 5

@@ -84,6 +84,14 @@ public class AssetCreationWindow : EditorWindow
                 activeMenu          = EnemyCreator.ManageEnemyMenu;
                 window.titleContent = new ("Creating new Enemy...");
             }
+            
+            if (Button(new GUIContent("Save Item 'Level-Descriptions'", "Save the Item 'Level-Descriptions' to a JSON file."), ExpandWidth(true)))
+            {
+                createdSuccessfully = false;
+
+                activeMenu          = ItemDescriptionsEditor.DefaultMenu;
+                window.titleContent = new ("Saving Item 'Level-Descriptions'...");
+            }
         }
     }
 

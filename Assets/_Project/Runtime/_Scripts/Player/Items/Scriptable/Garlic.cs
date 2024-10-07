@@ -70,6 +70,6 @@ public class Garlic : WeaponItem
             return;
         }
 
-        Attack(damage: null, knockback: 35);
+        Attack(damage: 0, knockback: 35);
     }
 }

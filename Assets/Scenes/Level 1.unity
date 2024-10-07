@@ -789,6 +789,16 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2373308814059859806, guid: 15b1794d446b6b64cb1b5a3803a71973,
+        type: 3}
+      propertyPath: m_Drag
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2373308814059859806, guid: 15b1794d446b6b64cb1b5a3803a71973,
+        type: 3}
+      propertyPath: m_AngularDrag
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5210179278632098843, guid: 15b1794d446b6b64cb1b5a3803a71973,
         type: 3}
       propertyPath: health
@@ -1979,7 +1989,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'Coins: 100690'
+  m_text: 'Coins: 104310'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 09f79cf523032fe47aec939e63f33535, type: 2}
   m_sharedMaterial: {fileID: -7526973247068231971, guid: 09f79cf523032fe47aec939e63f33535,
@@ -4250,7 +4260,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 235.26, y: -20}
+  m_AnchoredPosition: {x: 228.51, y: -20}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &637791364
@@ -4484,7 +4494,7 @@ MonoBehaviour:
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
   m_DynamicPixelsPerUnit: 1
-  m_PresetInfoIsWorld: 0
+  m_PresetInfoIsWorld: 1
 --- !u!223 &713147116
 Canvas:
   m_ObjectHideFlags: 0
@@ -9235,7 +9245,6 @@ MonoBehaviour:
   rapidFire: 0
   rapidFireInterval: 1
   waves:
-  - {fileID: 11400000, guid: 757b5bf705d6b5948a0846eadf70dfc2, type: 2}
   - {fileID: 11400000, guid: f7da777c92d77b7418f01a2c0c337b00, type: 2}
   - {fileID: 11400000, guid: 0fedb823fd641954db2f50068f86a1ea, type: 2}
   - {fileID: 11400000, guid: 81a464ffdd8b5544e9449934ebe0cdec, type: 2}
@@ -12548,7 +12557,7 @@ PrefabInstance:
     - target: {fileID: 8015983717074285493, guid: 35543b64ff04bda4d8e0ed7f1cc190a4,
         type: 3}
       propertyPath: currentHealth
-      value: 120
+      value: 1e+14
       objectReference: {fileID: 0}
     - target: {fileID: 8015983717074285493, guid: 35543b64ff04bda4d8e0ed7f1cc190a4,
         type: 3}

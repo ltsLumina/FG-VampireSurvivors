@@ -131,12 +131,15 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IPausable
     {
         Player.Instance.TryGetComponent(out IDamageable damageable);
         damageable?.TakeDamage(damage);
+        
+        // if animator exists, play the hurt animation
+        if (TryGetComponent(out Animator animator)) animator.SetTrigger("Attack");
     }
 
     void TakeRecoilDamage()
     {
         if (Player.Instance.CurrentHealth <= 0) return;
-
+        
         CurrentHealth -= recoilDamage;
         onHit?.Invoke(recoilDamage);
     }
@@ -144,13 +147,13 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IPausable
     void Death()
     {
         MaxHealth = 100;
-        CurrentHealth    = MaxHealth;
-        gameObject.SetActive(false); // Return to pool.
+        CurrentHealth = MaxHealth;
 
         CancelInvoke(nameof(DealDamage));
         CancelInvoke(nameof(TakeRecoilDamage));
         StopAllCoroutines();
 
+        gameObject.SetActive(false); // Return to pool.
         onDeath?.Invoke();
 
         Player.EnemiesDefeated++;

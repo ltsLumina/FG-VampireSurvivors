@@ -12,4 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5faa30a695a0489da2da5a343ba617ba, type: 3}
   m_Name: Lightning Ring Specific LvL 2
   m_EditorClassIdentifier: 
-  lightningStrikes: 5
+  lightningStrikes: 3

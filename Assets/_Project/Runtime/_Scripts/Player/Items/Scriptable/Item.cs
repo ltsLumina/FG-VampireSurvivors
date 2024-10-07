@@ -1,13 +1,14 @@
 ﻿#region
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using JetBrains.Annotations;
 using UnityEngine;
 using Random = UnityEngine.Random;
 #endregion
 
-public abstract class Item : ScriptableObject
+public abstract partial class Item : ScriptableObject
 {
     public enum ItemTypes
     {
@@ -25,9 +26,16 @@ public abstract class Item : ScriptableObject
     /// <summary>
     ///     Contains a list of levels for the item.
     /// </summary>
-    [SerializeField] protected List<Levels> levelsList;
+    [SerializeField] protected List<LevelContainer> levels;
 
-    Levels levelEntries;
+    /// <summary>
+    /// Holds the variables of the struct at each level.
+    /// </summary>
+    LevelContainer levelContainer;
+    LevelContainer container;
+    LevelContainer level;
+
+    public List<LevelContainer> Levels => levels;
 
     public string Name
     {
@@ -39,29 +47,62 @@ public abstract class Item : ScriptableObject
 
     public Sprite Icon => details.icon;
 
+    public string GetItemLevelDescription(Item item)
+    {
+        LoadAllDescriptionsFromJson();
+        
+        if (LevelInvalid(out int _))
+            // If the item isn't in the inventory, the level will be invalid. Therefore, return the description of the first level.
+            return item.levels[0].description;
+
+        // return the description of the next level
+        return item.GetItemLevel() == 8 ? "Max Level Reached. [This should never be displayed in regular gameplay, only in the editor.]" : item.levels[item.GetItemLevel()].description;
+    }
+
+    /// <summary>
+    /// Uses the item. (Basic attack loop)
+    /// </summary>
+    public abstract void Use();
+
+    /// <summary>
+    /// Plays the card and its associated effects.
+    /// </summary>
+    public abstract void Play();
+
+    #region Utility | Create method
+    /// <summary>
+    ///     "Creates" and returns a random item from the list of potential items.
+    /// </summary>
+    /// <returns></returns>
+    public static Item Create()
+    {
+        var potentialItems = new List<Item>(Resources.LoadAll<Item>("Items"));
+        // Remove any items that are already in the inventory and are at level 8 (max level)
+        //foreach (Item i in Inventory.Items.Where(i => potentialItems.Contains(i) && i.GetItemLevel() == 8)) { potentialItems.Remove(i); }
+        //TODO: this will crash unity
+
+        // return a random item from the list of potential items
+        Item item = potentialItems[Random.Range(0, potentialItems.Count)];
+        
+        return item;
+    }
+    #endregion
+    
     #region Utility | OnValidate
     void OnValidate()
     {
-        Debug.Assert(details.name        != string.Empty, "Name is empty. Please enter a name.");
-        Debug.Assert(details.description != string.Empty, "Description is empty. Please enter a description.");
-        Debug.Assert(details.icon        != null, "Icon is null. Please assign an icon.");
-
         Name = name;
 
         // Set the name of the structs' "name" variable to the index +1
-        for (int i = 0; i < levelsList.Count; i++)
+        for (int i = 0; i < levels.Count; i++)
         {
-            Levels level = levelsList[i];
-            level.name    = "Level " + (i + 1);
-            levelsList[i] = level;
+            levelContainer.name = "Level " + (i + 1);
         }
 
         // Set the level value to the index +1
-        for (int i = 0; i < levelsList.Count; i++)
+        for (int i = 0; i < levels.Count; i++)
         {
-            Levels level = levelsList[i];
-            level.level   = i + 1;
-            levelsList[i] = level;
+            levelContainer.level = i + 1;
         }
 
         // Set the name of the item to the name of the class
@@ -81,26 +122,25 @@ public abstract class Item : ScriptableObject
         void OutOfBounds()
         {
             // bug: The list is empty for 1 frame when recompiling so I just don't throw an error if the list is empty
-            // bug: and because of unity now its throwing an error saying that the item is level 0, which it isn't...
-            if (levelsList.Count == 0 || levelEntries.level == 0) return;
+            if (levels.Count == 0 || levelContainer.level == 0) return;
 
-            if (levelEntries.level < 1 || levelEntries.level > levelsList.Count) Debug.LogError("Level out of bounds. Please enter a valid level." + "\nLevel entered: " + levelEntries.level);
+            if (levelContainer.level < 1 || levelContainer.level > levels.Count) Debug.LogError("Level out of bounds. Please enter a valid level." + "\nLevel entered: " + levelContainer.level);
         }
 
         void NotInOrder()
         {
             // bug: same here
-            if (levelsList.Count == 0) return;
+            if (levels.Count == 0) return;
 
-            for (int i = 0; i < levelsList.Count; i++)
+            for (int i = 0; i < levels.Count; i++)
             {
-                Levels level = levelsList[i];
+                level = levels[i];
 
                 if (level.level != i + 1)
                 {
                     Debug.LogWarning
-                    ($"Element {i} is out of order. It is set to level {level.level} when it should be level {i + 1}." +
-                     "\nThe \"level\" field is marked as [HideInInspector] so make sure to remove that attribute to see the level field in the inspector.");
+                    ($"Element {i} is out of order. It is set to level {levelContainer.level} when it should be level {i + 1}." +
+                     "\nThe \"level\" field is marked as [HideInInspector] so make sure to remove that attribute to see the level field in the inspector.", this);
 
                     level.level = i + 1;
                 }
@@ -109,67 +149,39 @@ public abstract class Item : ScriptableObject
 
         void EnforcedLevelAmount()
         {
-            // bug: and same thing here
-            if (levelsList.Count == 0) return;
-
-            if (levelsList.Count != 8)
+            switch (levels.Count)
             {
-                Debug.LogError("Levels list must contain 8 levels.");
-                while (levelsList.Count > 8) levelsList.RemoveAt(levelsList.Count - 1);
+                case 0: // bug: and same thing here
+                case 8:
+                    return;
             }
+
+            Debug.LogError("Levels list must contain 8 levels.");
+            while (levels.Count > 8) levels.RemoveAt(levels.Count - 1);
         }
     }
     #endregion
 
-    #region Utility | GetItemLevel method
     /// <summary>
-    /// Gets the item from the inventory and returns the level of it as opposed to the item's level itself. (Which would likely always be zero)
+    /// Ensures the level is within the bounds of the list.
     /// </summary>
-    /// <returns> The level of the item. <para>Notice: If the item is not found in the inventory, it will return -1.</para> </returns>
-    public int GetItemLevel() => Inventory.GetItemLevel(this);
-    #endregion
-
-    /// <summary>
-    /// Uses the item. (Basic attack loop)
-    /// </summary>
-    public abstract void Use();
-
-    /// <summary>
-    /// Plays the card and its associated effects.
-    /// </summary>
-    public abstract void Play();
-
-    // TODO: Implement this method later
-    //public abstract void Evolve();
-
-    #region Utility | Create method
-    /// <summary>
-    ///     "Creates" and returns a random item from the list of potential items.
-    /// </summary>
+    /// <param name="level"></param>
     /// <returns></returns>
-    public static Item Create()
-    {
-        var potentialItems = new List<Item>(Resources.LoadAll<Item>("Items"));
-
-        // return a random item from the list of potential items
-        Item item = potentialItems[Random.Range(0, potentialItems.Count)];
-
-        return item;
-    }
-    #endregion
-
     protected bool LevelInvalid(out int level)
     {
-        level = GetItemLevel();
-        if (level == -1) return true;
-
-        if (level < 1 || level > levelsList.Count)
+        level = this.GetItemLevel();
+        switch (level)
         {
-            Debug.LogError("Level out of bounds. Please enter a valid level." + "\nLevel entered: " + level);
-            return true;
-        }
+            case -1:
+                return true;
 
-        return false;
+            case >= 1 when level <= levels.Count:
+                return false;
+
+            default:
+                Debug.LogError("Level out of bounds. Please enter a valid level." + "\nLevel entered: " + level);
+                return true;
+        }
     }
 
     [Serializable]
@@ -182,13 +194,13 @@ public abstract class Item : ScriptableObject
     }
 
     [Serializable]
-    public struct Levels
+    public struct LevelContainer
     {
         public enum StatTypes
         {
             Damage,
             Cooldown,
-            Zone,
+            Zone, // How much of the screen the item covers
         }
 
         [Header("Item Stats")]
@@ -197,6 +209,12 @@ public abstract class Item : ScriptableObject
 
         [HideInInspector]
         public int level;
+
+        /// <summary>
+        ///     The description of the item's stats at the current level. E.g. LvL 1: +10% damage, LvL 2: Knocks-back enemies, etc.
+        ///     <para>Used by the Level-Up Canvas' Buttons to display the stats of the item at the current level.</para>
+        /// </summary>
+        public string description;
         public BaseStats baseStats;
         public ItemSpecificStats itemSpecificStats;
     }

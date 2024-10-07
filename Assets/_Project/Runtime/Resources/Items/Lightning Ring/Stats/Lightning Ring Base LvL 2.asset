@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 252849f90a7d4143a6f8e9b8c6b8ee01, type: 3}
   m_Name: Lightning Ring Base LvL 2
   m_EditorClassIdentifier: 
-  damage: 150
-  cooldown: 2
-  zone: 20
+  damage: 75
+  cooldown: 4.5
+  zone: 10

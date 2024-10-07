@@ -243,7 +243,6 @@ public class CharacterStats : ScriptableObject
 #endif
 }
 
-#if UNITY_EDITOR
 [AttributeUsage(AttributeTargets.Property | AttributeTargets.Field)]
 public class ValueAttribute : Attribute
 {
@@ -255,4 +254,3 @@ public class MultiplierAttribute : Attribute
 {
     // This is just a marker attribute to indicate that the property is a multiplier.
 }
-#endif
