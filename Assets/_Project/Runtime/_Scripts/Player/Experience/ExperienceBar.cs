@@ -51,20 +51,22 @@ public class ExperienceBar : MonoBehaviour
 
     void OnLevelUp()
     {
-        // Wait a bit before showing the level up menu to give the XP a chance to fill multiple times. (multiple levels at once)
-        var sequence = new Sequence(this);
-        sequence.WaitThenExecuteRealtime(0.35f, () =>
-        {
-            vanitySlider.gameObject.SetActive(true);
-            rainbowShift = StartCoroutine(RainbowShift());
-            LevelUpManager.Instance.ShowLevelUpMenu();
-        });
+        StartCoroutine(Delay());
         
         LevelUpManager.Instance.OnMenuHidden.AddListener(() =>
         {
             vanitySlider.StopCoroutine(rainbowShift);
             vanitySlider.gameObject.SetActive(false);
         });
+
+        return;
+        IEnumerator Delay()
+        {
+            yield return new WaitForSecondsRealtime(0.35f);
+            vanitySlider.gameObject.SetActive(true);
+            rainbowShift = StartCoroutine(RainbowShift());
+            LevelUpManager.Instance.ShowLevelUpMenu();
+        }
     }
 
     IEnumerator RainbowShift()

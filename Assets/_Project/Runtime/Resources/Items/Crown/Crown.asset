@@ -14,33 +14,29 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   details:
     name: Crown
-    description: Increases XP gain.
+    description: Character gains 8% more experience.
     icon: {fileID: 21300000, guid: 57b2c596f4084bc44b426791635ec8f9, type: 3}
-  levels:
-  - name: 
-    level: 0
-    description: 
-    baseStats: {fileID: 0}
-    itemSpecificStats: {fileID: 0}
-  - name: 
-    level: 0
-    description: 
-    baseStats: {fileID: 0}
-    itemSpecificStats: {fileID: 0}
-  - name: 
-    level: 0
-    description: 
-    baseStats: {fileID: 0}
-    itemSpecificStats: {fileID: 0}
-  - name: 
-    level: 0
-    description: 
-    baseStats: {fileID: 0}
-    itemSpecificStats: {fileID: 0}
-  - name: 
-    level: 0
-    description: 
-    baseStats: {fileID: 0}
-    itemSpecificStats: {fileID: 0}
+  weaponLevels: []
+  passiveLevels:
+  - name: Level 1
+    level: 1
+    description: 'XP gain increases by 8%. '
+    effectType: 13
+  - name: Level 2
+    level: 2
+    description: 'XP gain increases by 8%. '
+    effectType: 13
+  - name: Level 3
+    level: 3
+    description: 'XP gain increases by 8%. '
+    effectType: 13
+  - name: Level 4
+    level: 4
+    description: 'XP gain increases by 8%. '
+    effectType: 13
+  - name: Level 5
+    level: 5
+    description: 'XP gain increases by 8%. '
+    effectType: 13
   effectType: 13
-  effect: 0.07
+  effect: 0.08

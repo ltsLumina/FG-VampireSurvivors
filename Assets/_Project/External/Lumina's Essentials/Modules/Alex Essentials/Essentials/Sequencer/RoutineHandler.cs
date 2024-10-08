@@ -30,12 +30,11 @@ public sealed class RoutineHandler
     /// <returns>An enumerator that executes the action.</returns>
     public IEnumerator ExecuteRoutine(Action action)
     {
-        SequenceErrorHandler.TryExecute(action, out Exception exception);
-
-        if (exception != null)
+        try { action(); } catch (Exception ex)
         {
-            Exception = exception;
-            Debug.LogError(exception);
+            Exception = ex;
+            Debug.LogError($"Exception occurred in ExecuteRoutine: {ex.Message}\n{ex.StackTrace}");
+            throw; // Rethrow the exception if you want it to propagate further
         }
 
         yield return null;

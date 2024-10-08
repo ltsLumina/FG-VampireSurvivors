@@ -198,10 +198,10 @@ public static class EnemyCreator
         enemyComponent.Damage      = damage;
         enemyComponent.Speed       = speed;
         enemyComponent.XPYield     = xpYield;
-
+        
         // Save the GameObject as a prefab
-        string prefabsFolder = "Assets/_Project/Runtime/Resources/PREFABS";
-        string prefabsPath   = $"{prefabsFolder}/{name}.prefab";
+        const string prefabsFolder = "Assets/_Project/Runtime/Resources/PREFABS";
+        string       prefabsPath   = $"{prefabsFolder}/{name}.prefab";
         currentEnemy = PrefabUtility.SaveAsPrefabAsset(enemyObject, prefabsPath, out bool success).GetComponent<Enemy>();
 
         if (success) Logger.Log("Prefab created successfully.");

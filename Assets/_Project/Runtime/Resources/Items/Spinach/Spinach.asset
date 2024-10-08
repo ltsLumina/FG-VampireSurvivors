@@ -16,31 +16,27 @@ MonoBehaviour:
     name: Spinach
     description: Increases Strength.
     icon: {fileID: 21300000, guid: c9bc86458a293a442b391bfeb1a5f762, type: 3}
-  levels:
-  - name: 
-    level: 0
+  weaponLevels: []
+  passiveLevels:
+  - name: Level 1
+    level: 1
     description: 
-    baseStats: {fileID: 0}
-    itemSpecificStats: {fileID: 0}
-  - name: 
-    level: 0
+    effectType: 4
+  - name: Level 2
+    level: 2
     description: 
-    baseStats: {fileID: 0}
-    itemSpecificStats: {fileID: 0}
-  - name: 
-    level: 0
+    effectType: 4
+  - name: Level 3
+    level: 3
     description: 
-    baseStats: {fileID: 0}
-    itemSpecificStats: {fileID: 0}
-  - name: 
-    level: 0
+    effectType: 4
+  - name: Level 4
+    level: 4
     description: 
-    baseStats: {fileID: 0}
-    itemSpecificStats: {fileID: 0}
-  - name: 
-    level: 0
+    effectType: 4
+  - name: Level 5
+    level: 5
     description: 
-    baseStats: {fileID: 0}
-    itemSpecificStats: {fileID: 0}
+    effectType: 4
   effectType: 4
   effect: 0.1

@@ -8,7 +8,7 @@ using Image = UnityEngine.UI.Image;
 //TODO: make abstract
 public class Card : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler, IPausable, IPointerEnterHandler, IPointerExitHandler
 {
-    [SerializeField] Item.ItemTypes item;
+    [SerializeField] WeaponItem.WeaponTypes weapon;
     [SerializeField] Image highlight;
     Vector2 centerPoint;
 
@@ -55,13 +55,13 @@ public class Card : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHand
         {
             if (CardDragHandler.Instance.IsWithinCenterArea(worldCenterPoint))
             {
-                Debug.Log("Played a card with the item: " + item);
+                Debug.Log("Played a card with the item: " + weapon);
 
-                Item inventoryItem = item switch
-                { Item.ItemTypes.Garlic        => Inventory.GetItem<Garlic>(),
-                  Item.ItemTypes.LightningRing => Inventory.GetItem<LightningRing>(),
-                  Item.ItemTypes.Knife         => Inventory.GetItem<Knife>(),
-                  _                            => null };
+                Item inventoryItem = weapon switch
+                { WeaponItem.WeaponTypes.Garlic        => Inventory.GetItem<Garlic>(),
+                  WeaponItem.WeaponTypes.LightningRing => Inventory.GetItem<LightningRing>(),
+                  WeaponItem.WeaponTypes.Knife         => Inventory.GetItem<Knife>(),
+                  _                                    => null };
 
                 if (inventoryItem == null)
                 {

@@ -1,6 +1,5 @@
 {
-  "damage": 200,
-  "speed": 0.25,
-  "duration": 0.0,
-  "area": 15.0
+    "damage": 125.0,
+    "cooldown": 1.0,
+    "zone": 12.5
 }

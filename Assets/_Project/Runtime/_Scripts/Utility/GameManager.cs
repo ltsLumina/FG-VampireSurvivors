@@ -57,9 +57,6 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
-    static void Initialize() => Item.SaveAllDescriptionsToJson();
-
     public void PauseGame() => Time.timeScale = 0;
 
     public void ResumeGame() => Time.timeScale = 1;

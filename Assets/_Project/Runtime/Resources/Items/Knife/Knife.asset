@@ -16,55 +16,56 @@ MonoBehaviour:
     name: Knife
     description: Description
     icon: {fileID: 21300000, guid: 96f2bb0ce8fff0f418073f00e8df2491, type: 3}
-  levels:
+  weaponLevels:
   - name: Level 1
     level: 1
-    description: Fires quickly in the faced direction.
-    baseStats: {fileID: 11400000, guid: c5751c20449ea4c46ab2bfa784452d5c, type: 2}
-    itemSpecificStats: {fileID: 11400000, guid: 363e8c985d4b7df4a8248b1b9dd1b8ab,
+    description: 
+    baseStats: {fileID: 11400000, guid: c160a13acd7ba6540b084c6e0c490d96, type: 2}
+    itemSpecificStats: {fileID: 11400000, guid: a62e0c5da21aa6b499f5e59cfc88b76f,
       type: 2}
   - name: Level 2
     level: 2
-    description: 'Fires 1 more projectile. '
-    baseStats: {fileID: 11400000, guid: 03ea8368f6ce8564c83a8e7c41c44fe9, type: 2}
-    itemSpecificStats: {fileID: 11400000, guid: 16260391b5215b049bb32c8c259ff07e,
+    description: 
+    baseStats: {fileID: 11400000, guid: c9626eed522bf2e4aa5ddcebd8d418c5, type: 2}
+    itemSpecificStats: {fileID: 11400000, guid: 7caf42018aec7d346aa23e7a3bd1b726,
       type: 2}
   - name: Level 3
     level: 3
-    description: 'Fires 1 more projectile. Base Damage up by 5. '
-    baseStats: {fileID: 11400000, guid: d3463b5df0428dd498cc97fe42e36116, type: 2}
-    itemSpecificStats: {fileID: 11400000, guid: 44f51de5069fd094986ae82c351312a4,
+    description: 
+    baseStats: {fileID: 11400000, guid: 0acc0e90ed2dadf4e8e3e72c66d58730, type: 2}
+    itemSpecificStats: {fileID: 11400000, guid: 43ed41d1fefe7784f826808d7da5fb70,
       type: 2}
   - name: Level 4
     level: 4
-    description: Fires 1 more projectile.
-    baseStats: {fileID: 11400000, guid: 165b2813b94115648b30af620471a23c, type: 2}
-    itemSpecificStats: {fileID: 11400000, guid: 966a3e70564a08d41b7466b6a749bf5b,
+    description: 
+    baseStats: {fileID: 11400000, guid: bf626b33515ad0f4d87c2de1ae3d9613, type: 2}
+    itemSpecificStats: {fileID: 11400000, guid: 5baa374b8588d2b46a9991db05acd512,
       type: 2}
   - name: Level 5
     level: 5
-    description: 'Passes through 1 more enemy. '
-    baseStats: {fileID: 11400000, guid: 961dcf17d66b049409b921aff7a94adf, type: 2}
-    itemSpecificStats: {fileID: 11400000, guid: 8c4bed4e65e56d44091923746b58803f,
+    description: 
+    baseStats: {fileID: 11400000, guid: 2d9b1c9c8e2051146aa91988cda0e6b6, type: 2}
+    itemSpecificStats: {fileID: 11400000, guid: bcad3faf9c6264f42be84a6702792e8a,
       type: 2}
   - name: Level 6
     level: 6
-    description: Fires 1 more projectile.
-    baseStats: {fileID: 11400000, guid: da2dd9d0ddc738e49a6b83691e099715, type: 2}
-    itemSpecificStats: {fileID: 11400000, guid: ff62f5d5594096447a1b7e6041e8c945,
+    description: 
+    baseStats: {fileID: 11400000, guid: 7eb6efeaa4d475e49b8848ee29cb55b1, type: 2}
+    itemSpecificStats: {fileID: 11400000, guid: f641521832db08a4497fb0e74aec19af,
       type: 2}
   - name: Level 7
     level: 7
-    description: 'Fires 1 more projectile. Base Damage up by 5. '
-    baseStats: {fileID: 11400000, guid: 56c9bf6a44542834da5a963fe989c80d, type: 2}
-    itemSpecificStats: {fileID: 11400000, guid: ea7861f19a4fe194aa5514f369eac4a1,
+    description: 
+    baseStats: {fileID: 11400000, guid: 75990f6af3acde847a476996ade85ca9, type: 2}
+    itemSpecificStats: {fileID: 11400000, guid: 511be5511305fea469f0afbe2f16d419,
       type: 2}
   - name: Level 8
     level: 8
-    description: Passes through 1 more enemy.
-    baseStats: {fileID: 11400000, guid: 207e9dbff5a689143a0ac001a7dfb3ef, type: 2}
-    itemSpecificStats: {fileID: 11400000, guid: cfb0db583f2247b4bbf6de68262c91cc,
+    description: 
+    baseStats: {fileID: 11400000, guid: ccb4bd19ed141654889f0bc9f851dd0d, type: 2}
+    itemSpecificStats: {fileID: 11400000, guid: d64baf637af92d540a377c93705a5f8c,
       type: 2}
+  passiveLevels: []
   knifePrefab: {fileID: 6277208900379832256, guid: c31f913ae8372f24aaa37a15081505ce,
     type: 3}
   velocity: 10

@@ -3,6 +3,15 @@
 // Essentially just a wrapper class for the items so far.
 public abstract class PassiveItem : Item
 {
+    public enum PassiveTypes
+    {
+        Spinach,
+        Crown,
+        Duplicator,
+        Magnet,
+        HollowHeart,
+    }
+    
     [SerializeField] CharacterStats.Stats effectType;
     [Tooltip("Grants the following effect to the player.")]
     [SerializeField] float effect;

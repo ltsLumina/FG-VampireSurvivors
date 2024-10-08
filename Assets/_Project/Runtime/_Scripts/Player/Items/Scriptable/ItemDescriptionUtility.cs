@@ -6,18 +6,37 @@ using UnityEngine;
 
 public abstract partial class Item
 {
+    /// <summary>
+    /// Saves the descriptions of all items to a JSON file.
+    /// </summary>
     public static void SaveAllDescriptionsToJson()
     {
-
         var items = Resources.LoadAll<Item>("Items");
-        
+
         var serializedItems = items.Select
-        (item => new SerializedItem
-         { ItemName = item.Name,
-           Descriptions = item.Levels.Select
-           ((level, index) => new LevelDescription
-            { Level       = index + 1,
-              Description = level.description }).ToList() }).ToList();
+        (item =>
+        {
+            var descriptions = new List<LevelDescription>();
+
+            if (item is WeaponItem weaponItem)
+            {
+                descriptions = weaponItem.weaponLevels.Select
+                ((level, index) => new LevelDescription
+                 { Level       = index + 1,
+                   Description = level.description }).ToList();
+            }
+            else if (item is PassiveItem passiveItem)
+            {
+                descriptions = passiveItem.passiveLevels.Select
+                ((level, index) => new LevelDescription
+                 { Level       = index + 1,
+                   Description = level.description }).ToList();
+            }
+
+            return new SerializedItem
+            { ItemName     = item.Name,
+              Descriptions = descriptions };
+        }).ToList();
 
         string json = JsonUtility.ToJson(new SerializedItemList(serializedItems), true);
 
@@ -25,39 +44,60 @@ public abstract partial class Item
         string path = Application.persistentDataPath + "/itemDescriptions.json";
         File.WriteAllText(path, json);
     }
+    
+    /// <summary>
+    /// Loads the descriptions of all items from a JSON file.
+    /// </summary>
     public static void LoadAllDescriptionsFromJson()
+{
+    string path = Application.persistentDataPath + "/itemDescriptions.json";
+    List<Item> items = Resources.LoadAll<Item>("Items").ToList();
+
+    if (!File.Exists(path))
     {
-        string     path  = Application.persistentDataPath + "/itemDescriptions.json";
-        List<Item> items = Resources.LoadAll<Item>("Items").ToList();
-        
-        if (!File.Exists(path))
+        Debug.LogError("File not found at path: " + path);
+        return;
+    }
+
+    string json = File.ReadAllText(path);
+    SerializedItemList serializedItemList = JsonUtility.FromJson<SerializedItemList>(json);
+
+    foreach (var serializedItem in serializedItemList.Items)
+    {
+        var matchingItem = items.FirstOrDefault(item => item.Name == serializedItem.ItemName);
+
+        if (matchingItem == null)
         {
-            Debug.LogError("File not found at path: " + path);
-            return;
+            Debug.LogWarning("Item not found: " + serializedItem.ItemName);
+            continue;
         }
 
-        string             json               = File.ReadAllText(path);
-        SerializedItemList serializedItemList = JsonUtility.FromJson<SerializedItemList>(json);
-
-        foreach (var serializedItem in serializedItemList.Items)
+        if (matchingItem is WeaponItem weaponItem)
         {
-            var matchingItem = items.FirstOrDefault(item => item.Name == serializedItem.ItemName);
-
-            if (matchingItem == null)
-            {
-                Debug.LogWarning("Item not found: " + serializedItem.ItemName);
-                continue;
-            }
-
             for (int i = 0; i < serializedItem.Descriptions.Count; i++)
             {
-                if (i < matchingItem.Levels.Count)
+                if (i < weaponItem.weaponLevels.Count)
                 {
-                    var levelContainer = matchingItem.Levels[i];
+                    var levelContainer = weaponItem.weaponLevels[i];
                     levelContainer.description = serializedItem.Descriptions[i].Description;
-
-                    // Update the modified levelContainer back into the list
-                    matchingItem.Levels[i] = levelContainer;
+                    weaponItem.weaponLevels[i] = levelContainer;
+                }
+                else
+                {
+                    Debug.LogWarning("More descriptions in JSON than levels in item: " + matchingItem.Name);
+                    break;
+                }
+            }
+        }
+        else if (matchingItem is PassiveItem passiveItem)
+        {
+            for (int i = 0; i < serializedItem.Descriptions.Count; i++)
+            {
+                if (i < passiveItem.passiveLevels.Count)
+                {
+                    var levelContainer = passiveItem.passiveLevels[i];
+                    levelContainer.description = serializedItem.Descriptions[i].Description;
+                    passiveItem.passiveLevels[i] = levelContainer;
                 }
                 else
                 {
@@ -67,6 +107,7 @@ public abstract partial class Item
             }
         }
     }
+}
 
     [Serializable]
     public class SerializedItem

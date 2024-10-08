@@ -16,55 +16,75 @@ MonoBehaviour:
     name: Lightning Ring
     description: Strikes down enemies with bolts of lightning
     icon: {fileID: 21300000, guid: 6208e75404504114297288e0c6269259, type: 3}
-  levels:
+  weaponLevels:
   - name: Level 1
     level: 1
-    description: Strikes at random enemies.
+    description: 1
     baseStats: {fileID: 11400000, guid: c160a13acd7ba6540b084c6e0c490d96, type: 2}
     itemSpecificStats: {fileID: 11400000, guid: a62e0c5da21aa6b499f5e59cfc88b76f,
       type: 2}
   - name: Level 2
     level: 2
-    description: Fires 1 more projectile.
+    description: 2
     baseStats: {fileID: 11400000, guid: c9626eed522bf2e4aa5ddcebd8d418c5, type: 2}
     itemSpecificStats: {fileID: 11400000, guid: 7caf42018aec7d346aa23e7a3bd1b726,
       type: 2}
   - name: Level 3
     level: 3
-    description: Base Area up by 100%. Base Damage up by 10.
+    description: 
     baseStats: {fileID: 11400000, guid: 0acc0e90ed2dadf4e8e3e72c66d58730, type: 2}
     itemSpecificStats: {fileID: 11400000, guid: 43ed41d1fefe7784f826808d7da5fb70,
       type: 2}
   - name: Level 4
     level: 4
-    description: Fires 1 more projectile.
+    description: 
     baseStats: {fileID: 11400000, guid: bf626b33515ad0f4d87c2de1ae3d9613, type: 2}
     itemSpecificStats: {fileID: 11400000, guid: 5baa374b8588d2b46a9991db05acd512,
       type: 2}
   - name: Level 5
     level: 5
-    description: Base Area up by 50%. Fires 1 more projectile.
+    description: 
     baseStats: {fileID: 11400000, guid: 2d9b1c9c8e2051146aa91988cda0e6b6, type: 2}
     itemSpecificStats: {fileID: 11400000, guid: bcad3faf9c6264f42be84a6702792e8a,
       type: 2}
   - name: Level 6
     level: 6
-    description: Fires 1 more projectile. Cooldown reduced by 1 second.
+    description: 
     baseStats: {fileID: 11400000, guid: 7eb6efeaa4d475e49b8848ee29cb55b1, type: 2}
     itemSpecificStats: {fileID: 11400000, guid: f641521832db08a4497fb0e74aec19af,
       type: 2}
   - name: Level 7
     level: 7
-    description: Base Damage up by 100. Cooldown reduced by 1 second.
+    description: 
     baseStats: {fileID: 11400000, guid: 75990f6af3acde847a476996ade85ca9, type: 2}
     itemSpecificStats: {fileID: 11400000, guid: 511be5511305fea469f0afbe2f16d419,
       type: 2}
   - name: Level 8
     level: 8
-    description: Base Damage up by 100. Fires 4 more projectiles. Cooldown reduced
-      by 1 second.
+    description: 
     baseStats: {fileID: 11400000, guid: ccb4bd19ed141654889f0bc9f851dd0d, type: 2}
     itemSpecificStats: {fileID: 11400000, guid: d64baf637af92d540a377c93705a5f8c,
       type: 2}
+  passiveLevels:
+  - name: 
+    level: 0
+    description: 
+    effectType: 0
+  - name: 
+    level: 0
+    description: 
+    effectType: 0
+  - name: 
+    level: 0
+    description: 
+    effectType: 0
+  - name: 
+    level: 0
+    description: 
+    effectType: 0
+  - name: 
+    level: 0
+    description: 
+    effectType: 0
   lightningEffect: {fileID: 1617602193996184, guid: 37cc546003ea4944ca2f036db80baeab,
     type: 3}
