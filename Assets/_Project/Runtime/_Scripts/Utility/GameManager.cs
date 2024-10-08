@@ -4,6 +4,10 @@ using System.IO;
 using System.Linq;
 using DG.Tweening;
 using UnityEngine;
+#if UNITY_EDITOR
+using UnityEditor.Build;
+using UnityEditor.Build.Reporting;
+#endif
 #endregion
 
 public class GameManager : MonoBehaviour
@@ -119,3 +123,33 @@ public class GameManager : MonoBehaviour
         Cursor.lockState = Screen.fullScreen ? CursorLockMode.Locked : CursorLockMode.None;
     }
 }
+
+#if UNITY_EDITOR
+public class MyCustomBuildProcessor : IPreprocessBuildWithReport
+{
+    public int callbackOrder { get; }
+
+    public void OnPreprocessBuild(BuildReport report)
+    {
+        Debug.Log("Preprocessing the build...");
+
+        // clear the statbuffs json
+        File.WriteAllText(Application.persistentDataPath + "/statBuffs.json", string.Empty);
+
+        // check if the itemDescriptions.json exists
+        if (!File.Exists(Application.persistentDataPath + "/itemDescriptions.json"))
+        {
+            // if it doesn't, create it
+            Item.SaveAllDescriptionsToJson();
+        }
+
+        // set balance to zero
+        PlayerPrefs.SetInt("Balance", 0);
+        Balance.Coins = 0;
+
+        // set the playerprefs to zero
+        PlayerPrefs.DeleteAll();
+    }
+}
+#endif
+
