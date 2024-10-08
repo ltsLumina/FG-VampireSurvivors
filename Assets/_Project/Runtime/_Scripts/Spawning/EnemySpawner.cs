@@ -45,30 +45,6 @@ public class EnemySpawner : MonoBehaviour, IPausable
         set => waves = value;
     }
 
-    #region Skip Wave Button
-    [Button("Skip Wave")]
-    [UsedImplicitly]
-    public void SkipWave()
-    {
-        int currentMinute = CountdownTimer.Instance.Time.Minutes;
-        int nextMinute    = currentMinute + 1;
-        CountdownTimer.Instance.AddTime(60);
-
-        if (nextMinute < waves.Count)
-        {
-            // Cancel the current InvokeRepeating
-            CancelInvoke(nameof(SpawnWaves));
-
-            // Spawn the next wave
-            waves[nextMinute].Spawn();
-            Debug.Log("Spawning wave " + waves[nextMinute].name);
-
-            // Re-invoke the SpawnWaves method to continue spawning waves every 60 seconds
-            InvokeRepeating(nameof(SpawnWaves), 60f - CountdownTimer.Instance.Time.Seconds, 60f);
-        }
-    }
-    #endregion
-
     void Awake()
     {
         Pools.Clear(); // Clear the pools list in case it's not empty. This prevents errors when using Unity Editor Mode options.
@@ -111,28 +87,6 @@ public class EnemySpawner : MonoBehaviour, IPausable
         }
     }
 
-    IEnumerator SpawnWavesCoroutine(Wave wave)
-    {
-        while (true)
-        {
-            wave.Spawn(true);
-            yield return new WaitForSeconds(5);
-        }
-    }
-
-    public void SpawnWaves()
-    {
-        int currentMinute = CountdownTimer.Instance.Time.Minutes;
-        if (currentMinute < waves.Count)
-        {
-            var wave = waves[currentMinute];
-            wave.Spawn();
-            Debug.Log("Spawning " + waves[currentMinute].name);
-        }
-    }
-
-    void RepeatSpawn() => waves[0].Spawn();
-
 #if UNITY_EDITOR
     void OnGUI()
     {
@@ -158,4 +112,50 @@ public class EnemySpawner : MonoBehaviour, IPausable
 #endif
 
     public void Pause() => enabled = !enabled;
+
+    #region Skip Wave Button
+    [Button("Skip Wave")]
+    [UsedImplicitly]
+    public void SkipWave()
+    {
+        int currentMinute = CountdownTimer.Instance.Time.Minutes;
+        int nextMinute    = currentMinute + 1;
+        CountdownTimer.Instance.AddTime(60);
+
+        if (nextMinute < waves.Count)
+        {
+            // Cancel the current InvokeRepeating
+            CancelInvoke(nameof(SpawnWaves));
+
+            // Spawn the next wave
+            waves[nextMinute].Spawn();
+            Debug.Log("Spawning wave " + waves[nextMinute].name);
+
+            // Re-invoke the SpawnWaves method to continue spawning waves every 60 seconds
+            InvokeRepeating(nameof(SpawnWaves), 60f - CountdownTimer.Instance.Time.Seconds, 60f);
+        }
+    }
+    #endregion
+
+    IEnumerator SpawnWavesCoroutine(Wave wave)
+    {
+        while (true)
+        {
+            wave.Spawn(true);
+            yield return new WaitForSeconds(5f);
+        }
+    }
+
+    public void SpawnWaves()
+    {
+        int currentMinute = CountdownTimer.Instance.Time.Minutes;
+        if (currentMinute < waves.Count)
+        {
+            var wave = waves[currentMinute];
+            wave.Spawn();
+            Debug.Log("Spawning " + waves[currentMinute].name);
+        }
+    }
+
+    void RepeatSpawn() => waves[0].Spawn();
 }

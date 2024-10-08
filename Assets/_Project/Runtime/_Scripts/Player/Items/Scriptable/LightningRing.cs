@@ -5,7 +5,6 @@ using System.Linq;
 using UnityEngine;
 #endregion
 
-[CreateAssetMenu(fileName = "Lightning Ring", menuName = "Items/Weapons/Lightning Ring")]
 public class LightningRing : WeaponItem
 {
     [Header("Other")]

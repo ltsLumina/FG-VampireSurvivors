@@ -3,12 +3,13 @@ using System.Collections;
 using UnityEngine;
 #endregion
 
-[CreateAssetMenu(fileName = "Knife", menuName = "Items/Knife")]
 public class Knife : WeaponItem
 {
     [Header("Knife")]
     [SerializeField] GameObject knifePrefab;
     [SerializeField] float velocity = 10f;
+
+    [Header("Card Effect")]
     [SerializeField] int numShots = 30;
 
     public override void Use()
@@ -19,19 +20,25 @@ public class Knife : WeaponItem
 
     public override void Play() => Player.Instance.StartCoroutine(CardEffect());
 
-    public void Attack(Vector3? direction = null)
+    void Attack(Vector3? direction = null)
     {
-        var moveInput = Player.Instance.GetComponentInChildren<InputManager>().MoveInput;
-        var shootDir  = direction ?? new Vector3(moveInput.x, 0, moveInput.y).normalized;
-        var offset    = shootDir * 2;
+        Vector2 moveInput        = Player.Instance.GetComponentInChildren<InputManager>().MoveInput;
+        Vector3 shootDir         = direction ?? new Vector3(moveInput.x, 0, moveInput.y).normalized;
+        Vector3 offsetFromPlayer = shootDir * 2;
 
-        if (moveInput == Vector2.zero && direction == null) return; // TODO: Should keep shooting in the last direction
+        if (shootDir == Vector3.zero) return;
 
-        GameObject knife = Instantiate(knifePrefab, Player.Instance.transform.position + offset, Quaternion.identity);
-        knife.transform.rotation = Quaternion.LookRotation(shootDir);
-        knife.GetComponent<Rigidbody>().AddForce(shootDir * (velocity * Character.Stat.Dexterity), ForceMode.Impulse);
-        
-        Destroy(knife, 3f * Character.Stat.Intelligence);
+        for (int i = 0; i < GetItemSpecificStat(ItemSpecificStats.Stats.Knives) + Character.Stat.Amount; i++)
+        {
+            GameObject knife = Instantiate(knifePrefab, Player.Instance.transform.position + offsetFromPlayer, Quaternion.identity);
+
+            var knifeOffset = new Vector3(Random.Range(-1.5f, 1.5f), 0, Random.Range(-0.5f, 0.5f));
+            knife.transform.position += knifeOffset;
+            knife.transform.rotation =  Quaternion.LookRotation(shootDir);
+            knife.GetComponent<Rigidbody>().AddForce(shootDir * (velocity * Character.Stat.Dexterity), ForceMode.Impulse);
+
+            Destroy(knife, 3f * Character.Stat.Intelligence);
+        }
     }
 
     public IEnumerator KnifeCooldown()
@@ -48,7 +55,7 @@ public class Knife : WeaponItem
         float angleStep = 360f / numShots;
         float angle     = 0f;
 
-        for (int i = 0; i < numShots; i++)
+        for (int i = 0; i < numShots * (Character.Stat.Amount > 0 ? Character.Stat.Amount : 1); i++)
         {
             float   directionX = Mathf.Cos(angle * Mathf.Deg2Rad);
             float   directionZ = Mathf.Sin(angle * Mathf.Deg2Rad);

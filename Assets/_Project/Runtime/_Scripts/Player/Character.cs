@@ -8,7 +8,7 @@ public class Character : ScriptableObject
     [SerializeField] string characterName;
     [Multiline]
     [SerializeField] string description;
-    [SerializeField] Item startingItem;
+    [SerializeField] WeaponItem startingItem;
     [SerializeField] CharacterStats stats;
 
     public string CharacterName => characterName;

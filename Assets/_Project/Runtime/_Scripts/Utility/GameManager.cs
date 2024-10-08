@@ -34,7 +34,7 @@ public class GameManager : MonoBehaviour
 
             if (File.Exists(path) && File.ReadAllText(path) != string.Empty)
             {
-                string json = File.ReadAllText(path);
+                string                   json             = File.ReadAllText(path);
                 List<Store.StatBuffData> statBuffDataList = JsonUtility.FromJson<Store.StatBuffDataList>(json).Buffs;
 
                 foreach (Store.StatBuffData statBuffData in statBuffDataList)
@@ -53,7 +53,11 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
+    static void Initialize() => Item.SaveAllDescriptionsToJson();
+
     public void PauseGame() => Time.timeScale = 0;
+
     public void ResumeGame() => Time.timeScale = 1;
 
     public void TogglePause()
@@ -77,6 +81,7 @@ public class GameManager : MonoBehaviour
 
     public void InitiateGameOverSequence()
     {
+        // i got lazy lol
         var gameOverCanvas = GameObject.FindWithTag("[Canvas] Game-Over Canvas");
         
         var sequence = DOTween.Sequence();
@@ -95,6 +100,7 @@ public class GameManager : MonoBehaviour
 
     public void ResultsSequence()
     {
+        // i got lazy with this too :)
         GameObject resultsCanvas = GameObject.FindWithTag("[Canvas] Results Canvas");
         Transform  ui = resultsCanvas.transform.GetChild(0);
         
@@ -103,47 +109,13 @@ public class GameManager : MonoBehaviour
         ui.gameObject.SetActive(true);
         sequence.Append(ui.DOScale(1, 1f).SetEase(Ease.Linear));
     }
-    
+
     public void LoadScene(int sceneIndex) => SceneManagerExtended.LoadScene(sceneIndex);
 
-    // public enum GameStates
-    // {
-    //     MainMenu,
-    //     Running,
-    //     Paused
-    // }
-
-    //public GameStates State;
-
-    // public void ChangeGameState(GameStates newState)
-    // {
-    //     State = newState;
-    //
-    //     switch (newState)
-    //     {
-    //         case GameStates.MainMenu:
-    //             inputSystemRef.SwitchCurrentActionMap("UI");
-    //             break;
-    //
-    //         case GameStates.Running:
-    //             inputSystemRef.SwitchCurrentActionMap("Player");
-    //             break;
-    //
-    //         case GameStates.Paused:
-    //             inputSystemRef.SwitchCurrentActionMap("UI");
-    //             break;
-    //
-    //     }
-    // }
-    //
-    // public PlayerInput inputComponent;
-    //
-    // public delegate void PauseEvent();
-    // public static event PauseEvent pauseEvent;
-    //
-    // private void OnPause()
-    // {
-    //     if (pauseEvent != null) { pauseEvent(); }
-    //
-    // }
+    public void ToggleFullScreen()
+    {
+        Screen.fullScreen = !Screen.fullScreen;
+        Screen.fullScreenMode = Screen.fullScreen ? FullScreenMode.FullScreenWindow : FullScreenMode.Windowed;
+        Cursor.lockState = Screen.fullScreen ? CursorLockMode.Locked : CursorLockMode.None;
+    }
 }

@@ -1,5 +1,6 @@
 ﻿#region
 using System;
+using JetBrains.Annotations;
 using UnityEditor;
 using UnityEngine;
 #endregion
@@ -9,7 +10,10 @@ public class CreateItemWindow : EditorWindow
 {
     static Action activeMenu;
     static string itemName = string.Empty;
+    static ItemType itemType = ItemType.Weapon;
     static bool success;
+
+    void OnGUI() => activeMenu();
 
     [MenuItem("Tools/Items/Create Item Window")]
     static void ShowWindow()
@@ -21,44 +25,6 @@ public class CreateItemWindow : EditorWindow
         window.Show();
     }
 
-    #region Utility
-    void OnEnable()
-    {
-        Initialize();
-        EditorApplication.playModeStateChanged += PlayModeState;
-
-        return;
-
-        void Initialize()
-        {
-            activeMenu = DefaultMenu;
-            success    = false;
-        }
-    }
-
-    void OnDisable()
-    {
-        Terminate();
-
-        return;
-
-        void Terminate()
-        {
-            // Remove the play mode state changed event.
-            EditorApplication.playModeStateChanged -= PlayModeState;
-
-            success = false;
-        }
-    }
-
-    void PlayModeState(PlayModeStateChange state)
-    { // Repaint the window when entering play mode.
-        if (state == PlayModeStateChange.EnteredPlayMode) Repaint();
-    }
-    #endregion
-
-    void OnGUI() => activeMenu();
-
     public static void DefaultMenu()
     {
         AssetCreationWindow.DrawBackButton();
@@ -67,6 +33,7 @@ public class CreateItemWindow : EditorWindow
         {
             GUILayout.Label("Create New Item", EditorStyles.boldLabel, GUILayout.Height(30));
             itemName = EditorGUILayout.TextField("Item Name", itemName);
+            itemType = (ItemType) EditorGUILayout.EnumPopup("Item Type", itemType);
 
             using (new EditorGUI.DisabledScope(ValidateItemName(itemName)))
             {
@@ -75,8 +42,10 @@ public class CreateItemWindow : EditorWindow
                     const string directory    = "Assets/_Project/Runtime/_Scripts/Player/Items/Scriptable";
                     const string className    = "ItemTemplateFile";
                     string       templatePath = $"Assets/_Project/Runtime/_Scripts/Player/Items/Scriptable/{className}.cs";
-
-                    EditorGUIUtils.CreateScript(typeof(Item), directory, className, templatePath, itemName);
+                    
+                    var type = Type.GetType(Enum.GetName(typeof(ItemType), itemType) ?? throw new InvalidOperationException());
+                    
+                    EditorGUIUtils.CreateScript(type, directory, className, templatePath, itemName);
                     CreateNewItemAsset();
                     GUI.FocusControl(null); // Deselect the text field to clear it
                 }
@@ -147,6 +116,51 @@ public class CreateItemWindow : EditorWindow
 
         success  = true;
         itemName = string.Empty;
+    }
+    #endregion
+
+    /// <summary>
+    /// Determines the type of item to create.
+    /// </summary>
+    enum ItemType
+    {
+        [UsedImplicitly] Weapon,
+        [UsedImplicitly] Passive
+    }
+
+    #region Utility
+    void OnEnable()
+    {
+        Initialize();
+        EditorApplication.playModeStateChanged += PlayModeState;
+
+        return;
+
+        void Initialize()
+        {
+            activeMenu = DefaultMenu;
+            success    = false;
+        }
+    }
+
+    void OnDisable()
+    {
+        Terminate();
+
+        return;
+
+        void Terminate()
+        {
+            // Remove the play mode state changed event.
+            EditorApplication.playModeStateChanged -= PlayModeState;
+
+            success = false;
+        }
+    }
+
+    void PlayModeState(PlayModeStateChange state)
+    { // Repaint the window when entering play mode.
+        if (state == PlayModeStateChange.EnteredPlayMode) Repaint();
     }
     #endregion
 }

@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using JetBrains.Annotations;
 using UnityEngine;
 using VInspector;
 #if UNITY_EDITOR
@@ -12,6 +13,29 @@ using UnityEditor;
 [CreateAssetMenu(fileName = "Character Stats", menuName = "Character/Character Stats", order = 0)]
 public class CharacterStats : ScriptableObject
 {
+    public enum Stats
+    {
+        MaxHealth,
+        Recovery,
+        Armor,
+        MoveSpeed,
+        Strength,
+        Dexterity,
+        Intelligence,
+        Wisdom,
+        Cooldown,
+        Amount,
+        Revival,
+        Magnet,
+        Luck,
+        Growth,
+        Greed,
+        Curse,
+        Reroll,
+        Skip,
+        Banish
+    }
+
     [Header("Player Stats")]
     [SerializeField] int maxHealth = 120;
     [SerializeField]  float recovery = 0.3f; // 0.3 health per second
@@ -32,8 +56,8 @@ public class CharacterStats : ScriptableObject
     [Space(15)]
     [Header("Utility Stats")]
     [SerializeField] float cooldown = 0.95f; // 5% faster ("-5% cooldown")
-    [SerializeField] int amount = 1;         // +1 item effect (e.g. 1 more lightning strike)
-    [SerializeField] int revival = 0;
+    [SerializeField] int amount;             // +1 item effect (e.g. 1 more lightning strike)
+    [SerializeField] int revival;
     [SerializeField] float magnet = 1.50f; // 50% radius // probably gonna re-do this one
 
     [Space(15)]
@@ -41,8 +65,8 @@ public class CharacterStats : ScriptableObject
     [SerializeField] float luck = 1.30f;   // 30% luck
     [SerializeField] float growth = 1.15f; // 15% growth
 
-    [SerializeField] float greed;      // increases amount of coins dropped
-    [SerializeField] float curse = 0f; // increases difficulty. (enemy move speed, spawn rate, health)
+    [SerializeField] float greed; // increases amount of coins dropped
+    [SerializeField] float curse; // increases difficulty. (enemy move speed, spawn rate, health)
 
     [Space(15)]
     [Header("Item-Adjusted Stats")]
@@ -52,7 +76,7 @@ public class CharacterStats : ScriptableObject
 
     Dictionary<string, Action<float>> statIncreasers;
 
-    void Reset()
+    public void Reset()
     {
         maxHealth = 120;
         recovery  = 0.3f;
@@ -65,7 +89,7 @@ public class CharacterStats : ScriptableObject
         wisdom       = 1.10f;
 
         cooldown = 0.95f; // 5% faster ("-5% cooldown")
-        amount   = 1;     // +1 item effect (e.g. 1 more lightning strike)
+        amount   = 0;     // +1 item effect (e.g. 1 more lightning strike)
         revival  = 0;
         magnet   = 1.50f; // 50% radius // probably gonna re-do this one
 
@@ -111,15 +135,14 @@ public class CharacterStats : ScriptableObject
         { "Skip", value => skip                      += (int) value },
         { "Banish", value => banish                  += (int) value } };
         #endregion
-
         
         #if UNITY_EDITOR
         EditorApplication.playModeStateChanged -= OnPlayModeStateChanged;
         EditorApplication.playModeStateChanged += OnPlayModeStateChanged;
         #endif
-        }
+    }
 
-    [Button]
+    [Button, UsedImplicitly]
     public void ClearJSON()
     {
         string path = Application.persistentDataPath + "/statBuffs.json";
@@ -137,6 +160,17 @@ public class CharacterStats : ScriptableObject
         if (statIncreasers.TryGetValue(statName, out Action<float> increaseAction)) increaseAction(value);
         else Debug.LogWarning($"Stat {statName} not found.");
     }
+
+#if UNITY_EDITOR
+    void OnPlayModeStateChanged(PlayModeStateChange state)
+    {
+        if (state == PlayModeStateChange.ExitingPlayMode)
+        {
+            EditorApplication.playModeStateChanged -= OnPlayModeStateChanged;
+            Reset();
+        }
+    }
+#endif
 
     #region Properties
     [Value]
@@ -221,26 +255,6 @@ public class CharacterStats : ScriptableObject
     [Value]
     public int Banish => banish;
     #endregion
-
-#if UNITY_EDITOR
-    string initialJson;
-
-    //TODO: This wont work in a build, probably.
-    void OnPlayModeStateChanged(PlayModeStateChange obj)
-    {
-        switch (obj)
-        {
-            case PlayModeStateChange.EnteredPlayMode:
-                initialJson = EditorJsonUtility.ToJson(this);
-                break;
-
-            case PlayModeStateChange.ExitingPlayMode:
-                EditorApplication.playModeStateChanged -= OnPlayModeStateChanged;
-                EditorJsonUtility.FromJsonOverwrite(initialJson, this);
-                break;
-        }
-    }
-#endif
 }
 
 [AttributeUsage(AttributeTargets.Property | AttributeTargets.Field)]

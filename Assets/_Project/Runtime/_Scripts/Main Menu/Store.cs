@@ -40,6 +40,11 @@ public class Store : MonoBehaviour
 
     void Start()
     {
+        // reset the character stats to their default values when the game starts
+        // this prevents the stats from being applied multiple times when the game is played multiple times
+        var characterStats = Resources.LoadAll<CharacterStats>("Characters").ToList();
+        characterStats.ForEach(stats => stats.Reset());
+        
         // hide on play
         if (Application.isPlaying) gameObject.SetActive(false);
         
@@ -127,8 +132,11 @@ public class Store : MonoBehaviour
 
             foreach (StatBuffUIToggle toggle in button.Toggles) { toggle.isOn = false; }
         }
+        
+        // Resets all stats to their default.
+        Character.Stat.Reset();
     }
-    
+
     public static StatBuffData LoadStatBuffData(string statName)
     {
         string path = Application.persistentDataPath + "/statBuffs.json";

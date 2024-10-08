@@ -6,13 +6,13 @@ using UnityEngine.InputSystem;
 public class InputManager : MonoBehaviour
 {
     PlayerInput playerInput;
-    
+
     public Vector2 MoveInput { get; private set; }
 
     void Awake()
     {
         playerInput = GetComponent<PlayerInput>();
-        if (!playerInput) Logger.LogError("PlayerInput component not found on InputManager!");
+        Debug.Assert(playerInput != null, "Player Input component not found.");
     }
 
     // -- Player Input Actions --
@@ -20,7 +20,6 @@ public class InputManager : MonoBehaviour
     public void OnMove(InputAction.CallbackContext context)
     {
         MoveInput = context.ReadValue<Vector2>();
-
         //Logger.Log("Move Vector: " + MoveInput);
     }
 
@@ -33,8 +32,14 @@ public class InputManager : MonoBehaviour
     /// <param name="context"></param>
     public void OnPause(InputAction.CallbackContext context)
     {
-        //TODO: Clean this up. This is terrible.
+        // I got lazy so this code is terribly ugly and I'm sorry :)
         if (LevelUpManager.Instance.transform.GetChild(0).gameObject.activeSelf) return; // Prevent pausing/un-pausing the game when the level up menu is active
-        if (context.performed) GameManager.Instance.TogglePause();
+
+        if (context.performed)
+        {
+            GameManager.Instance.TogglePause();
+            var pauseMenu = GameObject.FindWithTag("[Canvas] Settings Canvas").transform.GetChild(0).gameObject;
+            pauseMenu.SetActive(GameManager.IsPaused);
+        }
     }
 }

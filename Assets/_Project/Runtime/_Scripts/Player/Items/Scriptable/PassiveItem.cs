@@ -3,13 +3,15 @@
 // Essentially just a wrapper class for the items so far.
 public abstract class PassiveItem : Item
 {
-    public override void Use()
-    {
-        throw new System.NotImplementedException();
-    }
+    [SerializeField] CharacterStats.Stats effectType;
+    [Tooltip("Grants the following effect to the player.")]
+    [SerializeField] float effect;
 
-    public override void Play()
+    public override void Use() => GrantEffect();
+
+    protected void GrantEffect()
     {
-        throw new System.NotImplementedException();
+        Character.Stat.IncreaseStat(effectType.ToString(), effect); 
+        Debug.Log($"{name} granted effect: {effectType} increased by {effect}.");
     }
 }

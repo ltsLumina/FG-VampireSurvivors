@@ -53,8 +53,8 @@ MonoBehaviour:
   magnetizationRadius: 3
   magnetizationStrength: 10
   blueExpValue: 1
-  greenExpValue: 10
-  redExpValue: 50
+  greenExpValue: 5
+  redExpValue: 25
   blue: {r: 0.21586865, g: 0.46661994, b: 0.9339623, a: 0}
   green: {r: 0.30199316, g: 0.7075472, b: 0.20358667, a: 0}
   red: {r: 1, g: 0.08018869, b: 0.08018869, a: 0}

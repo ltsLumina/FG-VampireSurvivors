@@ -31,6 +31,9 @@ public class InventoryDisplay : MonoBehaviour
     /// <param name="item">The item that was added to the inventory.</param>
     public void OnItemAdded(Item item)
     {
+        // if the item is already in the inventory, return
+        if (inventorySlots.Any(slot => slot.sprite == item.Icon)) return;
+        
         // set the sprite of the first inactive inventory slot to the icon of the item
         foreach (Image slot in inventorySlots.Where(slot => !slot.gameObject.activeSelf))
         {

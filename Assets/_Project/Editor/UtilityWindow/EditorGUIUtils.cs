@@ -8,17 +8,12 @@ using UnityEngine;
 public static class EditorGUIUtils
 {
     public readonly static GUIContent createdSuccessfullyContent = new ("Created Successfully.");
-
     public readonly static GUIContent nameContent = new ("Name", "The name of the move. This will be the name of the ScriptableObject as well.");
     public readonly static GUIContent damageContent = new ("Damage", "The damage value of the move.");
     public readonly static GUIContent descriptionContent = new ("Description", "The description of the move.");
     public readonly static GUIContent maxHealthContent = new ("Max Health", "The maximum health of the enemy.");
     public readonly static GUIContent speedContent = new ("Speed", "The speed of the enemy.");
     public readonly static GUIContent xpYieldContent = new ("XP Yield", "The amount of experience the enemy yields when defeated.");
-
-    public readonly static GUIContent animationContent = new ("Animation", "The animation to play during the move.");
-    public readonly static GUIContent audioClipContent = new ("Audio Clip", "The audio clip to play during the move.");
-    public readonly static GUIContent spriteContent = new ("Sprite", "The sprite to display during the move.");
 
     /// <summary>
     ///     Creates a new script file based on a template.

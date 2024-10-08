@@ -3,9 +3,9 @@ using UnityEngine;
 #endregion
 
 /// <summary>
-///     Base stat object (not to be confused with the BaseStats class) that stores the item-specific stats such as knockback for the Garlic item.
+///     Inheritance-base object (not to be confused with the BaseStats class) that stores the item-specific stats such as knockback for the Garlic item.
 /// </summary>
-public class ItemSpecificStats : ScriptableObject
+public abstract class ItemSpecificStats : ScriptableObject
 {
     public enum Stats
     {
@@ -14,6 +14,10 @@ public class ItemSpecificStats : ScriptableObject
 
         // Lightning Ring
         LightningStrikes,
+        
+        // Knife
+        Knives, // how many knives are thrown at once
+        Pierce,
     }
 
     public virtual float GetItemSpecificStat(Stats stat)

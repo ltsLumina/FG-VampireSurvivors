@@ -1,9 +1,7 @@
 #region
-using UnityEngine;
 #endregion
 
-[CreateAssetMenu(fileName = "ItemTemplateFile", menuName = "Items/ItemTemplateFile")]
-public class ItemTemplateFile : Item
+public class ItemTemplateFile : WeaponItem
 {
     public override void Use() { }
 

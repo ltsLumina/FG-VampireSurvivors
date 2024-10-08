@@ -1,7 +1,6 @@
 ﻿#region
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using JetBrains.Annotations;
 using UnityEngine;
@@ -27,13 +26,13 @@ public abstract partial class Item : ScriptableObject
     ///     Contains a list of levels for the item.
     /// </summary>
     [SerializeField] protected List<LevelContainer> levels;
+    LevelContainer container;
+    LevelContainer level;
 
     /// <summary>
     /// Holds the variables of the struct at each level.
     /// </summary>
     LevelContainer levelContainer;
-    LevelContainer container;
-    LevelContainer level;
 
     public List<LevelContainer> Levels => levels;
 
@@ -46,6 +45,41 @@ public abstract partial class Item : ScriptableObject
     public string Description => details.description;
 
     public Sprite Icon => details.icon;
+
+    #region Utility | OnValidate
+    void OnValidate()
+    {
+        Name = name;
+
+        // Set the name of the structs' "name" variable to the index +1
+        for (int i = 0; i < levels.Count; i++)
+        {
+            levelContainer.name = "Level " + (i + 1);
+        }
+
+        // Set the level value to the index +1
+        for (int i = 0; i < levels.Count; i++)
+        {
+            levelContainer.level = i + 1;
+        }
+
+        // Set the name of the item to the name of the class
+        details.name = string.Concat(GetType().Name.Select(x => char.IsUpper(x) ? " " + x : x.ToString())).TrimStart(' ');
+
+        // throw error if the level is out of bounds
+        OutOfBounds();
+
+        return;
+
+        void OutOfBounds()
+        {
+            // bug: The list is empty for 1 frame when recompiling so I just don't throw an error if the list is empty
+            if (levels.Count == 0 || levelContainer.level == 0) return;
+
+            if (levelContainer.level < 1 || levelContainer.level > levels.Count) Debug.LogError("Level out of bounds. Please enter a valid level." + "\nLevel entered: " + levelContainer.level);
+        }
+    }
+    #endregion
 
     public string GetItemLevelDescription(Item item)
     {
@@ -85,80 +119,6 @@ public abstract partial class Item : ScriptableObject
         Item item = potentialItems[Random.Range(0, potentialItems.Count)];
         
         return item;
-    }
-    #endregion
-    
-    #region Utility | OnValidate
-    void OnValidate()
-    {
-        Name = name;
-
-        // Set the name of the structs' "name" variable to the index +1
-        for (int i = 0; i < levels.Count; i++)
-        {
-            levelContainer.name = "Level " + (i + 1);
-        }
-
-        // Set the level value to the index +1
-        for (int i = 0; i < levels.Count; i++)
-        {
-            levelContainer.level = i + 1;
-        }
-
-        // Set the name of the item to the name of the class
-        details.name = string.Concat(GetType().Name.Select(x => char.IsUpper(x) ? " " + x : x.ToString())).TrimStart(' ');
-
-        // ensure the list of levels is always 8
-        EnforcedLevelAmount();
-
-        // warn if the level is not in order
-        NotInOrder();
-
-        // throw error if the level is out of bounds
-        OutOfBounds();
-
-        return;
-
-        void OutOfBounds()
-        {
-            // bug: The list is empty for 1 frame when recompiling so I just don't throw an error if the list is empty
-            if (levels.Count == 0 || levelContainer.level == 0) return;
-
-            if (levelContainer.level < 1 || levelContainer.level > levels.Count) Debug.LogError("Level out of bounds. Please enter a valid level." + "\nLevel entered: " + levelContainer.level);
-        }
-
-        void NotInOrder()
-        {
-            // bug: same here
-            if (levels.Count == 0) return;
-
-            for (int i = 0; i < levels.Count; i++)
-            {
-                level = levels[i];
-
-                if (level.level != i + 1)
-                {
-                    Debug.LogWarning
-                    ($"Element {i} is out of order. It is set to level {levelContainer.level} when it should be level {i + 1}." +
-                     "\nThe \"level\" field is marked as [HideInInspector] so make sure to remove that attribute to see the level field in the inspector.", this);
-
-                    level.level = i + 1;
-                }
-            }
-        }
-
-        void EnforcedLevelAmount()
-        {
-            switch (levels.Count)
-            {
-                case 0: // bug: and same thing here
-                case 8:
-                    return;
-            }
-
-            Debug.LogError("Levels list must contain 8 levels.");
-            while (levels.Count > 8) levels.RemoveAt(levels.Count - 1);
-        }
     }
     #endregion
 

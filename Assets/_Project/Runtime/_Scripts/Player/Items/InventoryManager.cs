@@ -71,6 +71,7 @@ public class InventoryManager : MonoBehaviour
             inventory[i] = itemEntry;
 
             Debug.Log($"Item level increased. \nItem: {itemEntry.Item} increased to level {itemEntry.Level}.");
+            onItemAdded.Invoke(item);
             return;
         }
 
@@ -193,7 +194,7 @@ public static class Inventory
     public static List<Item> Items => instance.Inventory.Select(entry => entry.Item).ToList();
 
     public static T GetItem<T>() where T : Item => instance.GetItem<T>();
-    
+
     public static int GetItemLevel(this Item item) => instance.GetItemLevel(item);
 
     public static void AddItem(Item item) => instance.AddItem(item);

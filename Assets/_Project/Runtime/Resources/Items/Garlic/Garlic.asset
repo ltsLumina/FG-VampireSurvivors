@@ -66,5 +66,3 @@ MonoBehaviour:
     baseStats: {fileID: 11400000, guid: 41bf874a36640f546aa0a3a42a3a0444, type: 2}
     itemSpecificStats: {fileID: 11400000, guid: f584fa0f2f2efde4b905a2694371b615,
       type: 2}
-  garlicEffect: {fileID: 8877596331768416466, guid: 6f4b628023cb4bc449d3bb2c00bad6af,
-    type: 3}

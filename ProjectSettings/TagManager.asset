@@ -11,6 +11,7 @@ TagManager:
   - '[Canvas] Pop-Ups Canvas'
   - '[Canvas] Game-Over Canvas'
   - '[Canvas] Results Canvas'
+  - '[Canvas] Settings Canvas'
   layers:
   - Default
   - TransparentFX

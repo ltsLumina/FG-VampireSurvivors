@@ -4,7 +4,6 @@ using System.Collections;
 using System.Reflection;
 using UnityEngine;
 using UnityEngine.Events;
-using UnityEngine.UI;
 #endregion
 
 [SelectionBase]
@@ -32,32 +31,10 @@ public sealed partial class Player : MonoBehaviour, IDamageable, IPausable
 
     public static Player Instance { get; private set; }
 
-    public float CurrentHealth
-    {
-        get => currentHealth;
-        set
-        {
-            currentHealth = Mathf.Clamp(value, 0, Character.Stat.MaxHealth);
-
-            if (currentHealth <= 0)
-            {
-                if (Character.Stat.Revival > 0)
-                {
-                    currentHealth = Character.Stat.MaxHealth;
-                    Logger.LogWarning("Player has been revived.");
-                    return;
-                }
-
-                Death();
-            }
-            else if (Mathf.Approximately(currentHealth, Character.Stat.MaxHealth)) { healingEffect.gameObject.SetActive(false); }
-        }
-    }
-    
     public static bool IsDead => Instance.CurrentHealth <= 0;
 
     public static Vector3 Position => Instance.transform.position;
-    
+
     public static int EnemiesDefeated { get; set; }
 
     void Awake()
@@ -72,9 +49,6 @@ public sealed partial class Player : MonoBehaviour, IDamageable, IPausable
             
             inputManager = GetComponentInChildren<InputManager>();
             if (!inputManager) Logger.LogError("InputManager component not found on Player!");
-            
-            healthbar = GetComponentInChildren<Healthbar>();
-            healthbar.GetComponent<Slider>().maxValue = Character.Stat.MaxHealth;
 
             lightningRingCoroutine = null;
             garlicCoroutine        = null;
@@ -155,6 +129,28 @@ public sealed partial class Player : MonoBehaviour, IDamageable, IPausable
         {
             Gizmos.color = Color.blue;
             Gizmos.DrawWireSphere(transform.position, lightningRing.Zone);
+        }
+    }
+
+    public float CurrentHealth
+    {
+        get => currentHealth;
+        set
+        {
+            currentHealth = Mathf.Clamp(value, 0, Character.Stat.MaxHealth);
+
+            if (currentHealth <= 0)
+            {
+                if (Character.Stat.Revival > 0)
+                {
+                    currentHealth = Character.Stat.MaxHealth;
+                    Logger.LogWarning("Player has been revived.");
+                    return;
+                }
+
+                Death();
+            }
+            else if (Mathf.Approximately(currentHealth, Character.Stat.MaxHealth)) { healingEffect.gameObject.SetActive(false); }
         }
     }
 

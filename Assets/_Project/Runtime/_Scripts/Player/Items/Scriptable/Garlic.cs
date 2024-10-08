@@ -3,18 +3,33 @@ using System.Collections;
 using UnityEngine;
 #endregion
 
-[CreateAssetMenu(fileName = "Garlic", menuName = "Items/Garlic")]
 public class Garlic : WeaponItem
 {
     [Header("Effects")]
-    [SerializeField] GameObject garlicEffect;
-
+    GameObject garlicAura;
     Collider[] garlicColliders;
+
+    ParticleSystem.ShapeModule module;
 
     public override void Use()
     {
         Debug.Log($"{nameof(Garlic)} used.");
         Player.Instance.SelectAttack<Garlic>();
+        
+        // terrible but i cant be bothered to fix it
+        garlicAura = Player.Instance.transform.GetChild(2).GetChild(4).gameObject;
+
+        if (garlicAura != null)
+        {
+            garlicAura.SetActive(true);
+            // set the radius of the ShapeModule to the item's area stat
+            var particleSystems = garlicAura.GetComponentsInChildren<ParticleSystem>();
+            foreach (var ps in particleSystems)
+            {
+                module        = ps.shape;
+                module.radius = Zone;
+            }
+        }
     }
 
     public override void Play() => CardEffect();

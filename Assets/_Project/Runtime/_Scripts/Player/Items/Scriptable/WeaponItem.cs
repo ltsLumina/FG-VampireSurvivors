@@ -48,7 +48,7 @@ public abstract class WeaponItem : Item
         }
     }
 
-    protected float GetItemSpecificStat(ItemSpecificStats.Stats stat)
+    public float GetItemSpecificStat(ItemSpecificStats.Stats stat)
     {
         if (LevelInvalid(out int level)) return -1;
 

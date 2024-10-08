@@ -6,8 +6,11 @@ using UnityEngine;
 
 public abstract partial class Item
 {
-    public static void SaveAllDescriptionsToJson(List<Item> items)
+    public static void SaveAllDescriptionsToJson()
     {
+
+        var items = Resources.LoadAll<Item>("Items");
+        
         var serializedItems = items.Select
         (item => new SerializedItem
          { ItemName = item.Name,
