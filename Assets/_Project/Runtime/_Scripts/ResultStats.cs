@@ -14,28 +14,29 @@ public class ResultStats : MonoBehaviour
         EnemiesDefeated,
     }
 
-    [SerializeField] List<TextMeshProUGUI> statTexts;
     readonly static List<ResultStat> resultStats = new ();
 
-    void Awake() => resultStats.Clear();
+    [SerializeField] List<TextMeshProUGUI> statTexts;
 
-    public static void SetResults(Stats stat, int value)
-    {
-        // If a stat with the same name already exists, update the value.
-        if (resultStats.Exists(resultStat => resultStat.Name == stat.ToString())) resultStats.Find(resultStat => resultStat.Name == stat.ToString()).Value = value;
-        else resultStats.Add(new ResultStat { Name = stat.ToString(), Value = value });
-    }
+    void Awake() => resultStats.Clear();
 
     void OnEnable()
     {
         CountdownTimer.OnTimerEnded += () =>
         {
-            SetResults(Stats.SurvivalTime, CountdownTimer.Instance.Time.Seconds);
+            Set(Stats.SurvivalTime, CountdownTimer.Instance.Time.Seconds);
             Debug.Log("Time is: " + CountdownTimer.Instance.Time.Seconds);
         };
         // Gold earned set through the Enemy class.
-        SetResults(Stats.LevelReached, Experience.Level);
+        Set(Stats.LevelReached, Experience.Level);
         // Enemies defeated set through the Enemy class.
+    }
+
+    public static void Set(Stats stat, int value)
+    {
+        // If a stat with the same name already exists, update the value.
+        if (resultStats.Exists(resultStat => resultStat.Name == stat.ToString())) resultStats.Find(resultStat => resultStat.Name == stat.ToString()).Value = value;
+        else resultStats.Add(new ResultStat { Name = stat.ToString(), Value = value });
     }
 
     public void OnPlayerDeath()

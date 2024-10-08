@@ -15,6 +15,7 @@ public class CharacterStats : ScriptableObject
 {
     public enum Stats
     {
+        // ReSharper disable UnusedMember.Global
         MaxHealth,
         Recovery,
         Armor,
@@ -34,6 +35,7 @@ public class CharacterStats : ScriptableObject
         Reroll,
         Skip,
         Banish
+        // ReSharper restore UnusedMember.Global
     }
 
     [Header("Player Stats")]
@@ -112,9 +114,9 @@ public class CharacterStats : ScriptableObject
         { "MaxHealth", multiplier =>
         {
             // Convert to float to allow for percentage increase
-            float floatHealth = maxHealth;
-            floatHealth = floatHealth.AddPercent(multiplier);
-            maxHealth   = Mathf.CeilToInt(floatHealth);
+            float convertedMaxHealth = maxHealth;
+            convertedMaxHealth = convertedMaxHealth.AddPercent(multiplier);
+            maxHealth = Mathf.FloorToInt(convertedMaxHealth);
         } },
         { "Recovery", value => recovery              += value },
         { "Armor", value => armor                    += (int) value },
@@ -129,8 +131,20 @@ public class CharacterStats : ScriptableObject
         { "Magnet", multiplier => magnet             =  magnet.AddPercent(multiplier) },
         { "Luck", multiplier => luck                 =  luck.AddPercent(multiplier) },
         { "Growth", multiplier => growth             =  growth.AddPercent(multiplier) },
-        { "Greed", multiplier => greed               =  greed.AddPercent(multiplier) },
-        { "Curse", multiplier => curse               =  curse.AddPercent(multiplier) },
+        { "Greed", multiplier =>
+        {
+            // Greed is zero by default, but the multiplier should still be applied if it's not.
+            // Using the Greed property because it returns 1 if the value is zero.
+            float f = Greed;
+            greed = f.AddPercent(multiplier);
+        } },
+        { "Curse", multiplier =>
+        {
+            // Curse is zero by default, but the multiplier should still be applied if it's not.
+            // Using the Curse property because it returns 1 if the value is zero.
+            float f = Curse;
+            curse = f.AddPercent(multiplier);
+        } },
         { "Reroll", value => reroll                  += (int) value },
         { "Skip", value => skip                      += (int) value },
         { "Banish", value => banish                  += (int) value } };
@@ -164,11 +178,16 @@ public class CharacterStats : ScriptableObject
 #if UNITY_EDITOR
     void OnPlayModeStateChanged(PlayModeStateChange state)
     {
-        if (state == PlayModeStateChange.ExitingPlayMode)
+        switch (state)
         {
-            EditorApplication.playModeStateChanged -= OnPlayModeStateChanged;
-            Reset();
+            case PlayModeStateChange.EnteredEditMode:
+                break;
+            
+            case PlayModeStateChange.ExitingPlayMode:
+                break;
         }
+
+        Reset();
     }
 #endif
 
@@ -236,7 +255,14 @@ public class CharacterStats : ScriptableObject
     }
 
     [Multiplier]
-    public float Greed => greed;
+    public float Greed
+    {
+        get
+        {
+            if (greed == 0) return 1;
+            return greed;
+        }
+    }
 
     [Multiplier]
     public float Curse

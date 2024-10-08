@@ -55,6 +55,9 @@ MonoBehaviour:
   maxHealth: 1000
   speed: 3
   xpYield: 25
+  coinYield:
+    min: 5
+    max: 25
   damage: 25
   recoilDamage: 5
   damageInterval: 1

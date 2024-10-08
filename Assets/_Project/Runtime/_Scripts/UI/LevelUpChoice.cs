@@ -27,9 +27,23 @@ public class LevelUpChoice : MonoBehaviour
 
     public void GetItem(List<Item> selectedItems)
     {
+        const int maxAttempts = 100;
+        int       attempts    = 0;
+
         // Create a new item for this button to give.
-        do { item = Item.Create(); }
-        while (selectedItems.Contains(item));
+        do
+        {
+            item = Item.Create();
+            attempts++;
+        }
+        while (selectedItems.Contains(item) && attempts < maxAttempts);
+        
+        if (attempts >= maxAttempts || !item)
+        {
+            Debug.LogError("Unable to create a unique item.");
+            gameObject.SetActive(false);
+            return;
+        }
 
         // Add the new item to the list of selected items
         selectedItems.Add(item);

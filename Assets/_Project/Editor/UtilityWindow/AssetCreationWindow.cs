@@ -1,5 +1,6 @@
 ﻿#region
 using System;
+using System.Linq;
 using UnityEditor;
 using UnityEngine;
 using static EditorGUIUtils;
@@ -15,20 +16,8 @@ public class AssetCreationWindow : EditorWindow
 
     public static Action activeMenu;
     public static bool createdSuccessfully;
+    static bool showingOther;
     Vector2 scrollPos;
-
-    [MenuItem("Tools/Create Asset Menu")]
-    public static void Open()
-    {
-        if (window) { window.Focus(); }
-        else
-        {
-            window              = GetWindow<AssetCreationWindow>(true);
-            window.titleContent = new ("Create Assets...");
-            window.minSize      = new (winSize.x, winSize.y / 2);
-            window.Show();
-        }
-    }
 
     void OnEnable()
     {
@@ -46,6 +35,19 @@ public class AssetCreationWindow : EditorWindow
 
         scrollPos = scrollView.scrollPosition;
         activeMenu();
+    }
+
+    [MenuItem("Tools/Create Asset Menu")]
+    public static void Open()
+    {
+        if (window) { window.Focus(); }
+        else
+        {
+            window              = GetWindow<AssetCreationWindow>(true);
+            window.titleContent = new ("Create Assets...");
+            window.minSize      = new (winSize.x, winSize.y / 2);
+            window.Show();
+        }
     }
 
     #region GUI
@@ -84,14 +86,29 @@ public class AssetCreationWindow : EditorWindow
                 activeMenu          = EnemyCreator.ManageEnemyMenu;
                 window.titleContent = new ("Creating new Enemy...");
             }
+
+            if (Button("Other Options", ExpandWidth(true))) showingOther = !showingOther;
+        }
+
+        using (new HorizontalScope())
+        {
+            if (!showingOther) return;
             
+            FlexibleSpace();
+
             if (Button(new GUIContent("Save Item 'Level-Descriptions'", "Save the Item 'Level-Descriptions' to a JSON file."), ExpandWidth(true)))
             {
-                createdSuccessfully = false;
-
-                activeMenu          = ItemDescriptionsEditor.DefaultMenu;
-                window.titleContent = new ("Saving Item 'Level-Descriptions'...");
+                Item.SaveAllDescriptionsToJson();
+                foreach (Item item in Resources.LoadAll<Item>("Items").ToList()) { Debug.Log("Saving descriptions for " + item); }
             }
+                
+            if (Button(new GUIContent("Load Item 'Level-Descriptions'", "Load the Item 'Level-Descriptions' from a JSON file."), ExpandWidth(true)))
+            {
+                Item.LoadAllDescriptionsFromJson();
+                foreach (Item item in Resources.LoadAll<Item>("Items").ToList()) { Debug.Log("Loading descriptions for " + item); }
+            }
+
+            FlexibleSpace();
         }
     }
 

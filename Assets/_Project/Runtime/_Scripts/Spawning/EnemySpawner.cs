@@ -45,6 +45,8 @@ public class EnemySpawner : MonoBehaviour, IPausable
         set => waves = value;
     }
 
+    static int SpawnMultiplier => Mathf.Clamp(CountdownTimer.Instance.Time.Minutes + 1, 1, 10);
+
     void Awake()
     {
         Pools.Clear(); // Clear the pools list in case it's not empty. This prevents errors when using Unity Editor Mode options.
@@ -65,22 +67,22 @@ public class EnemySpawner : MonoBehaviour, IPausable
     void Start()
     {
         Debug.Assert(waves.Count > 0, "No waves have been set up in the EnemySpawner.");
-        
+    
         SpawnWaves();
-        
+    
         // Spawn the enemies of the wave concurrently
         int currentMinute = CountdownTimer.Instance.Time.Minutes;
         StartCoroutine(SpawnWavesCoroutine(waves[currentMinute]));
-
+    
         if (repeat)
         {
             // spawn the first wave repeatedly
             InvokeRepeating(nameof(RepeatSpawn), 0f, 5f);
-
+    
             if (rapidFire)
             {
                 CancelInvoke(nameof(RepeatSpawn));
-
+    
                 // spawn the first wave rapidly
                 InvokeRepeating(nameof(RepeatSpawn), 0f, rapidFireInterval);
             }
@@ -146,14 +148,16 @@ public class EnemySpawner : MonoBehaviour, IPausable
         }
     }
 
-    public void SpawnWaves()
+    void SpawnWaves()
     {
         int currentMinute = CountdownTimer.Instance.Time.Minutes;
+        
         if (currentMinute < waves.Count)
         {
-            var wave = waves[currentMinute];
-            wave.Spawn();
-            Debug.Log("Spawning " + waves[currentMinute].name);
+            var wave            = waves[currentMinute];
+            int spawnMultiplier = SpawnMultiplier;
+            for (int i = 0; i < spawnMultiplier; i++) { wave.Spawn(); }
+            Debug.Log($"Spawning {wave.name} with multiplier {spawnMultiplier}");
         }
     }
 

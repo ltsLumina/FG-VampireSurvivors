@@ -40,16 +40,13 @@ public class InventoryManager : MonoBehaviour
         AddStartingItem(character.StartingItem);
     }
 
-    public Item AddStartingItem(Item item)
+    void AddStartingItem(Item item)
     {
         inventory.Add(new () { Item = item, Level = 1 });
 
         onItemAdded.Invoke(item);
 
         ValidateInspectorName();
-
-        Debug.Log("Starting item added to inventory. \nItem: " + item);
-        return item;
     }
 
     public void AddItem(Item item)
@@ -59,7 +56,7 @@ public class InventoryManager : MonoBehaviour
             if (inventory[i].Item != item) continue;
 
             // If the item is already at max level, return
-            if (inventory[i].Level >= 8)
+            if (inventory[i].Level >= item.MaxLevel)
             {
                 Debug.LogWarning("Item level is already at max level." + "\nThis warning should not appear during normal gameplay.");
                 return;
@@ -194,6 +191,8 @@ public static class Inventory
     public static List<Item> Items => instance.Inventory.Select(entry => entry.Item).ToList();
 
     public static T GetItem<T>() where T : Item => instance.GetItem<T>();
+
+    public static Item GetItem(Item item) => instance.Inventory.FirstOrDefault(entry => entry.Item == item).Item;
 
     public static int GetItemLevel(this Item item) => instance.GetItemLevel(item);
 

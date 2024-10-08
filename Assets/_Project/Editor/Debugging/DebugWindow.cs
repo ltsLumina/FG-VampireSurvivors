@@ -29,31 +29,14 @@ public class DebugWindow : EditorWindow
     static string commandQuery = string.Empty;
 
     readonly static Dictionary<string, string> commandDictionary = new ()
-    { { "help", "Shows the list of available commands." } };
+    { { "help", "Shows the list of available commands." },
+    { "health", "Sets the player's health to the maximum value." } };
 
     readonly static List<string> addedScenes = new ();
 
     static Vector2 scrollPosition;
 
     static DateTime lastDebugLogTime = DateTime.MinValue;
-
-    [MenuItem("Tools/Lumina/Debug Window")]
-    public static void ShowWindow()
-    {
-        // Dock next to inspector. Find the inspector window using reflection
-        Type desiredDockNextTo = typeof(EditorWindow).Assembly.GetType("UnityEditor.InspectorWindow");
-        var  window            = GetWindow<DebugWindow>("Debug", true, desiredDockNextTo);
-
-        // Set the icon. The icon is found in the Icons folder. Name of icon is "Debug.png"
-        var icon = AssetDatabase.LoadAssetAtPath<Texture2D>("Assets/Editor/Debugging/Icons/Debug.png");
-        window.titleContent.image = icon;
-        window.minSize            = new (350, 200);
-        window.maxSize            = window.minSize;
-
-        window.Show();
-    }
-
-    void OnGUI() => activeMenu();
 
     void OnEnable()
     {
@@ -83,6 +66,24 @@ public class DebugWindow : EditorWindow
             // Remove the play mode state changed event.
             EditorApplication.playModeStateChanged -= PlayModeState;
         }
+    }
+
+    void OnGUI() => activeMenu();
+
+    [MenuItem("Tools/Lumina/Debug Window")]
+    public static void ShowWindow()
+    {
+        // Dock next to inspector. Find the inspector window using reflection
+        Type desiredDockNextTo = typeof(EditorWindow).Assembly.GetType("UnityEditor.InspectorWindow");
+        var  window            = GetWindow<DebugWindow>("Debug", true, desiredDockNextTo);
+
+        // Set the icon. The icon is found in the Icons folder. Name of icon is "Debug.png"
+        var icon = AssetDatabase.LoadAssetAtPath<Texture2D>("Assets/Editor/Debugging/Icons/Debug.png");
+        window.titleContent.image = icon;
+        window.minSize            = new (350, 200);
+        window.maxSize            = window.minSize;
+
+        window.Show();
     }
 
     #region GUI
@@ -147,6 +148,7 @@ public class DebugWindow : EditorWindow
         Space(10);
     }
 
+    // unused in current project
     static void DrawCustomSceneButtons()
     {
         using (new VerticalScope("box"))
@@ -188,8 +190,6 @@ public class DebugWindow : EditorWindow
     {
         if (Button("Main Menu", Height(30))) sceneAction(0);
         if (Button("Level 1", Height(30))) sceneAction(1);
-        if (Button("Level 2", Height(30))) sceneAction(2);
-        if (Button("Level 3", Height(30))) sceneAction(3);
     }
 
     static void DrawMidBanner()
@@ -435,6 +435,11 @@ public class DebugWindow : EditorWindow
                 case var command when command.Contains("help"):
                     HelpCommand();
                     break;
+                
+                case var command when command.Contains("health"):
+                    HealthCommand();
+                    Logger.Log(message);
+                    break;
 
                 default:
                     Debug.LogWarning($"Command + \"{commandQuery}\" not recognized.");
@@ -451,6 +456,14 @@ public class DebugWindow : EditorWindow
     {
         if (!commandsListFoldout) commandsListFoldout = true;
         else Logger.Log("Commands can be viewed from the commands list at the bottom of the" + nameof(DebugWindow));
+    }
+
+    static void HealthCommand()
+    {
+        // Add health to the player
+        if (!Application.isPlaying) return;
+        Player.Instance.CurrentHealth = int.MaxValue;
+        Logger.Log("Player health set to max.");
     }
     #endregion
 

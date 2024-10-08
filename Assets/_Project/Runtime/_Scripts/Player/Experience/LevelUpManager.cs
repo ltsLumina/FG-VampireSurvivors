@@ -51,8 +51,11 @@ public class LevelUpManager : MonoBehaviour
             float heal = Character.Stat.MaxHealth * 0.10f;
             Player.Instance.CurrentHealth += heal;
         });
-        
-        foreach (var choice in levelUpChoices) { choice.GetComponent<Button>().onClick.AddListener(HideLevelUpMenu); }
+
+        foreach (var choice in levelUpChoices)
+        {
+            choice.GetComponent<Button>().onClick.AddListener(HideLevelUpMenu); 
+        }
         
         Debug.Assert(levelUpChoices.Count == 3, $"No {nameof(LevelUpChoice)}-buttons have been assigned to the {nameof(LevelUpManager)}. \nPlease assign them in the inspector.");
     }
@@ -101,9 +104,7 @@ public class LevelUpManager : MonoBehaviour
 
         Sequence sequence = DOTween.Sequence();
         sequence.SetUpdate(true);
-
         sequence.AppendInterval(0.3f);
-
         sequence.Append(levelUpMenu.DOScale(Vector3.zero, scaleDuration));
         sequence.OnComplete(() =>
         {

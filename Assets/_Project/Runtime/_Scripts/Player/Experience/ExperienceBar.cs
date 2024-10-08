@@ -1,10 +1,10 @@
 #region
 using System.Collections;
+using System.Linq;
 using JetBrains.Annotations;
 using Lumina.Essentials.Attributes;
 using UnityEngine;
 using UnityEngine.UI;
-using Sequence = Lumina.Essentials.Sequencer.Sequence;
 #endregion
 
 public class ExperienceBar : MonoBehaviour
@@ -19,8 +19,8 @@ public class ExperienceBar : MonoBehaviour
 
     [Header("UI")]
     [SerializeField] Slider vanitySlider;
-    Coroutine rainbowShift;
 
+    Coroutine rainbowShift;
     Slider slider;
 
     public void Reset()
@@ -51,6 +51,9 @@ public class ExperienceBar : MonoBehaviour
 
     void OnLevelUp()
     {
+        // If the player has reached the max level for all items and has all items in the game, return
+        if (InventoryManager.Instance.Inventory.All(item => item.Level >= item.Item.MaxLevel) && Inventory.Items.Count >= Resources.LoadAll<Item>("Items").Length) return;
+
         StartCoroutine(Delay());
         
         LevelUpManager.Instance.OnMenuHidden.AddListener(() =>

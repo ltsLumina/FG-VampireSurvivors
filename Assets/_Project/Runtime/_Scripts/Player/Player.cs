@@ -137,6 +137,14 @@ public sealed partial class Player : MonoBehaviour, IDamageable, IPausable
         get => currentHealth;
         set
         {
+#if UNITY_EDITOR
+            if (Mathf.Approximately(value, int.MaxValue))
+            {
+                currentHealth = int.MaxValue;
+                return;
+            }
+#endif
+            
             currentHealth = Mathf.Clamp(value, 0, Character.Stat.MaxHealth);
 
             if (currentHealth <= 0)

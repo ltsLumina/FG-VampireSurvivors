@@ -44,7 +44,7 @@ public abstract partial class Item
         string path = Application.persistentDataPath + "/itemDescriptions.json";
         File.WriteAllText(path, json);
     }
-    
+
     /// <summary>
     /// Loads the descriptions of all items from a JSON file.
     /// </summary>
@@ -72,38 +72,44 @@ public abstract partial class Item
             continue;
         }
 
-        if (matchingItem is WeaponItem weaponItem)
+        switch (matchingItem)
         {
-            for (int i = 0; i < serializedItem.Descriptions.Count; i++)
-            {
-                if (i < weaponItem.weaponLevels.Count)
+            case WeaponItem weaponItem: {
+                for (int i = 0; i < serializedItem.Descriptions.Count; i++)
                 {
-                    var levelContainer = weaponItem.weaponLevels[i];
-                    levelContainer.description = serializedItem.Descriptions[i].Description;
-                    weaponItem.weaponLevels[i] = levelContainer;
+                    if (i < weaponItem.weaponLevels.Count)
+                    {
+                        var levelContainer = weaponItem.weaponLevels[i];
+                        levelContainer.description = serializedItem.Descriptions[i].Description;
+                        weaponItem.weaponLevels[i] = levelContainer;
+                    }
+                    else
+                    {
+                        Debug.LogWarning("More descriptions in JSON than levels in item: " + matchingItem.Name);
+                        break;
+                    }
                 }
-                else
-                {
-                    Debug.LogWarning("More descriptions in JSON than levels in item: " + matchingItem.Name);
-                    break;
-                }
+
+                break;
             }
-        }
-        else if (matchingItem is PassiveItem passiveItem)
-        {
-            for (int i = 0; i < serializedItem.Descriptions.Count; i++)
-            {
-                if (i < passiveItem.passiveLevels.Count)
+
+            case PassiveItem passiveItem: {
+                for (int i = 0; i < serializedItem.Descriptions.Count; i++)
                 {
-                    var levelContainer = passiveItem.passiveLevels[i];
-                    levelContainer.description = serializedItem.Descriptions[i].Description;
-                    passiveItem.passiveLevels[i] = levelContainer;
+                    if (i < passiveItem.passiveLevels.Count)
+                    {
+                        var levelContainer = passiveItem.passiveLevels[i];
+                        levelContainer.description   = serializedItem.Descriptions[i].Description;
+                        passiveItem.passiveLevels[i] = levelContainer;
+                    }
+                    else
+                    {
+                        Debug.LogWarning("More descriptions in JSON than levels in item: " + matchingItem.Name);
+                        break;
+                    }
                 }
-                else
-                {
-                    Debug.LogWarning("More descriptions in JSON than levels in item: " + matchingItem.Name);
-                    break;
-                }
+
+                break;
             }
         }
     }

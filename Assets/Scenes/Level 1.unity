@@ -2123,7 +2123,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'Coins: 92822'
+  m_text: 'Coins: 70'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 09f79cf523032fe47aec939e63f33535, type: 2}
   m_sharedMaterial: {fileID: -7526973247068231971, guid: 09f79cf523032fe47aec939e63f33535,
@@ -4493,7 +4493,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 224.01, y: -20}
+  m_AnchoredPosition: {x: 170.01, y: -20}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &637791364
@@ -9962,6 +9962,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Knife Card
       objectReference: {fileID: 0}
+    - target: {fileID: 8899542215406548731, guid: feb429ee9c4a266438441100c5d542ae,
+        type: 3}
+      propertyPath: weapon
+      value: 2
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -13494,6 +13499,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9132604627126963050, guid: 15a3b0b635c612f4baabe8491970dabc,
+        type: 3}
+      propertyPath: weapon
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 9204266457335963689, guid: 15a3b0b635c612f4baabe8491970dabc,
         type: 3}

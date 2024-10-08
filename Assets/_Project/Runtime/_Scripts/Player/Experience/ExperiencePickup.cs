@@ -4,6 +4,7 @@ using UnityEngine;
 using VInspector;
 #endregion
 
+[SelectionBase]
 public class ExperiencePickup : MonoBehaviour, IPausable
 {
     [Header("Settings")]

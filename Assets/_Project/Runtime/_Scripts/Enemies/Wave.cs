@@ -20,13 +20,13 @@ public class Wave : ScriptableObject
             return;
         }
 
-        float[] spawnDistances = { 50, 75, 100 };
+        float[] spawnDistances = { 25, 50, 100 };
         float spawnDistance = Random.Range(spawnDistances[0], spawnDistances[^1]);
 
         if (!delayed) SpawnWithoutDelay(player, spawnDistance);
         else player.GetComponent<MonoBehaviour>().StartCoroutine(SpawnEnemiesWithDelay(player, spawnDistance));
     }
-    
+
     void SpawnWithoutDelay(GameObject player, float spawnDistance)
     {
         foreach (EnemyGroup group in enemyGroup)

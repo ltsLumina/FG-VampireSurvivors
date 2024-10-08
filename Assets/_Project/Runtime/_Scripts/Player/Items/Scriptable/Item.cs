@@ -1,10 +1,10 @@
 ﻿#region
+#if UNITY_EDITOR
+#endif
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text.RegularExpressions;
 using JetBrains.Annotations;
-using UnityEditor;
 using UnityEngine;
 using Random = UnityEngine.Random;
 #endregion
@@ -16,26 +16,33 @@ public abstract partial class Item : ScriptableObject
     /// </summary>
     [Header("Item Details")]
     public Details details;
-    
     public List<WeaponLevels> weaponLevels;
     public List<PassiveLevels> passiveLevels;
-    WeaponLevels levels;
 
-    public string Name
-    {
-        get => details.name;
-        private set => details.name = value;
-    }
+    public int MaxLevel => this is WeaponItem ? weaponLevels.Count : passiveLevels.Count;
+
+    public string Name => details.name.ToNormalCase();
 
     public string Description => details.description;
 
     public Sprite Icon => details.icon;
-    
+
     #region Utility | OnValidate
     void OnValidate()
     {
-        Name = name;
+        // Ensure the item's name, description and icon are not null
+        if (string.IsNullOrEmpty(details.name) || string.IsNullOrEmpty(details.description) || !details.icon)
+        {
+            details.description = this switch
+            { // Set the description to the item's first level description as a fallback.
+              WeaponItem weaponItem   => weaponItem.weaponLevels[0].description,
+              PassiveItem passiveItem => passiveItem.passiveLevels[0].description,
+              _                       => details.description };
 
+            Logger.LogError("Item details are null. Please ensure the item has a name, description and icon.");
+            return;
+        }
+        
         #region WeaponLevels
         // Set the name of the structs' "name" variable to the index +1
         for (int i = 0; i < weaponLevels.Count; i++)
@@ -71,40 +78,8 @@ public abstract partial class Item : ScriptableObject
             passiveLevels[i] = levels;
         }
         #endregion
-
-        // Set the name of the item to the name of the class
-        details.name = string.Concat(GetType().Name.Select(x => char.IsUpper(x) ? " " + x : x.ToString())).TrimStart(' ');
-
-        // throw error if the level is out of bounds
-        OutOfBounds();
-
-        return;
-        void OutOfBounds()
-        {
-            // bug: The list is empty for 1 frame when recompiling so I just don't throw an error if the list is empty
-            if (weaponLevels.Count == 0 || weaponLevels == null) return;
-
-            for (int i = 0; i < weaponLevels.Count; i++)
-            {
-                WeaponLevels weaponLevels = this.weaponLevels[i];
-                if (weaponLevels.level != i + 1) Debug.LogError("Level out of bounds. Please enter a valid level." + "\nLevel entered: " + weaponLevels.level);
-            }
-        }
     }
     #endregion
-
-    public string GetItemLevelDescription(Item item)
-    {
-        LoadAllDescriptionsFromJson();
-
-        if (LevelInvalid(out int _))
-            // If the item isn't in the inventory, the level will be invalid. Therefore, return the description of the first level.
-            return item is WeaponItem ? weaponLevels[0].description : passiveLevels[0].description;
-
-        // return the description of the next level
-        if (item.GetItemLevel() == 8) return "Max Level Reached. [This should never be displayed in regular gameplay, only in the editor.]";
-        return item is WeaponItem ? weaponLevels[item.GetItemLevel()].description : passiveLevels[item.GetItemLevel()].description;
-    }
 
     /// <summary>
     /// Uses the item. (Basic attack loop)
@@ -124,14 +99,25 @@ public abstract partial class Item : ScriptableObject
     public static Item Create()
     {
         var potentialItems = new List<Item>(Resources.LoadAll<Item>("Items"));
-        // Remove any items that are already in the inventory and are at level 8 (max level)
-        //foreach (Item i in Inventory.Items.Where(i => potentialItems.Contains(i) && i.GetItemLevel() == 8)) { potentialItems.Remove(i); }
-        //TODO: this will crash unity
 
-        // return a random item from the list of potential items
-        Item item = potentialItems[Random.Range(0, potentialItems.Count)];
+        // Check if the item is already in the inventory
+        foreach (InventoryManager.Items itemEntry in InventoryManager.Instance.Inventory)
+        {
+            if (!itemEntry.Item) continue;
+            if (itemEntry.Level == itemEntry.Item.MaxLevel) potentialItems.Remove(itemEntry.Item);
+        }
         
-        return item;
+        // Return a random item from the list of potential items
+        try
+        {
+            Item item = potentialItems[Random.Range(0, potentialItems.Count)];
+            return item;
+        }
+        catch (ArgumentOutOfRangeException e)
+        {
+            Logger.LogError("All items at max level. Cannot create a new item." + $"\n{e}");
+            return null;
+        }
     }
     #endregion
 
@@ -158,6 +144,20 @@ public abstract partial class Item : ScriptableObject
         }
     }
 
+    public string GetItemLevelDescription(Item item)
+    {
+        LoadAllDescriptionsFromJson();
+
+        if (LevelInvalid(out int _))
+
+            // If the item isn't in the inventory, the level will be invalid. Therefore, return the description of the first level.
+            return Description;
+
+        // return the description of the next level
+        if (item.GetItemLevel() == MaxLevel) return "Max Level Reached. [This should never be displayed in regular gameplay, only in the editor.]";
+        return item is WeaponItem ? weaponLevels[item.GetItemLevel()].description : passiveLevels[item.GetItemLevel()].description;
+    }
+    #region Structs
     [Serializable]
     public struct Details
     {
@@ -192,7 +192,7 @@ public abstract partial class Item : ScriptableObject
         public BaseStats baseStats;
         public ItemSpecificStats itemSpecificStats;
     }
-    
+
     [Serializable]
     public struct PassiveLevels
     {
@@ -210,6 +210,7 @@ public abstract partial class Item : ScriptableObject
         public string description;
         public CharacterStats.Stats effectType;
     }
+    #endregion
 
 #if UNITY_EDITOR
     public void SetAllScriptableObjects(BaseStats[] allBaseStats, ItemSpecificStats[] allItemSpecificStats)
@@ -263,82 +264,3 @@ public abstract partial class Item : ScriptableObject
     }
 #endif
 }
-
-#if UNITY_EDITOR
-[CustomEditor(typeof(Item), true)]
-public class ItemEditor : Editor
-{
-    SerializedProperty details;
-    SerializedProperty passiveLevels;
-    SerializedProperty weaponLevels;
-    
-    // Passive item specific:
-    // - Effect type (enum)
-    // - Effect value (float)
-    
-    SerializedProperty passiveType;
-    SerializedProperty passiveEffect;
-
-    void OnEnable()
-    {
-        details       = serializedObject.FindProperty("details");
-        weaponLevels  = serializedObject.FindProperty("weaponLevels");
-        passiveLevels = serializedObject.FindProperty("passiveLevels");
-        
-        passiveType = serializedObject.FindProperty("effectType");
-        passiveEffect = serializedObject.FindProperty("effect");
-    }
-
-    public override void OnInspectorGUI()
-    {
-        var item = target as Item;
-        
-        serializedObject.Update();
-
-        // Check the type of the target object and conditionally display fields
-        EditorGUILayout.PropertyField(details, true);
-        if (target is WeaponItem) EditorGUILayout.PropertyField(weaponLevels, true);
-        if (target is PassiveItem) EditorGUILayout.PropertyField(passiveLevels, true);
-
-        if (target is PassiveItem)
-        {
-            EditorGUILayout.PropertyField(passiveType);
-            EditorGUILayout.PropertyField(passiveEffect);
-        }
-
-        serializedObject.ApplyModifiedProperties();
-
-        GUILayout.Space(20);
-        
-        if (item is WeaponItem)
-        {
-            using var scope = new EditorGUILayout.HorizontalScope();
-
-            GUILayout.FlexibleSpace();
-
-            var content = new GUIContent("Set Scriptable Objects", "Set the BaseStats and ItemSpecificStats for each level of this item.");
-            
-            if (GUILayout.Button(content, GUILayout.Height(25), GUILayout.Width(250)))
-            {
-                if (item)
-                {
-                    var allBaseStats         = Resources.LoadAll<BaseStats>("Items");
-                    var allItemSpecificStats = Resources.LoadAll<ItemSpecificStats>("Items");
-                    item.SetAllScriptableObjects(allBaseStats, allItemSpecificStats);
-                }
-            }
-
-            GUILayout.FlexibleSpace();
-        }
-
-        using (new GUILayout.HorizontalScope("box"))
-        {
-            var saveContent = new GUIContent("Save Level Descriptions", "Save the Level Descriptions to a JSON file.");
-            var loadContent = new GUIContent("Load Level Descriptions", "Load the Level Descriptions from a JSON file.");
-            
-            if (GUILayout.Button(saveContent)) Item.SaveAllDescriptionsToJson();
-            if (GUILayout.Button(loadContent)) Item.LoadAllDescriptionsFromJson();
-        }
-    }
-}
-#endif

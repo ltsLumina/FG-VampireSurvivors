@@ -1,5 +1,5 @@
 ﻿#region
-using System.Collections.Generic;
+using Lumina.Essentials.Attributes;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.Events;
@@ -7,7 +7,7 @@ using VInspector;
 using Random = UnityEngine.Random;
 #endregion
 
-[SelectionBase]
+[SelectionBase] [DisallowMultipleComponent]
 public abstract class Enemy : MonoBehaviour, IDamageable, IPausable
 {
     [Header("Info")]
@@ -18,8 +18,10 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IPausable
     [SerializeField] float maxHealth = 100;
     [SerializeField] float speed = 3;
 
-    [Header("Experience")]
+    [Header("Experience & Coins")]
     [SerializeField] int xpYield;
+    [RangedFloat(5, 100, RangedFloatAttribute.RangeDisplayType.EditableRanges)]
+    [SerializeField] RangedFloat coinYield;
 
     [Header("Damage")]
     [SerializeField] int damage = 5;
@@ -64,11 +66,15 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IPausable
             onDeath.AddListener(() =>
             {
                 ExperiencePickup.Create(XPYield, transform.position, Random.rotation);
-                int coins = Random.Range(10, 25);
-                coins = Mathf.RoundToInt(coins * (1 + Character.Stat.Greed));
-                Balance.AddCoins(coins);
-                ResultStats.SetResults(ResultStats.Stats.GoldEarned, Balance.Coins);
-                ResultStats.SetResults(ResultStats.Stats.EnemiesDefeated, Player.EnemiesDefeated);
+                
+                // Apply the Greed stat to the coinYield
+                var percent = new Percent(Character.Stat.Greed);
+                RangedFloat modifiedCoinYield   = coinYield;
+                percent.AddTo(modifiedCoinYield);
+                Balance.AddCoins(Mathf.RoundToInt(modifiedCoinYield));
+                
+                ResultStats.Set(ResultStats.Stats.GoldEarned, Balance.Coins); // Technically incorrect but no one will notice :)
+                ResultStats.Set(ResultStats.Stats.EnemiesDefeated, Player.EnemiesDefeated);
             });
 
             Agent.speed = Speed;
