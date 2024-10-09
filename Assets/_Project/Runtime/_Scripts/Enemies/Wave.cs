@@ -31,7 +31,9 @@ public class Wave : ScriptableObject
     {
         foreach (EnemyGroup group in enemyGroup)
         {
-            for (int i = 0; i < group.amount * Character.Stat.Curse; i++)
+            bool curseValid = Character.Stat.Curse != null;
+            var loopAmount = curseValid ? group.amount * Character.Stat.Curse : group.amount;
+            for (int i = 0; i < loopAmount; i++)
             {
                 var pool = EnemySpawner.Pools.Find(pool => pool.GetPooledObjectPrefab() == group.enemy.gameObject && pool.name.Contains(name));
 
@@ -52,7 +54,10 @@ public class Wave : ScriptableObject
     {
         foreach (EnemyGroup group in enemyGroup)
         {
-            for (int i = 0; i < group.amount * Character.Stat.Curse; i++)
+            bool curseValid = Character.Stat.Curse != null;
+            var  loopAmount = curseValid ? group.amount * Character.Stat.Curse : group.amount;
+
+            for (int i = 0; i < loopAmount; i++)
             {
                 var pool = EnemySpawner.Pools.Find(pool => pool.GetPooledObjectPrefab() == group.enemy.gameObject && pool.name.Contains(name));
 

@@ -1,0 +1,18 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c00e3d39e54f4417931d877ea3303e21, type: 3}
+  m_Name: Thor
+  m_EditorClassIdentifier: 
+  characterName: Thor
+  description: one of the avengers
+  startingItem: {fileID: 11400000, guid: 525815cef62963248814760cc7e69324, type: 2}
+  stats: {fileID: 11400000, guid: b7462e9f19a19f044a3720bcaf79b144, type: 2}

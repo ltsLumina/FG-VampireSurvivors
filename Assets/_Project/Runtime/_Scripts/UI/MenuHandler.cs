@@ -13,4 +13,7 @@ public class MenuHandler : MonoBehaviour
             m.gameObject.SetActive(m == menu);
         }
     }
+
+    // ignore this lol
+    public void LoadScene(int sceneIndex) => SceneManagerExtended.LoadScene(sceneIndex);
 }

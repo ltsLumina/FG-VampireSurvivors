@@ -55,6 +55,28 @@ public static class PercentExtensions
 
         return baseValue;
     }
+    
+    /// <summary>
+    /// Overload for int values.
+    /// </summary>
+    /// <param name="baseValue"> The original value to modify. </param>
+    /// <param name="percent"> The percentage to add. </param>
+    /// <param name="round"> Whether to round the result. </param>
+    /// <param name="decimals"> The number of decimal places to round to. </param>
+    /// <returns> The modified value. </returns>
+    /// <remarks> This method modifies the original value, rather than returning a new value. </remarks>
+    public static int AddPercent(ref this int baseValue, float percent, bool round = true, int decimals = 3)
+    {
+        baseValue = (int) (baseValue * (1 + Mathf.Clamp01(percent)));
+
+        if (round)
+        {
+            float     multiplier = Mathf.Pow(10, decimals);
+            baseValue = (int) (Mathf.Round(baseValue * multiplier) / multiplier);
+        }
+
+        return baseValue;
+    }
 
     // Extension method to remove a percentage from a float value and modify the original value
     public static void RemovePercent(ref this float baseValue, float percent) => baseValue *= 1 - Mathf.Clamp01(percent);

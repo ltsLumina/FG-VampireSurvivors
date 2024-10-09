@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using DG.Tweening;
 using TMPro;
 using UnityEngine;
 
@@ -59,6 +60,37 @@ public class ResultStats : MonoBehaviour
 
             statText.text += stat.Value.ToString(CultureInfo.InvariantCulture);
         });
+    }
+
+    public void InitiateGameOverSequence()
+    {
+        // i got lazy lol
+        var gameOverCanvas = GameObject.FindWithTag("[Canvas] Game-Over Canvas");
+
+        var sequence   = DOTween.Sequence();
+        var overlayTop = gameOverCanvas.transform.GetChild(0).GetComponent<RectTransform>();
+        overlayTop.gameObject.SetActive(true);
+        var overlayLow = gameOverCanvas.transform.GetChild(1).GetComponent<RectTransform>();
+        overlayLow.gameObject.SetActive(true);
+
+        // Move the overlays off-screen before the animation.
+        overlayTop.anchoredPosition = new (0, 1080);
+        overlayLow.anchoredPosition = new (0, -1080);
+
+        sequence.Append(overlayTop.DOAnchorPosY(0, 1f).SetEase(Ease.InOutSine));
+        sequence.Join(overlayLow.DOAnchorPosY(0, 1f).SetEase(Ease.InOutSine));
+    }
+
+    public void ResultsSequence()
+    {
+        // i got lazy with this too :)
+        GameObject resultsCanvas = GameObject.FindWithTag("[Canvas] Results Canvas");
+        Transform  ui            = resultsCanvas.transform.GetChild(0);
+
+        var sequence = DOTween.Sequence();
+        ui.localScale = Vector3.zero;
+        ui.gameObject.SetActive(true);
+        sequence.Append(ui.DOScale(1, 1f).SetEase(Ease.Linear));
     }
 }
 

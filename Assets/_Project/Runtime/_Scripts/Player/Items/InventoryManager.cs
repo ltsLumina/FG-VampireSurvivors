@@ -37,6 +37,9 @@ public class InventoryManager : MonoBehaviour
         inventory.Clear();
         Logger.LogWarning("Inventory cleared." + $"\nThe starting item will be added to the inventory. (Starting Item: {character.StartingItem})");
         
+        // Set the character.
+        character = GameManager.Instance.SelectedCharacter;
+        
         AddStartingItem(character.StartingItem);
     }
 

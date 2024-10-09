@@ -68,10 +68,17 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IPausable
                 ExperiencePickup.Create(XPYield, transform.position, Random.rotation);
                 
                 // Apply the Greed stat to the coinYield
-                var percent = new Percent(Character.Stat.Greed);
-                RangedFloat modifiedCoinYield   = coinYield;
-                percent.AddTo(modifiedCoinYield);
-                Balance.AddCoins(Mathf.RoundToInt(modifiedCoinYield));
+                if (Character.Stat.Greed != null)
+                {
+                    var         percent           = new Percent((float)Character.Stat.Greed);
+                    RangedFloat modifiedCoinYield = coinYield;
+                    percent.AddTo(modifiedCoinYield);
+                    Balance.AddCoins(Mathf.RoundToInt(modifiedCoinYield));
+                }
+                else
+                {
+                    Balance.AddCoins(Mathf.RoundToInt(coinYield));
+                }
                 
                 ResultStats.Set(ResultStats.Stats.GoldEarned, Balance.Coins); // Technically incorrect but no one will notice :)
                 ResultStats.Set(ResultStats.Stats.EnemiesDefeated, Player.EnemiesDefeated);
@@ -186,7 +193,8 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IPausable
     {
         get
         {
-            if (InventoryManager.Instance) return maxHealth *= Character.Stat.Curse;
+            // Apply the Curse stat to the maxHealth only if the value is not null (not zero).
+            if (InventoryManager.Instance) return Character.Stat.Curse != null ? maxHealth *= (float)Character.Stat.Curse : maxHealth;
             return maxHealth; 
         }
         set => maxHealth = value;
@@ -196,7 +204,7 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IPausable
     {
         get
         {
-            if (InventoryManager.Instance) return speed *= Character.Stat.Curse;
+            if (InventoryManager.Instance) return Character.Stat.Curse != null ? speed *= (float)Character.Stat.Curse : speed;
             return speed;
         }
         set => speed = value;

@@ -10,7 +10,7 @@ using UnityEditor;
 #endif
 #endregion
 
-[CreateAssetMenu(fileName = "Character Stats", menuName = "Character/Character Stats", order = 0)]
+[CreateAssetMenu(fileName = "Character Stats", menuName = "Character/Character Stats", order = 1)]
 public class CharacterStats : ScriptableObject
 {
     public enum Stats
@@ -76,34 +76,61 @@ public class CharacterStats : ScriptableObject
     [SerializeField] int skip;   // Will be increased by the store/upgrades
     [SerializeField] int banish; // Will be increased by the store/upgrades
 
-    Dictionary<string, Action<float>> statIncreasers;
+    #region Default Values
+    int defaultMaxHealth;
+    float defaultRecovery;
+    int defaultArmor;
+    float defaultMoveSpeed;
 
+    float defaultStrength;
+    float defaultDexterity;
+    float defaultIntelligence;
+    float defaultWisdom;
+
+    float defaultCooldown;
+    int defaultAmount;
+    int defaultRevival;
+    float defaultMagnet;
+
+    float defaultLuck;
+    float defaultGrowth;
+
+    float defaultGreed;
+    float defaultCurse;
+
+    int defaultReroll;
+    int defaultSkip;
+    int defaultBanish;
+    #endregion
+    
+    Dictionary<string, Action<float>> statIncreasers;
+    
     public void Reset()
     {
-        maxHealth = 120;
-        recovery  = 0.3f;
-        armor     = 1;
-        moveSpeed = 1.10f; // 10%
+        maxHealth = defaultMaxHealth;
+        recovery = defaultRecovery;
+        armor = defaultArmor;
+        moveSpeed = defaultMoveSpeed;
 
-        strength     = 1.25f; // 25%
-        dexterity    = 1.20f; // 20%... etc.
-        intelligence = 1.30f;
-        wisdom       = 1.10f;
+        strength = defaultStrength;
+        dexterity = defaultDexterity;
+        intelligence = defaultIntelligence;
+        wisdom = defaultWisdom;
 
-        cooldown = 0.95f; // 5% faster ("-5% cooldown")
-        amount   = 0;     // +1 item effect (e.g. 1 more lightning strike)
-        revival  = 0;
-        magnet   = 1.50f; // 50% radius // probably gonna re-do this one
+        cooldown = defaultCooldown;
+        amount = defaultAmount;
+        revival = defaultRevival;
+        magnet = defaultMagnet;
 
-        luck   = 1.30f; // 30% luck
-        growth = 1.15f; // 15% growth
+        luck = defaultLuck;
+        growth = defaultGrowth;
 
-        greed = 0;
-        curse = 0;
+        greed = defaultGreed;
+        curse = defaultCurse;
 
-        reroll = 0; // Will be increased by the store/upgrades
-        skip   = 0; // Will be increased by the store/upgrades
-        banish = 0; // Will be increased by the store/upgrades
+        reroll = defaultReroll;
+        skip = defaultSkip;
+        banish = defaultBanish;
     }
 
     void OnEnable()
@@ -135,15 +162,13 @@ public class CharacterStats : ScriptableObject
         {
             // Greed is zero by default, but the multiplier should still be applied if it's not.
             // Using the Greed property because it returns 1 if the value is zero.
-            float f = Greed;
-            greed = f.AddPercent(multiplier);
+            greed += multiplier;
         } },
         { "Curse", multiplier =>
         {
             // Curse is zero by default, but the multiplier should still be applied if it's not.
             // Using the Curse property because it returns 1 if the value is zero.
-            float f = Curse;
-            curse = f.AddPercent(multiplier);
+            curse += multiplier;
         } },
         { "Reroll", value => reroll                  += (int) value },
         { "Skip", value => skip                      += (int) value },
@@ -156,7 +181,7 @@ public class CharacterStats : ScriptableObject
         #endif
     }
 
-    [Button, UsedImplicitly]
+    [Button]
     public void ClearJSON()
     {
         string path = Application.persistentDataPath + "/statBuffs.json";
@@ -167,6 +192,66 @@ public class CharacterStats : ScriptableObject
             Debug.Log("statBuffs.json cleared!");
         }
         else { Debug.Log("statBuffs.json not found!"); }
+    }
+    
+    [Button]
+    public void SetDefaults()
+    {
+        defaultMaxHealth = maxHealth;
+        defaultRecovery  = recovery;
+        defaultArmor     = armor;
+        defaultMoveSpeed = moveSpeed;
+
+        defaultStrength     = strength;
+        defaultDexterity    = dexterity;
+        defaultIntelligence = intelligence;
+        defaultWisdom       = wisdom;
+
+        defaultCooldown = cooldown;
+        defaultAmount   = amount;
+        defaultRevival  = revival;
+        defaultMagnet   = magnet;
+
+        defaultLuck   = luck;
+        defaultGrowth = growth;
+
+        defaultGreed = greed;
+        defaultCurse = curse;
+
+        defaultReroll = reroll;
+        defaultSkip   = skip;
+        defaultBanish = banish;
+    }
+
+    [Button]
+    void SetOptimizedDefaults()
+    {
+        defaultMaxHealth = 120;
+        defaultRecovery  = 0.3f;
+        defaultArmor     = 1;
+        defaultMoveSpeed = 1.10f;
+
+        defaultStrength     = 1.25f;
+        defaultDexterity    = 1.20f;
+        defaultIntelligence = 1.30f;
+        defaultWisdom       = 1.10f;
+
+        defaultCooldown = 0.95f;
+        defaultAmount   = 0;
+        defaultRevival  = 0;
+        defaultMagnet   = 1.50f;
+
+        defaultLuck   = 1.30f;
+        defaultGrowth = 1.15f;
+
+        defaultGreed = 0;
+        defaultCurse = 0;
+
+        defaultReroll = 0;
+        defaultSkip   = 0;
+        defaultBanish = 0;
+        
+        Reset();
     }
 
     public void IncreaseStat(string statName, float value)
@@ -255,22 +340,22 @@ public class CharacterStats : ScriptableObject
     }
 
     [Multiplier]
-    public float Greed
+    public float? Greed
     {
         get
         {
-            if (greed == 0) return 1;
-            return greed;
+            if (greed == 0) return null;
+            return 1 + greed;
         }
     }
 
     [Multiplier]
-    public float Curse
+    public float? Curse
     {
         get
         {
-            if (curse == 0) return 1;
-            return curse;
+            if (curse == 0) return null;
+            return 1 + curse;
         }
     }
 

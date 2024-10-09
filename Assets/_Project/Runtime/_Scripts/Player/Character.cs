@@ -2,7 +2,7 @@
 using UnityEngine;
 #endregion
 
-[CreateAssetMenu(fileName = "Character", menuName = "Character", order = 0)]
+[CreateAssetMenu(fileName = "Character", menuName = "Character/New Character", order = 0)]
 public class Character : ScriptableObject
 {
     [SerializeField] string characterName;
