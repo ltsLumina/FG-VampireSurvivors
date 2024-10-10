@@ -3,7 +3,6 @@ using System;
 using UnityEngine;
 #endregion
 
-[CreateAssetMenu(fileName = "Magnet", menuName = "Items/Magnet")]
 public class Magnet : PassiveItem
 {
     public override void Use() => GrantEffect();

@@ -48,72 +48,74 @@ public abstract partial class Item
     /// <summary>
     /// Loads the descriptions of all items from a JSON file.
     /// </summary>
-    public static void LoadAllDescriptionsFromJson()
-{
-    string path = Application.persistentDataPath + "/itemDescriptions.json";
-    List<Item> items = Resources.LoadAll<Item>("Items").ToList();
-
-    if (!File.Exists(path))
+    public static bool LoadAllDescriptionsFromJson()
     {
-        Debug.LogError("File not found at path: " + path);
-        return;
-    }
+        string     path  = Application.persistentDataPath + "/itemDescriptions.json";
+        List<Item> items = Resources.LoadAll<Item>("Items").ToList();
 
-    string json = File.ReadAllText(path);
-    SerializedItemList serializedItemList = JsonUtility.FromJson<SerializedItemList>(json);
-
-    foreach (var serializedItem in serializedItemList.Items)
-    {
-        var matchingItem = items.FirstOrDefault(item => item.Name == serializedItem.ItemName);
-
-        if (matchingItem == null)
+        if (!File.Exists(path) || File.ReadAllText(path) == string.Empty)
         {
-            Debug.LogWarning("Item not found: " + serializedItem.ItemName);
-            continue;
+            Debug.LogError("File not found at path: " + path);
+            return false;
         }
 
-        switch (matchingItem)
-        {
-            case WeaponItem weaponItem: {
-                for (int i = 0; i < serializedItem.Descriptions.Count; i++)
-                {
-                    if (i < weaponItem.weaponLevels.Count)
-                    {
-                        var levelContainer = weaponItem.weaponLevels[i];
-                        levelContainer.description = serializedItem.Descriptions[i].Description;
-                        weaponItem.weaponLevels[i] = levelContainer;
-                    }
-                    else
-                    {
-                        Debug.LogWarning("More descriptions in JSON than levels in item: " + matchingItem.Name);
-                        break;
-                    }
-                }
+        string json               = File.ReadAllText(path);
+        var    serializedItemList = JsonUtility.FromJson<SerializedItemList>(json);
 
-                break;
+        foreach (SerializedItem serializedItem in serializedItemList.Items)
+        {
+            Item matchingItem = items.FirstOrDefault(item => item.Name == serializedItem.ItemName);
+
+            if (matchingItem == null)
+            {
+                Debug.LogWarning("Item not found: " + serializedItem.ItemName);
+                continue;
             }
 
-            case PassiveItem passiveItem: {
-                for (int i = 0; i < serializedItem.Descriptions.Count; i++)
-                {
-                    if (i < passiveItem.passiveLevels.Count)
+            switch (matchingItem)
+            {
+                case WeaponItem weaponItem: {
+                    for (int i = 0; i < serializedItem.Descriptions.Count; i++)
                     {
-                        var levelContainer = passiveItem.passiveLevels[i];
-                        levelContainer.description   = serializedItem.Descriptions[i].Description;
-                        passiveItem.passiveLevels[i] = levelContainer;
+                        if (i < weaponItem.weaponLevels.Count)
+                        {
+                            WeaponLevels levelContainer = weaponItem.weaponLevels[i];
+                            levelContainer.description = serializedItem.Descriptions[i].Description;
+                            weaponItem.weaponLevels[i] = levelContainer;
+                        }
+                        else
+                        {
+                            Debug.LogWarning("More descriptions in JSON than levels in item: " + matchingItem.Name);
+                            break;
+                        }
                     }
-                    else
-                    {
-                        Debug.LogWarning("More descriptions in JSON than levels in item: " + matchingItem.Name);
-                        break;
-                    }
+
+                    break;
                 }
 
-                break;
+                case PassiveItem passiveItem: {
+                    for (int i = 0; i < serializedItem.Descriptions.Count; i++)
+                    {
+                        if (i < passiveItem.passiveLevels.Count)
+                        {
+                            PassiveLevels levelContainer = passiveItem.passiveLevels[i];
+                            levelContainer.description   = serializedItem.Descriptions[i].Description;
+                            passiveItem.passiveLevels[i] = levelContainer;
+                        }
+                        else
+                        {
+                            Debug.LogWarning("More descriptions in JSON than levels in item: " + matchingItem.Name);
+                            break;
+                        }
+                    }
+
+                    break;
+                }
             }
         }
+
+        return true;
     }
-}
 
     [Serializable]
     public class SerializedItem

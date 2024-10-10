@@ -14,32 +14,10 @@ public class GameManager : MonoBehaviour
 
     public static bool IsPaused => Time.timeScale == 0;
 
-    Character selectedCharacter;
-    public Character SelectedCharacter
-    {
-        get
-        {
-            if (selectedCharacter == null)
-            {
-                // Use John Doe as a default character
-                Resources.Load<Character>("Characters/John Doe");
-            }
-            return selectedCharacter;
-        }
-        set => selectedCharacter = value;
-    }
-
     void Awake()
     {
-        if (Instance == null)
-        {
-            Instance = this;
-            DontDestroyOnLoad(gameObject);
-        }
-        else
-        {
-            Destroy(gameObject);
-        }
+        if (Instance == null) Instance = this;
+        else Destroy(gameObject);
     }
 
     void Start()
@@ -66,7 +44,6 @@ public class GameManager : MonoBehaviour
             }
 
             return;
-
             void ApplyStatBuff(string statName, float value)
             {
                 var characterStats = Character.Stat;
@@ -104,4 +81,7 @@ public class GameManager : MonoBehaviour
         Screen.fullScreenMode = Screen.fullScreen ? FullScreenMode.FullScreenWindow : FullScreenMode.Windowed;
         Cursor.lockState = Screen.fullScreen ? CursorLockMode.Locked : CursorLockMode.None;
     }
+    
+    // ignore this lol
+    public void LoadScene(int sceneIndex) => SceneManagerExtended.LoadScene(sceneIndex);
 }

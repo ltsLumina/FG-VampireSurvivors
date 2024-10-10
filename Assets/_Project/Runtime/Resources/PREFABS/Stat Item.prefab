@@ -65,7 +65,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Max Health
+  m_text: Stat Item
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 09f79cf523032fe47aec939e63f33535, type: 2}
   m_sharedMaterial: {fileID: -7526973247068231971, guid: 09f79cf523032fe47aec939e63f33535,
@@ -186,6 +186,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 56ea00069b03bfb4b966ea932f009f83, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  icon: {fileID: 5916464955124271115}
   statName: {fileID: 1475365100049469236}
   statValue: {fileID: 2595594505294499687}
 --- !u!1 &6801827895938658462
@@ -388,7 +389,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 2df039799e5bb5a40a15b3c247386a49, type: 3}
+  m_Sprite: {fileID: 0}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1

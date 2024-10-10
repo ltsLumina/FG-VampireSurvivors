@@ -9,6 +9,7 @@ public partial class Player
     Coroutine garlicCoroutine;
     Coroutine knifeCoroutine;
     Coroutine lightningRingCoroutine;
+    Coroutine magicWandCoroutine;
 
     void UseItems()
     {
@@ -34,6 +35,10 @@ public partial class Player
             
             case not null when typeof(T) == typeof(Knife):
                 knifeCoroutine ??= StartCoroutine(Inventory.GetItem<Knife>().KnifeCooldown());
+                break;
+
+            case not null when typeof(T) == typeof(MagicWand):
+                magicWandCoroutine ??= StartCoroutine(Inventory.GetItem<MagicWand>().ShootProjectileCoroutine());
                 break;
         }
     }

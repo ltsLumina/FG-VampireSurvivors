@@ -2123,7 +2123,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'Coins: 100145'
+  m_text: 'Coins: 102104'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 09f79cf523032fe47aec939e63f33535, type: 2}
   m_sharedMaterial: {fileID: -7526973247068231971, guid: 09f79cf523032fe47aec939e63f33535,
@@ -4850,7 +4850,7 @@ Canvas:
   m_OverridePixelPerfect: 0
   m_SortingBucketNormalizedSize: 0
   m_VertexColorAlwaysGammaSpace: 1
-  m_AdditionalShaderChannelsFlag: 1
+  m_AdditionalShaderChannelsFlag: 25
   m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
   m_SortingOrder: 99
@@ -13223,6 +13223,11 @@ PrefabInstance:
       propertyPath: onDeath.m_PersistentCalls.m_Calls.Array.data[2].m_Arguments.m_ObjectArgumentAssemblyTypeName
       value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
+    - target: {fileID: 8638681359720029289, guid: 35543b64ff04bda4d8e0ed7f1cc190a4,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 51e3f14106eb3624f8a142ca4d87fb7c, type: 2}
     - target: {fileID: 8663757204412334232, guid: 35543b64ff04bda4d8e0ed7f1cc190a4,
         type: 3}
       propertyPath: m_IsTrigger

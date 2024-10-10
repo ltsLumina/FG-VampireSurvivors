@@ -70,37 +70,27 @@ public class CharacterStats : ScriptableObject
     [SerializeField] float greed; // increases amount of coins dropped
     [SerializeField] float curse; // increases difficulty. (enemy move speed, spawn rate, health)
 
-    [Space(15)]
-    [Header("Item-Adjusted Stats")]
-    [SerializeField] int reroll; // Will be increased by the store/upgrades
-    [SerializeField] int skip;   // Will be increased by the store/upgrades
-    [SerializeField] int banish; // Will be increased by the store/upgrades
-
     #region Default Values
-    int defaultMaxHealth;
-    float defaultRecovery;
-    int defaultArmor;
-    float defaultMoveSpeed;
+    int defaultMaxHealth = 120;
+    float defaultRecovery = 0.3f;
+    int defaultArmor = 1;
+    float defaultMoveSpeed = 1.10f;
 
-    float defaultStrength;
-    float defaultDexterity;
-    float defaultIntelligence;
-    float defaultWisdom;
+    float defaultStrength = 1.25f;
+    float defaultDexterity = 1.20f;
+    float defaultIntelligence = 1.30f;
+    float defaultWisdom = 1.10f;
 
-    float defaultCooldown;
-    int defaultAmount;
-    int defaultRevival;
-    float defaultMagnet;
+    float defaultCooldown = 0.95f;
+    int defaultAmount = 0;
+    int defaultRevival = 0;
+    float defaultMagnet = 1.50f;
 
-    float defaultLuck;
-    float defaultGrowth;
+    float defaultLuck = 1.30f;
+    float defaultGrowth = 1.15f;
 
-    float defaultGreed;
-    float defaultCurse;
-
-    int defaultReroll;
-    int defaultSkip;
-    int defaultBanish;
+    float defaultGreed = 0;
+    float defaultCurse = 0;
     #endregion
     
     Dictionary<string, Action<float>> statIncreasers;
@@ -127,10 +117,6 @@ public class CharacterStats : ScriptableObject
 
         greed = defaultGreed;
         curse = defaultCurse;
-
-        reroll = defaultReroll;
-        skip = defaultSkip;
-        banish = defaultBanish;
     }
 
     void OnEnable()
@@ -143,7 +129,7 @@ public class CharacterStats : ScriptableObject
             // Convert to float to allow for percentage increase
             float convertedMaxHealth = maxHealth;
             convertedMaxHealth = convertedMaxHealth.AddPercent(multiplier);
-            maxHealth = Mathf.FloorToInt(convertedMaxHealth);
+            maxHealth          = Mathf.FloorToInt(convertedMaxHealth);
         } },
         { "Recovery", value => recovery              += value },
         { "Armor", value => armor                    += (int) value },
@@ -169,10 +155,7 @@ public class CharacterStats : ScriptableObject
             // Curse is zero by default, but the multiplier should still be applied if it's not.
             // Using the Curse property because it returns 1 if the value is zero.
             curse += multiplier;
-        } },
-        { "Reroll", value => reroll                  += (int) value },
-        { "Skip", value => skip                      += (int) value },
-        { "Banish", value => banish                  += (int) value } };
+        } }, };
         #endregion
         
         #if UNITY_EDITOR
@@ -217,10 +200,6 @@ public class CharacterStats : ScriptableObject
 
         defaultGreed = greed;
         defaultCurse = curse;
-
-        defaultReroll = reroll;
-        defaultSkip   = skip;
-        defaultBanish = banish;
     }
 
     [Button]
@@ -246,10 +225,6 @@ public class CharacterStats : ScriptableObject
 
         defaultGreed = 0;
         defaultCurse = 0;
-
-        defaultReroll = 0;
-        defaultSkip   = 0;
-        defaultBanish = 0;
         
         Reset();
     }
@@ -310,7 +285,11 @@ public class CharacterStats : ScriptableObject
     [Value]
     public int Amount => amount;
     [Value]
-    public int Revival => revival;
+    public int Revival
+    {
+        get => revival;
+        set => revival = value;
+    }
     [Multiplier]
     public float Magnet => magnet;
     [Multiplier]
@@ -358,13 +337,6 @@ public class CharacterStats : ScriptableObject
             return 1 + curse;
         }
     }
-
-    [Value]
-    public int Reroll => reroll;
-    [Value]
-    public int Skip => skip;
-    [Value]
-    public int Banish => banish;
     #endregion
 }
 

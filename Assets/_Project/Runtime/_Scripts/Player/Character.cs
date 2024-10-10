@@ -19,7 +19,18 @@ public class Character : ScriptableObject
     /// <summary>
     ///     Shorthand for InventoryManager.Instance.Character.Stats
     /// </summary>
-    public static CharacterStats Stat => InventoryManager.Instance.Character.Stats;
+    public static CharacterStats Stat
+    {
+        get
+        {
+            if (!InventoryManager.Instance || !InventoryManager.Instance.Character)
+            {
+                // Load John Doe as a default character
+                return Resources.Load<CharacterStats>("Characters/John Doe Stats");
+            }
+            return InventoryManager.Instance.Character.Stats;
+        }
+    }
 
     void OnValidate() => name = characterName;
 }

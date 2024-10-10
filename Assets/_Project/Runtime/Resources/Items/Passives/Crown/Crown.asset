@@ -15,7 +15,7 @@ MonoBehaviour:
   details:
     name: Crown
     description: Character gains 8% more experience.
-    icon: {fileID: 21300000, guid: 57b2c596f4084bc44b426791635ec8f9, type: 3}
+    icon: {fileID: 21300000, guid: e5e96c2aa75acca41a776c337334e517, type: 3}
   weaponLevels: []
   passiveLevels:
   - name: Level 1

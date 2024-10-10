@@ -14,5 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   characterName: Iron Man
   description: another avenger
-  startingItem: {fileID: 11400000, guid: cb232441d14236a4c926f8070ded54ee, type: 2}
+  startingItem: {fileID: 11400000, guid: d61797c90055a8549be0a2b3c7829f4f, type: 2}
   stats: {fileID: 11400000, guid: 721c9bb6168b9494aaaa4c9cd9388004, type: 2}

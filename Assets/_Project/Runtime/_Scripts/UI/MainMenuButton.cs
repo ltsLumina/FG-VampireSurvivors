@@ -5,12 +5,6 @@ using UnityEngine.UI;
 
 public class MainMenuButton : Button
 {
-    public void SelectCharacter() // Used on the "Start" button in unity.
-    {
-        Debug.Log("Starting the game...");
-        SceneManagerExtended.LoadScene(1);
-    }
-
     public void Settings() // TODO: this is horrendous
     {
         Debug.Log("Opening the settings menu...");

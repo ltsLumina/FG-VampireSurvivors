@@ -5,6 +5,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
+[ExecuteInEditMode]
 public class StatBuffUIButton : Button
 {
     public List<StatBuffUIToggle> Toggles { get; private set; } = new ();
@@ -48,4 +49,14 @@ public class StatBuffUIButton : Button
             Toggles[i].isOn = i < level;
         }
     }
+
+#if UNITY_EDITOR
+    protected override void OnValidate()
+    {
+        base.OnValidate();
+        
+        var icon = GetComponent<Image>();
+        icon.sprite   = Resources.Load<Sprite>($"Item Icons/Icon-{name}");
+    }
+#endif
 }

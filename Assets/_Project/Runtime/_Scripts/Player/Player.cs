@@ -56,6 +56,16 @@ public sealed partial class Player : MonoBehaviour, IDamageable, IPausable
             currentHealth = Character.Stat.MaxHealth;
         }
     }
+    
+    void Start()
+    {
+        // If the item descriptions are not loaded from JSON, save them to JSON and load them
+        if (!Item.LoadAllDescriptionsFromJson())
+        {
+            Item.SaveAllDescriptionsToJson();
+            Item.LoadAllDescriptionsFromJson();
+        }
+    }
 
     void Update() => Movement(inputManager.MoveInput);
 
@@ -80,10 +90,11 @@ public sealed partial class Player : MonoBehaviour, IDamageable, IPausable
         UseItems(); // AttackLoop.cs
     }
 
+#if UNITY_EDITOR
     void OnGUI()
     {
         // draw amount of garlic and lightning ring colliders
-        var        garlic        = Inventory.GetItem<Garlic>();
+        var garlic        = Inventory.GetItem<Garlic>();
         var lightningRing = Inventory.GetItem<LightningRing>();
 
         if (garlic != null)
@@ -131,6 +142,7 @@ public sealed partial class Player : MonoBehaviour, IDamageable, IPausable
             Gizmos.DrawWireSphere(transform.position, lightningRing.Zone);
         }
     }
+#endif
 
     public float CurrentHealth
     {
@@ -153,6 +165,7 @@ public sealed partial class Player : MonoBehaviour, IDamageable, IPausable
                 {
                     currentHealth = Character.Stat.MaxHealth;
                     Logger.LogWarning("Player has been revived.");
+                    Character.Stat.Revival--;
                     return;
                 }
 

@@ -1,0 +1,70 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5d44ea0335fda4b4b9934e5ed3aad963, type: 3}
+  m_Name: Magic Wand
+  m_EditorClassIdentifier: 
+  details:
+    name: Magic Wand
+    description: Fires a homing skull towards enemies.
+    icon: {fileID: 21300000, guid: b57ce83b38711304c996cf569184f982, type: 3}
+  weaponLevels:
+  - name: Level 1
+    level: 1
+    description: Fires a homing skull towards enemies.
+    baseStats: {fileID: 11400000, guid: 6f6836a38c152bf459064f85f2fc6640, type: 2}
+    itemSpecificStats: {fileID: 11400000, guid: 79f23e77e76698f46bf006bb44537297,
+      type: 2}
+  - name: Level 2
+    level: 2
+    description: Damage dealt increased by 10.
+    baseStats: {fileID: 11400000, guid: f7ed2ef4688da2f46b72a46c9002deab, type: 2}
+    itemSpecificStats: {fileID: 11400000, guid: 799d784e8c413234ba3d346e79ffcd2b,
+      type: 2}
+  - name: Level 3
+    level: 3
+    description: Fires slightly faster.
+    baseStats: {fileID: 11400000, guid: 1fe4b1bff399cee4187f48b8c7bc3137, type: 2}
+    itemSpecificStats: {fileID: 11400000, guid: 49c42a3bc0fdb2b43bec85c67759365d,
+      type: 2}
+  - name: Level 4
+    level: 4
+    description: Damage dealt increased by 15.
+    baseStats: {fileID: 11400000, guid: b49a516ab729a094e96bdb05400e2569, type: 2}
+    itemSpecificStats: {fileID: 11400000, guid: 8d871e35d33d8d74a9e5ef3ba211496f,
+      type: 2}
+  - name: Level 5
+    level: 5
+    description: Fires moderately faster.
+    baseStats: {fileID: 11400000, guid: 1d9c69ce68ea2e045966a48c67e35b7f, type: 2}
+    itemSpecificStats: {fileID: 11400000, guid: f113709a73fe5644cb903892590cd087,
+      type: 2}
+  - name: Level 6
+    level: 6
+    description: Skulls have a larger homing range.
+    baseStats: {fileID: 11400000, guid: 60115f3d1609ae94ea3db5e236383145, type: 2}
+    itemSpecificStats: {fileID: 11400000, guid: e4d543a70a35e2f4cbac648ac451ce78,
+      type: 2}
+  - name: Level 7
+    level: 7
+    description: Damage dealt increased by 15. Homing range increased further.
+    baseStats: {fileID: 11400000, guid: 4a258d91dc5ecf4458d91af5e9570732, type: 2}
+    itemSpecificStats: {fileID: 11400000, guid: 082089e66d958794395f60f2f18267fe,
+      type: 2}
+  - name: Level 8
+    level: 8
+    description: Cooldown reduced further.
+    baseStats: {fileID: 11400000, guid: 14f9c8657b46a054c9d1b99c92504525, type: 2}
+    itemSpecificStats: {fileID: 11400000, guid: 195d889b465f8f74b8d07fc2925af697,
+      type: 2}
+  passiveLevels: []
+  projectilePrefab: {fileID: 6277208900379832256, guid: db5f2db7ad9422647959a04d7ed0727f,
+    type: 3}

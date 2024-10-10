@@ -1,10 +1,13 @@
+using System;
 using System.Globalization;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 [ExecuteInEditMode]
 public class UIStatItem : MonoBehaviour
 {
+    [SerializeField] Image icon;
     [SerializeField] TextMeshProUGUI statName;
     [SerializeField] TextMeshProUGUI statValue;
 
@@ -14,10 +17,11 @@ public class UIStatItem : MonoBehaviour
         statValue.text = value;
     }
 
-    void OnValidate() => statName.text = name;
-
-    public void SetValue(float value)
+    void OnValidate()
     {
-        statValue.text = value.ToString(CultureInfo.InvariantCulture);
+        statName.text = name;
+        icon.sprite = Resources.Load<Sprite>($"Item Icons/Icon-{name}");
     }
+
+    public void SetValue(float value) => statValue.text = value.ToString(CultureInfo.InvariantCulture);
 }

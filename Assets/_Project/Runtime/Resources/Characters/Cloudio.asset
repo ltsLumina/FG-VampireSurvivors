@@ -14,5 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   characterName: Cloudio
   description: 
-  startingItem: {fileID: 11400000, guid: ee1a648d59885dc408f35f04ac14302c, type: 2}
+  startingItem: {fileID: 11400000, guid: d61797c90055a8549be0a2b3c7829f4f, type: 2}
   stats: {fileID: 11400000, guid: c6e3be967a77dfd43a15459a09dddfaa, type: 2}

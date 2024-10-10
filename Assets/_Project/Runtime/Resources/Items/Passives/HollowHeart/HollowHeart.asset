@@ -15,7 +15,7 @@ MonoBehaviour:
   details:
     name: HollowHeart
     description: Augments Max Health by 10%.
-    icon: {fileID: 21300000, guid: 5c9d736a02c58764e923626aa337f2f7, type: 3}
+    icon: {fileID: 21300000, guid: cbf24d6c42397f748a2b88203243a362, type: 3}
   weaponLevels: []
   passiveLevels:
   - name: Level 1

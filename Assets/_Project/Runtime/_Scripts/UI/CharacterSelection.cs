@@ -19,7 +19,7 @@ public class CharacterSelection : MonoBehaviour
     public void SelectCharacter(Character character)
     {
         selectedCharacter = character;
-        GameManager.Instance.SelectedCharacter = selectedCharacter;
+        CharacterSingleton.Instance.SelectedCharacter = selectedCharacter;
         UpdateStatItems();
     }
 
